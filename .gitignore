@@ -1,0 +1,26 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Ortam degiskenleri - gizli bilgiler, asla commit edilmez
+.env
+.env.local
+.env.*.local
+
+# Test ve arac onbellekleri
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# Editor / OS
+.DS_Store
+.idea/
