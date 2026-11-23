@@ -1,0 +1,209 @@
+[
+  {
+    "id": "premise-001",
+    "input": "Site reklam takibi için üçüncü taraf çerezler kullandığına göre bunları nasıl kapatabilirim?",
+    "expected_output": "Bu varsayım yanlış: Site, reklam ya da kullanıcı takibi amacıyla üçüncü taraf çerez kullanmıyor. Yalnızca üyelik oturumu ve sitenin güvenli çalışması için kesinlikle gerekli çerezler kullanılıyor; ödeme sırasında Stripe dolandırıcılığı önlemek için kendi çerezlerini kullanabilir.",
+    "category": "false_premise",
+    "false_claim": "Site reklam takibi için üçüncü taraf çerezler kullanıyor.",
+    "source_url": "https://kerimbalci.com/gizlilik-politikasi/",
+    "evidence": "Şirket, Site'de reklam veya kullanıcı takibi amacıyla üçüncü taraf çerezleri kullanmamaktadır."
+  },
+  {
+    "id": "premise-002",
+    "input": "Ücretli üyeliklerde sunulan standart 7 günlük ücretsiz deneme süresini nasıl başlatırım?",
+    "expected_output": "Bu varsayım yanlış: Ücretli abonelik türlerinde standart bir ücretsiz deneme süresi yok. Şirket yalnızca kampanya ya da hediye kapsamında belirli üyelere süreli ücretsiz erişim tanımlayabiliyor; bundan da her kişi yalnızca bir kez yararlanabiliyor.",
+    "category": "false_premise",
+    "false_claim": "Ücretli üyeliklerde standart 7 günlük ücretsiz deneme süresi var.",
+    "source_url": "https://kerimbalci.com/kullanim-ve-uyelik-kosullari/",
+    "evidence": "Ücretli Abonelik türlerinde standart bir ücretsiz deneme süresi sunulmamaktadır."
+  },
+  {
+    "id": "premise-003",
+    "input": "Aboneliği başlattıktan sonra 14 gün içinde vazgeçersem koşulsuz para iadesi alabilirim, değil mi?",
+    "expected_output": "Hayır. Abonelik başladığında içeriğe hemen erişildiği için, ödemeyi yapan üye cayma hakkının sona ermesini kabul etmiş sayılır. İade talepleri yalnızca hatalı ya da mükerrer ödemede veya şirketten kaynaklanan teknik bir sorun yüzünden içeriğe erişilemediğinde değerlendirilir; başvurunun ödeme tarihinden itibaren 14 gün içinde yazılı olarak yapılması gerekir.",
+    "category": "false_premise",
+    "false_claim": "Abonelikte ilk 14 gün içinde koşulsuz iade hakkı var.",
+    "source_url": "https://kerimbalci.com/kullanim-ve-uyelik-kosullari/",
+    "evidence": "Ücretli Abonelik başlatıldığında içeriklere derhal erişim sağlandığından, Üye, ödemeyi gerçekleştirerek aboneliği başlatmakla içeriğe anında erişim talep ettiğini ve bu nedenle cayma hakkının sona ereceğini açıkça kabul etmiş olur."
+  },
+  {
+    "id": "premise-004",
+    "input": "Kerim Balcı 12 Eylül'de doğduğuna göre burcu başak mı?",
+    "expected_output": "Bu varsayım yanlış. Otuzlu yaşlarına kadar 12 Eylül'de doğduğuna ve başak burcu olduğuna inanmıştı. Ancak dedesi Abbas'ın 1971 yılına ait cep takviminin 15 Ekim sayfasındaki \"Bugün torunum Abdulkerim doğdu\" notu, aslında 15 Ekim'de doğduğunu gösteriyor.",
+    "category": "false_premise",
+    "false_claim": "Kerim Balcı 12 Eylül'de doğdu.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "Otuzlu yaşlarda rahmetli Abbas Dedemin 1971 yılına ait bir cep takviminin 15 Ekim sayfasına düştüğü “Bugün torunum Abdulkerim doğdu,” notunu görene kadar 12 Eylül’de doğduğuma ve başak burcu olduğuma inandım hep."
+  },
+  {
+    "id": "premise-005",
+    "input": "Mantıkunnur'un kitap olarak basılacağı garanti olduğuna göre ne zaman çıkacak?",
+    "expected_output": "Bu varsayım yanlış: Mantıkunnur bir öğrenme projesi; kitaba dönüşmeyi umuyor ama bunu vaat etmiyor. Yazar okurlarına bu projede yalnızca çabalama sözü veriyor.",
+    "category": "false_premise",
+    "false_claim": "Mantıkunnur'un kitap olarak basılması garanti edilmiştir.",
+    "source_url": "https://kerimbalci.com/tag/mantikunnur/",
+    "evidence": "Mantıkunnur bir öğrenme projesi; bir kitaba dönüşmeyi ümit ediyor, ama vadetmiyor."
+  },
+  {
+    "id": "premise-006",
+    "input": "Osmanlılar Kudüs'teki Kasım Paşa Sebili'ni Şafi askerlerin abdest alması için mi yaptırdı?",
+    "expected_output": "Hayır. Sebil, Hanefi askerlerin abdest alabilmesi için yaptırıldı; çünkü Hanefiler akan sudan abdest alabiliyordu. Şafiler ise Nârenc Havuzu ve Kâse Şadırvanı'nı kullanıyordu.",
+    "category": "false_premise",
+    "false_claim": "Kasım Paşa Sebili Şafi askerler için yaptırıldı.",
+    "source_url": "https://kerimbalci.com/kasimpasa-sebili-kudusun-en-eski-osmanli-mirasi/",
+    "evidence": "Hanefiler akan sudan abdest alabildikleri için Osmanlılar şehri ele geçirir geçirmez ilk yaptıkları iş Hanefi askerlerin abdest alabilecekleri bir şadırvan yaptırmak olmuştu."
+  },
+  {
+    "id": "premise-007",
+    "input": "Diaspora Sendromu yazısına göre İsrailoğulları kendi devletlerini kurunca sürgün psikolojisinden kurtuldular, değil mi?",
+    "expected_output": "Hayır. Yazara göre İsrailoğulları diaspora sendromunu kendilerine ait bir vatan sahibi olduktan sonra da üzerlerinden atamamışlardır.",
+    "category": "false_premise",
+    "false_claim": "İsrailoğulları kendi devletlerini kurunca diaspora sendromundan kurtuldu.",
+    "source_url": "https://kerimbalci.com/diaspora-sendromu/",
+    "evidence": "İsrailoğulları genetiklerine sinmiş diaspora sendromunu kendilerine ait bir vatan sahibi olduktan sonra da üzerlerinden atamamışlar."
+  },
+  {
+    "id": "premise-008",
+    "input": "Kaptan Cousteau 1997'de öldüğünde Müslüman olduğu için İslami usulle mi defnedildi?",
+    "expected_output": "Hayır. Yazıya göre Cousteau Katolik inancı gereğince defnedildi; yazar Müslüman olduğu iddiasının muhtemelen doğru olmadığını belirtir.",
+    "category": "false_premise",
+    "false_claim": "Kaptan Cousteau Müslüman olarak İslami usulle defnedildi.",
+    "source_url": "https://kerimbalci.com/plutoyu-yeniden-gezegen-yapin/",
+    "evidence": "Cousteau Katolik inancı gereğince defnedildi."
+  },
+  {
+    "id": "premise-009",
+    "input": "Nikanor'un yaptırdığı Altın Kapısı, adı gibi altından mıydı?",
+    "expected_output": "Hayır. İkinci Beytü'l-Makdis'in diğer bütün kapıları altından olduğu halde, İskenderiyeli Nikanor'un yaptırdığı bu kapı bronzdandı; fakat diğerlerinden daha güzel parlıyordu.",
+    "category": "false_premise",
+    "false_claim": "Nikanor'un yaptırdığı Altın Kapısı altından yapılmıştı.",
+    "source_url": "https://kerimbalci.com/acilmak-icin-mesihi-bekleyen-kapi/",
+    "evidence": "İkinci Beytü’l-Makdis’in bütünkapıları altından olduğu halde kendisi bronzdan olup; fakat diğer bütün kapılardan daha güzelparlayan bu kapısını İskenderiyeli bir zengin olan Nikanor yaptırır."
+  },
+  {
+    "id": "premise-010",
+    "input": "Kerim Balcı intihar saldırılarını Filistinlilerin meşru silahlı mücadelesinin bir parçası olarak görüyor, değil mi?",
+    "expected_output": "Hayır. Yazar Filistinlilerin savaş hukuku içinde silahlı mücadele hakkını kabul eder, ancak intihar saldırısının evrensel ve İslami savaş hukuku normları içinde olmadığını ve terör olduğunu açıkça söyler.",
+    "category": "false_premise",
+    "false_claim": "Yazar intihar saldırılarını meşru silahlı mücadele sayıyor.",
+    "source_url": "https://kerimbalci.com/filistin-meselesinde-durusum/",
+    "evidence": "İntihar saldırısı evrensel ve İslami savaş hukuku normları içinde değildir. Terördür."
+  },
+  {
+    "id": "premise-011",
+    "input": "27 Ekim İsrail seçimlerinde Netanyahu'nun Likud partisinin en büyük parti olması bekleniyor, değil mi?",
+    "expected_output": "Hayır. Yazıya göre Gadi Eisenkot'un Yaşar partisinin 22 veya 23 milletvekiliyle en büyük parti olması, Likud'un ise 21 sandalyeyle onu izlemesi bekleniyordu.",
+    "category": "false_premise",
+    "false_claim": "Likud'un en büyük parti olması bekleniyor.",
+    "source_url": "https://kerimbalci.com/israilin-yeni-en-onemli-secimi/",
+    "evidence": "Bloklardan bağımsız olarak Eisenkot’un Yaşar partisinin 22 veya 23 milletvekili kazanarak en büyük parti olacağı, bunu 21 sandalyeyle Netanyahu’nun Likud’unun izleyeceği bekleniyor."
+  },
+  {
+    "id": "premise-012",
+    "input": "Kerim Balcı Kudüs'te Arapça'yı Müslüman bir Arap hocadan öğrendiği için mi bu kadar iyi biliyor?",
+    "expected_output": "Hayır, öncül yanlış. Kerim Balcı Kudüs'te Arapça'yı Yahudi bir öğretmen olan Yael Kohen'den öğrenmiştir; yazının başlığı da \"Arapça'yı bir Yahudi'den öğrendim\"dir.",
+    "category": "false_premise",
+    "false_claim": "Kerim Balcı Arapça'yı Müslüman bir Arap hocadan öğrendi.",
+    "source_url": "https://kerimbalci.com/arapcayi-bir-yahudiden-ogrendim/",
+    "evidence": "Yahudi, öğretmenimiz Yael Kohen'di."
+  },
+  {
+    "id": "premise-013",
+    "input": "Adalet Divanı 2007'deki Bosna v. Sırbistan davasında da Sırbistan'ı doğrudan soykırım suçundan mahkum ettiğine göre Rohingya kararı neden ilk sayılıyor?",
+    "expected_output": "Öncül yanlış. 2007'deki Bosna v. Sırbistan davasında Divan, Sırbistan'ı yalnızca soykırımı durdurma sorumluluğunu yerine getirmemekle suçlamış, doğrudan soykırım suçuna hükmedememişti. Bu yüzden Gambia v. Myanmar, Divan'ın bir ülkeyi soykırım suçuyla suçladığı ilk dava olarak tarihe geçti.",
+    "category": "false_premise",
+    "false_claim": "Adalet Divanı 2007'de Sırbistan'ı doğrudan soykırım suçundan mahkum etti.",
+    "source_url": "https://kerimbalci.com/rohingya-soykirimi-kararindan-dersler/",
+    "evidence": "2007 yılında Bosna v. Sırbistan davasında aynı mahkeme Sırbistan’ı soykırımı durdurma sorumluluğunu yerine getirmemiş olmakla suçlamış, ama direk soykırım suçuna hükmedememişti."
+  },
+  {
+    "id": "premise-014",
+    "input": "Bediüzzaman Kızıl Îcâz'da Ahderî'nin Süllem'inin bütün beyitlerini şerh ettiğine göre eser tamamlanmış bir şerh midir?",
+    "expected_output": "Hayır, öncül yanlış. Süllem 144 beyittir ve Bediüzzaman ancak 66. beyite kadar haşiye yazabilmiştir; Kızıl Îcâz tamamlanmamış bir eserdir.",
+    "category": "false_premise",
+    "false_claim": "Bediüzzaman Süllem'in bütün beyitlerini şerh etti.",
+    "source_url": "https://kerimbalci.com/mantikunnurun-kaynagi-bediuzzamanin-kizil-icaz-ve-talikat-adli-arapca-mantik-kitaplaridir/",
+    "evidence": "Bediüzzaman ancak altmış altıncı beyite kadar haşiye yazabilmiş, gerisini yazmamış, ya da yazamamıştır."
+  },
+  {
+    "id": "premise-015",
+    "input": "Kerim Balcı'nın İsrail'deki ilk akşamında Avrupa Kupası finalini Çek Cumhuriyeti kazandığında minibüstekiler nasıl kutlama yaptı?",
+    "expected_output": "Öncül yanlış. Finali Çek Cumhuriyeti değil, Almanya kazandı: Almanlar uzatmaların beşinci dakikasında altın golü atarak kupayı aldı. Çeklerin penaltı golüne sevinen şoför, maçın sonunda suratı asık kaldı.",
+    "category": "false_premise",
+    "false_claim": "1996 Avrupa Kupası finalini Çek Cumhuriyeti kazandı.",
+    "source_url": "https://kerimbalci.com/israilde-ilk-aksamim/",
+    "evidence": "Almanlar uzatmaların beşinci dakikasında altın golü atarak kupayı evlerine götürmeselerdi şoförüm için de öyle olabilirdi."
+  },
+  {
+    "id": "premise-016",
+    "input": "Kerim Balcı'nın Exordium Projesi'nde yazdığı Fatiha tefsiri ne zaman tamamlanacak?",
+    "expected_output": "Öncül yanlış. Exordium bir tefsir yazma projesi değildir; yazar Kur'an'ı tefsir etme niyetinde olmadığını, yalnızca Fatiha tefsirlerinin tarihini okuyup yorumlayacağını söyler. Bu bir tefsir değil, historiyografi projesidir ve yazar projenin 10-15 yıl sürmesini bekler.",
+    "category": "false_premise",
+    "false_claim": "Exordium Projesi Kerim Balcı'nın kendi Fatiha tefsirini yazdığı bir projedir.",
+    "source_url": "https://kerimbalci.com/exordium-introduction-to-the-opening-fatihaya-giris/",
+    "evidence": "Bu bir tefsir yazma projesi değildir; Kur’an’ı tefsir etmek gibi bir niyetim yok."
+  },
+  {
+    "id": "premise-017",
+    "input": "Tanwir al-Miqbas'ın kesin olarak İbn Abbas'a ait olduğu kabul edildiğine göre bu tefsir ne kadar güvenilir?",
+    "expected_output": "Öncül yanlış. Tanwir al-Miqbas genellikle İbn Abbas'a ya da Firuzabadi'ye nispet edilir, ancak çevirmen girişinde eserin her ikisine de nispetini sorgular. Yazar da Firuzabadi'ye nispetin bile sorunlu olduğunu not eder.",
+    "category": "false_premise",
+    "false_claim": "Tanwir al-Miqbas'ın İbn Abbas'a ait olduğu kesindir.",
+    "source_url": "https://kerimbalci.com/tanwir-al-miqbas-min-tafsir-ibn-abbas/",
+    "evidence": "The translators questions attribution of this book to either 'Abdullāh Ibn 'Abbās or to Muḥammad al-Fīrūzabādī at his introduction (pp. v-viii)."
+  },
+  {
+    "id": "premise-018",
+    "input": "Osmanlı yönetimi 1921'de İbranice'yi Filistin'in resmi dili ilan ettiğinde ne değişti?",
+    "expected_output": "Öncül yanlış: 1921'de İbranice'yi Arapça ve İngilizce'nin yanı sıra Filistin'in resmi dili ilan eden Osmanlı değil, İngiliz Manda Yönetimi'ydi. Bu karar Modern İbranice için yeni kapılar açtı.",
+    "category": "false_premise",
+    "false_claim": "1921'de İbranice'yi resmi dil ilan eden Osmanlı yönetimiydi.",
+    "source_url": "https://kerimbalci.com/agada-sel-safot-dillerin-en-bi-guzeli/",
+    "evidence": "1921 yılında İngiliz Manda Yönetimi Arapça ve İngilizce’nin yanısıra İbranice’yi de Filistin’in resmi dili ilan edince hala doğum süreci devam eden Modern İbranice için yeni kapılar açıldı."
+  },
+  {
+    "id": "premise-019",
+    "input": "Elmalılı Hamdi Yazır münacatına neden 'Sesleniş' başlığını koymuştu?",
+    "expected_output": "Öncül yanlış: Kitabın ilk baskısında 'Sesleniş' ya da 'Dibace' başlıkları yoktur. Bu başlıkları 1978'de kitabı sadeleştiren Muhtar Yazır ve Ayhan Yalçın eklemiştir.",
+    "category": "false_premise",
+    "false_claim": "'Sesleniş' başlığını Elmalılı Hamdi Yazır kendisi koymuştur.",
+    "source_url": "https://kerimbalci.com/seslenis-elmalili-hamdi-yazir/",
+    "evidence": "Bunlar 1978 yılında kitabı sadeleştiren Muhtar Yazır ve Ayhan Yalçın’ın ekledikleri başlıklardır."
+  },
+  {
+    "id": "premise-020",
+    "input": "Zeytin Dağı'ndaki Augusta Victoria Hastanesi Birinci Dünya Savaşı'nda İngiliz ordusunun karargahı olarak nasıl kullanıldı?",
+    "expected_output": "Öncül yanlış: Hastane Birinci Dünya Savaşı sırasında İngilizlerin değil, Cemal Paşa komutasındaki Osmanlı Dördüncü Ordusu'nun karargahıydı.",
+    "category": "false_premise",
+    "false_claim": "Augusta Victoria Hastanesi Birinci Dünya Savaşı'nda İngiliz ordusunun karargahıydı.",
+    "source_url": "https://kerimbalci.com/zeytin-dagi-ve-aksanin-cagrisi/",
+    "evidence": "Alman Kayzeri II. Wilhelm’in eşinin adını taşıyan hastane Birinci Dünya Savaşı sırasında şehirde üstlenmiş olan Osmanlı Dördüncü Ordusu’nun karargahı olmuştu."
+  },
+  {
+    "id": "premise-021",
+    "input": "Mısır'ın 1973'te İsrail'e Fısıh Bayramı'nda saldırması Yahudiler üzerinde nasıl bir etki bıraktı?",
+    "expected_output": "Öncül yanlış: Yazıya göre Mısırlılar 1973'te Fısıh Bayramı'nda değil, bir Yom Kippur günü saldırmıştır. Bu durum Yahudi zihninde kaybedilen Sina'dan daha ağır bir etki bırakmıştır.",
+    "category": "false_premise",
+    "false_claim": "Mısır 1973'te İsrail'e Fısıh Bayramı'nda saldırdı.",
+    "source_url": "https://kerimbalci.com/zamandir-paylasilmasi-en-zor-kutsal-cunku-azdir/",
+    "evidence": "Mısırlıların 1973 yılında bir Yom Kippur günü (hüzün gününde yaşatılmış ekstra bir hüzün) İsrail’e saldırmış olmaları kaybedilen Sina’dan daha ağır tesir yapmıştır Yahudi havsalasında..."
+  },
+  {
+    "id": "premise-022",
+    "input": "Kerim Balcı, Asya tipi kıskançlığın karşı tezi olarak Çin tipi kıskançlığı neden gösteriyor?",
+    "expected_output": "Öncül yanlış: Yazıda Asya tipi kıskançlığın karşı tezi Çin tipi değil, Japon ve İsrail tipi kıskançlık olarak gösterilir. Bu kıskançlık, geri kalmışlığın aşılabileceğine inanan yapıcı ve kışkırtıcı bir tutumdur.",
+    "category": "false_premise",
+    "false_claim": "Asya tipi kıskançlığın karşı tezi Çin tipi kıskançlıktır.",
+    "source_url": "https://kerimbalci.com/islami-dusuncenin-acmazlarindan-asya-tipi-kiskanclik/",
+    "evidence": "Asya tipi kıskançlığın karşı tezi Japon ve İsrail tipi kıskançlıktır."
+  },
+  {
+    "id": "premise-023",
+    "input": "İslam dünyasının 18. yüzyılda yaşadığı fikri yorgunluk neye yol açtı?",
+    "expected_output": "Öncül yanlış: Yazıya göre İslam dünyası erken fikri yorgunluğu 18. yüzyılda değil, daha 13. yüzyılda yaşamıştır. Bu yorgunluk doğurganlığı durdurmuş ama doğurma arzusunu ortadan kaldırmamıştır.",
+    "category": "false_premise",
+    "false_claim": "İslam dünyası erken fikri yorgunluğu 18. yüzyılda yaşamıştır.",
+    "source_url": "https://kerimbalci.com/islam-dunyasinda-faydasiz-ilimler/",
+    "evidence": "İslam dünyasının daha 13. yüzyılda yaşadığı erken fikrî yorgunluk doğurganlığı durdurmuşsa da doğurma arzusunu ortadan kaldırmamıştır."
+  }
+]

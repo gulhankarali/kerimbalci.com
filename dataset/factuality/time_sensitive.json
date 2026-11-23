@@ -1,0 +1,119 @@
+[
+  {
+    "id": "time-001",
+    "input": "Ene Makdisi yazılarını okumak için hangi üyelik seviyesi gerekiyor?",
+    "expected_output": "Ene Makdisi, en üst seviye olan Sınırsız (Gold) üyelikle erişilebilen içerikler arasında yer alıyor. Ancak sitenin tanıtım dönemi boyunca, yani 1 Kasım 2026'ya kadar yayımlanan yazıların tamamı herkese açık kalıyor.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Sitenin tanıtım dönemi boyunca, yani 1 Kasım 2026'ya kadar yayımlanan yazıların tamamı da ulaşıma açık kalacak."
+  },
+  {
+    "id": "time-002",
+    "input": "Sitedeki tefrikalardan ilk hangi kitaplar basılacak ve ne zaman?",
+    "expected_output": "Yazarın öngörüsüne göre ilk basılı eserler Zamansız Yazılar ve Vadedilmiş Yazılar olacak ve 2027 yılı sonunda üye okurlara ulaşacak. 2028 içinde de Ene Makdisi ve Kutsalların Çatışması'nın basılması umuluyor.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "KerimBalci.com projesinin ilk basılı eserlerinin Zamansız Yazılar ve Vadedilmiş Yazılar olacağını ve bunların 2027 yılı sonunda üye-okurlarıma ulaşacağını öngörüyorum."
+  },
+  {
+    "id": "time-003",
+    "input": "Ücretsiz üye olarak Vadedilmiş Yazılar'ı okuyabilir miyim?",
+    "expected_output": "Kısmen. Vadedilmiş Yazılar serisinde 23 Kasım 2026'ya kadar yayımlanan yazılar temel (ücretsiz) üyelere açık kalıyor. Bu tarihten itibaren yayımlananlar ise Başlangıç üyeliği ve üzerini gerektiriyor.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "'Vadedilmiş Yazılar' kategorisinde 23 Kasım 2026'ya kadar yayımlanan yazılar da temel üyelerimizin ulaşımına açık kalacak."
+  },
+  {
+    "id": "time-004",
+    "input": "Sitede şu anda kaç üyelik seviyesi var?",
+    "expected_output": "23 Kasım 2026 itibarıyla dört üyelik seviyesi var: Temel erişim (ücretsiz), Başlangıç erişimi, Standart erişim ve Sınırsız erişim.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/sikca-sorulan-sorular/",
+    "evidence": "23 Kasım 2026 itibarıyla sitede dört üyelik seviyesi bulunuyor: Temel erişim (ücretsiz), Başlangıç erişimi, Standart erişim ve Sınırsız erişim."
+  },
+  {
+    "id": "time-005",
+    "input": "Aktüel Yazılar bölümündeki en son yazı hangi konuyu ele alıyor?",
+    "expected_output": "En son Aktüel Yazı, Uluslararası Adalet Divanı'nın 19 Kasım tarihli Gambia v. Myanmar kararını ele alıyor. Divan bu kararda Myanmar ordusunun 2016-2017'de Rohingya Müslümanlarına yönelik operasyonlarının soykırım suçu oluşturduğuna hükmetti.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/tag/aktuel-yazilar/",
+    "evidence": "Uluslararası Adalet Divanı’nın 19 Kasım tarihli Gambia v. Myanmar kararını insan hakları alanında çalışan herkesin özenle okuyup analiz etmesi gerekiyor."
+  },
+  {
+    "id": "time-006",
+    "input": "Ene Makdisi serisinde yayınlanan en son yazı ne hakkında?",
+    "expected_output": "En son Ene Makdisi yazısı, Kerim Balcı'nın aynı daireyi paylaştığı Fas Yahudisi Avi'nin Ramazan orucunun otuz gün sürmesini katlanılamaz bulmasını ve \"Allah bize otuz gün oruç emretseydi biz isyan ederdik!\" sözünü konu alıyor.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/tag/ene-makdisi/",
+    "evidence": "Aynı daireyi paylaştığım Fas Yahudisi Avi Ramazan orucunun otuz gün sürmesini katlanılamaz bulmuştu."
+  },
+  {
+    "id": "time-007",
+    "input": "Vadedilmiş Yazılar serisinde en son hangi yazı yayınlandı?",
+    "expected_output": "Serideki en son yazı, İsrail'in kuruluş mitlerinden biri olan \"İsrail'in Araplara karşı bütün savaşlarında azınlıkta olduğu\" mitini ele alıyor.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/tag/vadedilmis-yazilar/",
+    "evidence": "İsrail'in kuruluş mitlerinden biri de İsrail'in Araplara karşı bütün savaşlarında azınlıkta olduğu mitidir."
+  },
+  {
+    "id": "time-008",
+    "input": "\"Kuruluş Miti 3: Her savaşı Araplar mı başlattı?\" yazısı ne zaman ve hangi seride yayınlandı?",
+    "expected_output": "Yazı 22 Kasım 2026'da \"Vadedilmiş Yazılar\" etiketiyle yayınlandı; İsrail'in kuruluş mitleri serisinin üçüncü yazısıdır.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/kurulus-miti-3-araplar-baslatti/",
+    "evidence": "\"article:published_time\": [\"2026-11-22T08:25:05.000Z\"], \"article:tag\": [\"VADEDİLMİŞ YAZILAR\"]"
+  },
+  {
+    "id": "time-009",
+    "input": "\"Allah bize otuz gün oruç emretseydi\" yazısı ne zaman ve hangi bölümde yayınlandı?",
+    "expected_output": "Yazı 20 Kasım 2026'da \"Ene Makdisi\" etiketiyle yayınlandı.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/allah-bize-otuz-gun-oruc-emretseydi/",
+    "evidence": "\"article:published_time\": [\"2026-11-20T08:00:03.000Z\"], \"article:tag\": [\"ENE MAKDİSİ\"]"
+  },
+  {
+    "id": "time-010",
+    "input": "\"Kulam Negdeynu – Herkes Bize Karşı\" yazısı ne zaman ve hangi seride yayımlandı?",
+    "expected_output": "Yazı 3 Kasım 2026'da \"Vadedilmiş Yazılar\" etiketiyle yayımlandı (23 Kasım 2026 itibarıyla sitedeki bilgi).",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/kulam-negdeynu-herkes-bize-karsi/",
+    "evidence": "\"article:published_time\": [\"2026-11-03T08:00:00.000Z\"], \"article:tag\": [\"VADEDİLMİŞ YAZILAR\"]"
+  },
+  {
+    "id": "time-011",
+    "input": "\"My Last Prayer\" yazısı ne zaman ve hangi seri altında yayımlandı?",
+    "expected_output": "Yazı 13 Kasım 2026'da \"Pleased With Islam\" etiketiyle yayımlandı (23 Kasım 2026 itibarıyla sitedeki bilgi).",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/my-last-prayer/",
+    "evidence": "\"article:published_time\": [\"2026-11-13T14:05:44.000Z\"], \"article:tag\": [\"PLEASED WITH ISLAM\"]"
+  },
+  {
+    "id": "time-012",
+    "input": "'Kuruluş Miti 4: Araplara Karşı Hep Azınlıkta mıydık?' yazısı ne zaman ve hangi bölümde yayımlandı?",
+    "expected_output": "Yazı 23 Kasım 2026'da 'Vadedilmiş Yazılar' etiketiyle yayımlandı. Kuruluş Miti dizisinin 4. yazısıdır ve İsrail'in Araplara karşı savaşlarda hep azınlıkta olduğu mitini sorguluyor.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/kurulus-miti-4-araplara-karsi-azinlik/",
+    "evidence": "\"article:published_time\": [\"2026-11-23T14:02:58.000Z\"], \"article:tag\": [\"VADEDİLMİŞ YAZILAR\"]"
+  },
+  {
+    "id": "time-013",
+    "input": "Kutsalların Çatışması dizisindeki Şam Kapısı yazısı ne zaman yayımlandı?",
+    "expected_output": "'Şam Kapısı: Kudüs'te Yıkım Neden Kuzeyden Gelir?' yazısı 15 Kasım 2026'da 'Kutsalların Çatışması' etiketiyle yayımlandı.",
+    "category": "time_sensitive",
+    "valid_as_of": "2026-11-23",
+    "source_url": "https://kerimbalci.com/sam-kapisi-yikim-kuzeyden-gelir/",
+    "evidence": "\"article:published_time\": [\"2026-11-15T08:00:00.000Z\"], \"article:tag\": [\"KUTSALLARIN ÇATIŞMASI\"]"
+  }
+]

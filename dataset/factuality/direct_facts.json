@@ -1,0 +1,450 @@
+[
+  {
+    "id": "fact-001",
+    "input": "kerimbalci.com sitesini hangi şirket işletiyor?",
+    "expected_output": "Site, İngiltere ve Galler'de 15921390 şirket numarasıyla kayıtlı Sanctuary Lodge Limited tarafından işletiliyor; şirket aynı zamanda kişisel verilerin veri sorumlusudur. Tescilli adresi Office 3 and 4, 338a Regents Park Road, Londra N3 2LN, Birleşik Krallık'tır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/gizlilik-politikasi/",
+    "evidence": "Site aracılığıyla toplanan kişisel verilerin veri sorumlusu (data controller), İngiltere ve Galler'de 15921390 şirket numarasıyla kayıtlı olan ve tescilli adresi Office 3 and 4, 338a Regents Park Road, Londra N3 2LN, Birleşik Krallık olan Sanctuary Lodge Limited'dir."
+  },
+  {
+    "id": "fact-002",
+    "input": "Sitenin bültenleri ve üyelik e-postaları hangi hizmet üzerinden gönderiliyor?",
+    "expected_output": "Bültenler ve üyelikle ilgili e-postalar Mailgun Technologies, Inc. aracılığıyla gönderiliyor. Gizlilik politikasında veri işleyen olarak sayılan diğer hizmetler; Ghost yazılımını barındıran hosting sağlayıcısı, Cloudflare ve ödemeler için Stripe'tır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/gizlilik-politikasi/",
+    "evidence": "bültenlerin ve üyelikle ilgili e-postaların gönderimini sağlayan Mailgun Technologies, Inc.;"
+  },
+  {
+    "id": "fact-003",
+    "input": "Ücretli aboneliğimi iptal edersem ödediğim dönemin sonuna kadar içeriklere erişebilir miyim?",
+    "expected_output": "Evet. Abonelik, sitedeki \"Hesabınız\" sayfasından istendiği zaman iptal edilebilir. İptal edildiğinde bir sonraki dönemin ücreti alınmaz ve üye, ödemesini yaptığı dönemin sonuna kadar içeriklere erişmeye devam eder.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/kullanim-ve-uyelik-kosullari/",
+    "evidence": "İptal halinde bir sonraki dönem için ücret tahsil edilmez ve Üye, ödemesini yaptığı dönemin sonuna kadar içeriklere erişmeye devam eder."
+  },
+  {
+    "id": "fact-004",
+    "input": "Kerim Balcı siteye üyeliği okurlarıyla nasıl bir ilişki olarak tanımlıyor?",
+    "expected_output": "Ücretli ya da ücretsiz olsun, üyeliği yazar ile üyeleri arasında bir sözleşme olarak görüyor. Bu bağın bir \"iştirak-i a'mâl-i fikriye\" (fikrî çalışmalara ortaklık) bağı kuracağına inanıyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/neden-abonelik/",
+    "evidence": "Bu sitede üyelik, ücretli olsun ücretsiz olsun benimle üyelerim arasında bir sözleşme mahiyeti taşıyor."
+  },
+  {
+    "id": "fact-005",
+    "input": "Kerim Balcı bu sitede kaç kitap ve kaç proje tamamlamayı hedefliyor?",
+    "expected_output": "Yaşarsa ve fikrî üretkenliği sürerse önümüzdeki 15 yıl içinde on dört kitap yazmaya ve üç projeyi tamamlamaya niyet ettiğini söylüyor. Projeler Mantıkunnur, Evrensel Ahlak ve 1001 Exordia.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/hakkinda/",
+    "evidence": "Niyet ettim, yaşarsam ve fikrî üretkenliğim devam ederse, önümüzdeki 15 yıl boyunca bu ön dört kitabı yazmaya, bu üç projeyi tamamlamaya…"
+  },
+  {
+    "id": "fact-006",
+    "input": "Kudüs'ün Türk Tarihi kitabı hangi eksikliği gidermeyi amaçlıyor?",
+    "expected_output": "Kitap, şehrin bilinen 4.000 yıllık tarihinin bin yıldan fazlasında egemen olan Türklere Kudüs tarihi kitaplarında yalnızca yüzde birlik yer ayrılmasına bir itiraz. Amacı bu haksızlığı düzeltmek.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/hakkinda/",
+    "evidence": "Şehrin bilinen 4,000 yıllık tarihinin bin yıldan fazlasına egemen olmuş Türklere, şehir tarihi kitaplarında yüzde birlik bir yer ayrıldığı gerçeğine isyanın, bu haksızlığı düzeltme arzusunun neticesi…"
+  },
+  {
+    "id": "fact-007",
+    "input": "Kerim Balcı Kudüs'te hangi yıllar arasında yaşadı?",
+    "expected_output": "Kerim Balcı, 1996 Ağustos'undan 2003 Mart'ına kadar Kudüs'te yaşadı.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "1996 Ağustosundan 2003 Martına kadar Kudüs’te yaşadım."
+  },
+  {
+    "id": "fact-008",
+    "input": "Aktüel Yazılar kerimbalci.com dışında da yayınlanıyor mu?",
+    "expected_output": "Evet. Kerim Balcı, Aktüel Yazılar'ın bir kısmını TR724'teki köşesinde de yayımlamaya çalışacağını belirtiyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tag/aktuel-yazilar/",
+    "evidence": "Aktüel Yazılar’ın bir kısmını TR724’deki köşemde de yayınlamaya çalışacağım."
+  },
+  {
+    "id": "fact-009",
+    "input": "Ene Makdisi ne demek, bu seri neyi anlatıyor?",
+    "expected_output": "Ene Makdisî \"Ben Kudüslüyüm\" anlamına geliyor. Seride Kerim Balcı, Kudüs'te geçirdiği yıllardan hatıralarla Kudüs'ü ve çevresini anlatıyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tag/ene-makdisi/",
+    "evidence": "Ene Makdisî, “Ben Kudüslüyüm”: Kerim Balcı, Kudüs’te geçirdiği yıllardan hatıralarla Kudüs’ü ve çevresini anlatıyor."
+  },
+  {
+    "id": "fact-010",
+    "input": "Exordium projesi bir Fatiha tefsiri mi yazıyor?",
+    "expected_output": "Hayır, proje bir tefsir yazmayı değil, bir Fatiha Suresi tefsir tarihi araştırması yapmayı amaçlıyor. Nihai ürünün İngilizce olması planlanıyor. Projede Sünni, Şii, Mutezili, İşari, Hurufi gibi tüm tefsir ekollerinin izinin sürülmesi hedefleniyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tag/exordium/",
+    "evidence": "Bir tefsir yazmayı değil, bir tefsir tarihi araştırması yapmayı vadediyor bu proje."
+  },
+  {
+    "id": "fact-011",
+    "input": "Hezar Metn projesinin amacı nedir?",
+    "expected_output": "Hezar Metn (Bin Metin), yeni bir İslam Rönesansı'nı tetikleyecek kuşağın okuması gereken bin metni tanıtan bir derleme ve yorum projesi. Doğulu ve Batılı düşünce dünyasının kurucu metinlerini derleyerek çok kanatlı bilim insanları yetiştirmeyi amaçlıyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tag/hezar-metn/",
+    "evidence": "Doğulu ve Batılı düşün dünyasının kurucu metinlerini derleyecek bu proje çokkanatlı bilim insanları yetiştirmeyi amaçlıyor."
+  },
+  {
+    "id": "fact-012",
+    "input": "Pleased with Islam serisi neyi anlatıyor?",
+    "expected_output": "Seri, Türkiye'de küçük bir köyde aile, misafirler ve cemaatle kılınan namazla şekillenen Ramazanların yazarda Müslümanlıktan ömür boyu sürecek bir hoşnutluğu nasıl inşa ettiğini anlatıyor. Yazar İslam'la bir dağ köyünde sosyalleştiğini ve bu süreçte Ramazan'ın özel bir yeri olduğunu belirtiyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tag/pleased-with-islam/",
+    "evidence": "I was socialised into Islam in a mountain village in Turkey, and Ramadan held a special place in that process."
+  },
+  {
+    "id": "fact-013",
+    "input": "Umbilicus Mundi serisi Kudüs'te hangi alanı konu alıyor?",
+    "expected_output": "Umbilicus Mundi (Evrenin Göbekbağı), Kudüs'te üzerinde Kubbetüssahra ve Aksa Camii'nin bulunduğu 144 dönümlük alandaki yapıların dününü, bugününü ve yarınını anlatıyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tag/umbilicus-mundi/",
+    "evidence": "Umbilicus Mundi (Evrenin Göbekbağı) Kudüs’te, üzerinde Kubbetüssahra ve Aksa Camii’nin bulunduğu 144 dönümlük alanda bulunan yapıların dünü, bugünü ve yarınını anlatıyor."
+  },
+  {
+    "id": "fact-014",
+    "input": "Zamansız Yazılar hangi yazılardan oluşuyor?",
+    "expected_output": "Zamansız Yazılar, Kerim Balcı'nın 1996-2016 yılları arasında Zaman Gazetesi'nde yayımlanan köşe yazılarının güncellenmiş, kapsamı genişletilmiş ve tarihsel döneminden bağımsızlaştırılmış versiyonlarından oluşuyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tag/zamansiz-yazilar/",
+    "evidence": "Zamansız Yazılar kategorisindeki yazılar 1996-2016 yılları arasında Zaman Gazetesi’nde yayınlandığım köşe yazılarımın güncellenmiş, kapsamı genişletilmiş ve tarihsel döneminden bağımsızlaştırılmış versiyonları."
+  },
+  {
+    "id": "fact-015",
+    "input": "Kudüs'teki Kasım Paşa Sebili hangi yılda inşa edilmiş?",
+    "expected_output": "Kitabesine göre sebil hicri 933 yılında inşa edilmiştir; bu da miladi 1527 yılına karşılık gelir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/kasimpasa-sebili-kudusun-en-eski-osmanli-mirasi/",
+    "evidence": "Sebil 933 yılında inşa edilmişti. Bu da 1527 yılına karşılık geliyordu."
+  },
+  {
+    "id": "fact-016",
+    "input": "Kudüs'teki Altın Kapısı'nın iki kanadının adları nedir?",
+    "expected_output": "Yarım bin yıldır kapalı tutulan Altın Kapısı, biri giriş biri çıkış için kullanılan iki kanattan oluşur; bunlara sırasıyla Tevbe ve Rahmet kapıları denir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/acilmak-icin-mesihi-bekleyen-kapi/",
+    "evidence": "Yarım bin yıldır kapalı tutulan bu kapı biri giriş, diğeri çıkış için kullanılan ve sırasıyla Tevbe ve Rahmet kapıları adı verilen iki kanattan oluşur ki adeta kapı, mimarisiyle geçenleri için dua etmektedir."
+  },
+  {
+    "id": "fact-017",
+    "input": "Pluto gezegen statüsünü hangi tarihteki toplantıda kaybetti?",
+    "expected_output": "Pluto, Uluslararası Astronomi Birliği'nin (IAU) 24 Ağustos 2006 tarihli toplantısında gezegen statüsünü kaybetti ve cüce-gezegen statüsüne indirildi.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/plutoyu-yeniden-gezegen-yapin/",
+    "evidence": "24 Ağustos 2006 tarihli IAU toplantısında Pluto’nun gezegen statüsünü kaybetmesini tetikleyen olay 2005 yılında yaşandı."
+  },
+  {
+    "id": "fact-018",
+    "input": "İsrail genel seçimlerinde seçim barajı yüzde kaç?",
+    "expected_output": "İsrail'in seçim barajı %3'tür. Yazar bu düşük oranın, barajı aşamayacağını düşünen partilerin çekilmesi veya ittifak yapması yoluyla sonuçlar üzerinde büyük etkisi olduğunu belirtir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/israilin-yeni-en-onemli-secimi/",
+    "evidence": "İsrail’in seçim barajı %3."
+  },
+  {
+    "id": "fact-019",
+    "input": "Kerim Balcı'nın köyünden hacca giden tek kişi kimdi?",
+    "expected_output": "Köyden hacca gitmiş tek kişi yazarın dedesiydi; Mekke'den getirdiği hurmalar hiç bitmezdi.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/dining-in-congregation/",
+    "evidence": "Grandpa was the only person from our village who had gone on pilgrimage, and the dates he brought back from Mecca never ran out."
+  },
+  {
+    "id": "fact-020",
+    "input": "Kerim Balcı'ya göre Türkiye'nin Filistin meselesinin çözümüne yapabileceği en büyük katkı nedir?",
+    "expected_output": "Yazara göre Türkiye'nin yapabileceği en büyük katkı, İsrail'deki her hükümetle konuşabilen bir Filistin dostu olma özelliğini korumaktır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/filistin-meselesinde-durusum/",
+    "evidence": "Türkiye’nin Filistin meselesinin çözümüne yapabileceği en büyük katkı, İsrail’deki her hükümetle konuşabilen bir Filistin dostu olma özelliğini korumaktır."
+  },
+  {
+    "id": "fact-021",
+    "input": "\"Poetikten Prozaike Meselelerimize Çözüm Arayışı\" yazısı ilk olarak nerede ve ne zaman yayınlandı?",
+    "expected_output": "Yazı ilk olarak 17 Temmuz 2006 tarihli Zaman Gazetesi'nde aynı adla yayınlanmıştır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/poetikten-prozaike-meselelerimize-cozum-arayisi/",
+    "evidence": "Bu yazı 17 Temmuz 2006 tarihli Zaman Gazetesi’nde aynı adla yayınlanmış makaledir."
+  },
+  {
+    "id": "fact-022",
+    "input": "\"Rabb'in önündeki yolları düzleyin\" yazısında fetih tanımını desteklemek için Bediüzzaman'ın hangi formülasyonuna atıf yapılıyor?",
+    "expected_output": "Yazar, Bediüzzaman'ın \"Medenilere galebe ikna iledir\" formülasyonunun, fethi gönüller kazanma olarak tanımlamasının altını çizdiğini belirtir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/rabbin-onundeki-yollari-duzleyin/",
+    "evidence": "Bediüzzaman’ın “Medenilere galebe ikna iledir” formülasyonu da aynı fetih tanımının altını çizmektedir."
+  },
+  {
+    "id": "fact-023",
+    "input": "Yom Kippur orucu kaç saat sürüyor?",
+    "expected_output": "Yazıya göre Yom Kippur orucu yirmi altı saat sürer ve Allah'a inansın inanmasın Yahudi olmanın tek ölçüsü olarak görülür.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/allah-bize-otuz-gun-oruc-emretseydi/",
+    "evidence": "Yılda bir defa da olsa hayatın her yönüyle durduğu yirmi altı saat boyunca süren bu oruç Allah'a inansın veya inanmasın Yahudi olmanın tek ölçüsü olarak görülüyordu."
+  },
+  {
+    "id": "fact-024",
+    "input": "Deyr Yasin katliamı ne zaman oldu ve kaç kişi öldürüldü?",
+    "expected_output": "9 Nisan 1948'de İrgun kuvvetleri Deyr Yasin köyüne saldırarak savunmasız durumdaki 250 erkek, kadın ve çocuğu katletti.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/kurulus-miti-2-filistinli-multeciler/",
+    "evidence": "9 Nisan 1948 günü bugün üzerinde İsrail Devlet Müzesi ve Parlamentosu'nun bulunduğu alanda yer alan Deyr Yasin köyüne saldıran İrgun kuvvetleri savunmasız durumdaki 250 erkek, kadın ve çocuğu katlettiler."
+  },
+  {
+    "id": "fact-025",
+    "input": "İsrail'in kuruluş mitleri yazısında milliyetçilik ve kuruluş mitleri konusunda hangi yazarın hangi eserine atıf yapılıyor?",
+    "expected_output": "Benedict Anderson'ın milliyetçiliğin doğuş ve yayılışını incelediği \"Imagined Communities\" (\"Hayali Cemaatler\") adlı eserine atıf yapılır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/israilin-kurulus-mitleri-1/",
+    "evidence": "Benedict Anderson milliyetçiliğin doğuş ve yayılışını incelediği “Imagined Communities” (“Hayali Cemaatler”) adlı eserinde toplulukların bir millet oluşturma kademesinde ortak geçmiş ve kuruluş mitlerinden nasıl faydalanıldığını anlatır."
+  },
+  {
+    "id": "fact-026",
+    "input": "Davud Peygamber döneminde Kudüs bugünkü Eski Şehir'e göre neredeydi?",
+    "expected_output": "Davud Peygamber'in Kudüs'ü bugünkü Eski Şehir'in güneyindeydi ve Silvan su kaynağını duvarlarının içinde tutuyordu.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/notalari-taslar-olan-musiki/",
+    "evidence": "Davud Peygamber'in Kudüs'ü bugünkü Eski Şehir'in güneyindeydi ve bu şekliyle Silvan su kaynağını duvarların içinde tutuyordu."
+  },
+  {
+    "id": "fact-027",
+    "input": "Kerim Balcı \"Onlar Savaşırken Yazmak\" önsözünde önyargı konusunda hangi düşünürün yaklaşımını benimsediğini söylüyor?",
+    "expected_output": "Yazar, kitabı önyargı konusunda Gadamer'in olumlamacı yaklaşımını benimseyerek yazdığını söyler; Gadamer'e göre önyargısız anlamak mümkün değildir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/onlar-savasirken-yazmak-vadedilmis-yazilara-onsoz-yerine-2/",
+    "evidence": "Önyargı konusunda Gadamer’in olumlamacı yaklaşımını benimseyerek yazdım bu kitabı. Gadamer, önyargısız anlamanın mümkün olmadığını söyler."
+  },
+  {
+    "id": "fact-028",
+    "input": "Kerim Balcı'ya göre gazeteci manşet atarken neden taviz vermemeli?",
+    "expected_output": "Yazara göre gazeteci, manşetlerini sanatçı refleksleriyle atmamalı ve 5N1K'nın prozaik gerçekliğinden taviz vermemelidir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/sanatci-heptenciligine-karsi-gazeteci-butunselligi/",
+    "evidence": "Gazeteciler manşetlerini sanatçı refleksleriyle atmaya başladıklarında prozaik mesleklerini şiire, lirizme, destansıya yaklaştırmış olurlar. Oysa gazeteci 5N1K’nın prozaik gerçekliğinden taviz vermemelidir."
+  },
+  {
+    "id": "fact-029",
+    "input": "Uluslararası Adalet Divanı'nın Rohingya kararı hangi tarihli ve hangi davada verildi?",
+    "expected_output": "Karar, Uluslararası Adalet Divanı'nın 19 Kasım tarihli Gambia v. Myanmar kararıdır. Divan, Myanmar ordusunun 2016-2017'de Rohingya Müslümanlarına karşı uyguladığı operasyonların soykırım suçu teşkil ettiğine hükmetti.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/rohingya-soykirimi-kararindan-dersler/",
+    "evidence": "Uluslararası Adalet Divanı’nın 19 Kasım tarihli Gambia v. Myanmar kararını insan hakları alanında çalışan herkesin özenle okuyup analiz etmesi gerekiyor."
+  },
+  {
+    "id": "fact-030",
+    "input": "Kerim Balcı İsrail'e ilk ne zaman ve hangi havayoluyla gitti?",
+    "expected_output": "1996 yılının 30 Haziran Pazar günü akşam saatlerinde THY uçağıyla Tel Aviv'e uçtu. Bu onun ilk uçak yolculuğu ve ilk yurt dışı çıkışıydı.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/israilde-ilk-aksamim/",
+    "evidence": "1996’nın 30 Haziran Pazar günü akşam saatlerinde bindiğim THY uçağıyla Tel Aviv’e uçtum."
+  },
+  {
+    "id": "fact-031",
+    "input": "Kerim Balcı'nın Kudüs'teki Arapça sınıfında kimler vardı?",
+    "expected_output": "Sınıf beş kişilikti: Kerim Balcı'nın yanında üç Alman Hıristiyan ve bir Amerikalı Mormon öğrenci vardı. Öğretmenleri ise Yahudi olan Yael Kohen'di.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/arapcayi-bir-yahudiden-ogrendim/",
+    "evidence": "Beş kişilik sınıfta üç Alman Hıristiyan ve bir Amerikalı Mormonla birlikte eğitim görüyordum."
+  },
+  {
+    "id": "fact-032",
+    "input": "Bediüzzaman'ın kayıp sanılan Ta'likât eseri nerede saklı kalmıştı?",
+    "expected_output": "Bediüzzaman, 1951'de kendisine gelen Ta'likât'ı Isparta'da kaldığı evin tavan arasına saklamıştı. Eser, ev 1991 yılında tadilattan geçirilene kadar orada kaldı.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/mantikunnurun-kaynagi-bediuzzamanin-kizil-icaz-ve-talikat-adli-arapca-mantik-kitaplaridir/",
+    "evidence": "1951 yılında kendisine gelen Ta’likât’ı Isparta’da kaldığı evin tavan arasına saklamış Üstad Bediüzzaman ve orada kalmış kitap."
+  },
+  {
+    "id": "fact-033",
+    "input": "\"Bizim zaman-mekân telakkimiz ve bayramlar\" yazısı ilk olarak ne zaman ve nerede yayımlandı?",
+    "expected_output": "Yazının ilk hali, o yılın Ramazan Bayramı'nın ikinci günü olan 10 Eylül 2010'da Zaman Gazetesi'nde yayımlandı. Yazar onu Zamansız Yazılar derlemesinin ilk makalesi yaptı.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/bizim-zaman-mekan-telakkimiz-ve-bayramlar/",
+    "evidence": "Bu yazının ilk hali, o yılın Ramazan Bayramı’nın ikinci günü olan 10 Eylül 2010 tarihinde Zaman Gazetesi’nde yayınlanmıştı."
+  },
+  {
+    "id": "fact-034",
+    "input": "\"Sloganlarla Düşünen Toplum\" yazısına göre Breslavlı Nahman nerede gömülüdür?",
+    "expected_output": "Yazıya göre Breslavlı Nahman, Polonya'daki Oman adlı bir kasabada ölüp gömülmüştür. Yazar onu mistik Yahudiliğin son ustalarından biri olarak tanıtır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/sloganlarla-dusunen-toplum/",
+    "evidence": "Breslavlı Nahman Polonya’da bulunan Oman isimli bir kasabada ölüp gömülmüş."
+  },
+  {
+    "id": "fact-035",
+    "input": "\"Vahşet dirildiğinde\" makalesinin ilk hali ne zaman yayımlanmıştı?",
+    "expected_output": "Makale, 28 Ağustos 2006'da Zaman Gazetesi'nde aynı adla yayımlanan yazının güncellenmiş halidir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/vahset-dirildiginde/",
+    "evidence": "Bu makale 28 Ağustos 2006 tarihinde Zaman Gazetesi’nde yayınlanan aynı isimli makalenin güncellenmiş halidir."
+  },
+  {
+    "id": "fact-036",
+    "input": "Kerim Balcı'ya göre İsrail toplumunun temel kırılma hatları nelerdir?",
+    "expected_output": "Yazara göre İsrail toplumunda beş kırılma hattı vardır: Arap-Yahudi, Güvercin-Şahin, Dindar-Seküler, Sefarad-Aşkenaz ve Rus-Rus olmayan çatışmaları. Diğer sosyo-ekonomik göstergelerin tamamı bu beş hatla örtüşür.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/israil-toplumunun-kirilma-noktalari/",
+    "evidence": "İsrail toplum ve siyasetini anlayabilmek için ülkenin kurulduğu günden bu yana sosyal kırılma hatlarını oluşturan Arap-Yahudi, Güvercin-Şahin, Dindar-Seküler, Sefarad-Aşkenar ve Rus-Rus olmayan çatışmalarını tanımak lazım."
+  },
+  {
+    "id": "fact-037",
+    "input": "Arapça hocası Yael dindarlıktan ne zaman soğumuştu?",
+    "expected_output": "Öğrencilik yıllarında dindarlaşan Yael, askerlik yıllarında önce dinden, sonra da dindarlardan soğumuştu. Bunda askerlik eğitiminin yoğunluğu ve dindar Yahudilerin askerlik yapmaması etkili olmuştu.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/kudus-laikleri-kusup-atacak/",
+    "evidence": "Ancak askerlik yıllarında önce dinden, daha sonra da dindarlardan soğumuş."
+  },
+  {
+    "id": "fact-038",
+    "input": "Bediüzzaman, Tiflis'te Rus polisin \"Burası Bitlis değil, Tiflis'tir\" sözüne ne cevap vermişti?",
+    "expected_output": "Bediüzzaman, Rus polisin bu sözüne \"Bitlis Tiflis kardeştir\" diye cevap vermişti.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/gurbet-yilani/",
+    "evidence": "Rus polisin ‘Burası Bitlis değil, Tiflis’tir’ sözüne de ‘Bitlis Tiflis kardeştir’ diye cevap veriyordu."
+  },
+  {
+    "id": "fact-039",
+    "input": "Sahur yazısında Mevlana'nın anlatılan hikâyesi neyle ilgili?",
+    "expected_output": "Yazıda Mevlana Celaleddin Rumi'nin, bitkilerle dolu büyük bir adada tek başına yaşayan bir ineğin hikâyesi anlatılır. İnek her gece ertesi gün ne yiyeceği kaygısıyla uyuyamaz, ama sabah adayı yine yemyeşil bulur.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/a-midnight-dream-sahur/",
+    "evidence": "Mevlana Celaleddin Rumi tells the story of a cow living alone on a great island full of plants."
+  },
+  {
+    "id": "fact-040",
+    "input": "\"My Last Prayer\" yazısında \"namaz\" kelimesi nasıl açıklanıyor?",
+    "expected_output": "Namaz, Müslümanların günlük ibadeti için kullanılan Türkçe ve Farsça isimdir. Müslümanlar günde beş kez kıbleye, yani Mekke yönüne dönerek namaz kılar.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/my-last-prayer/",
+    "evidence": "Namaz is the Turkish and Persian name for the Muslim daily prayer."
+  },
+  {
+    "id": "fact-041",
+    "input": "Kerim Balcı'ya göre dış politikada sempati ve empatinin yeri nedir?",
+    "expected_output": "Yazara göre dış politikada sempati olur, empati olmaz. Mazlumun hissettiğini paylaşmak insanlık görevidir, ama onun gibi hissedip kızgınlığa gark olmak zulme gönüllü bir boyun eğiştir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/dis-politika-anlayisimizda-disindalik-prensibi/",
+    "evidence": "Dış politikada sempati olur, empati olmaz."
+  },
+  {
+    "id": "fact-042",
+    "input": "Kerim Balcı \"biz bize benzeriz\" önermesinin yerine hangi ifadenin doğru olacağını söylüyor?",
+    "expected_output": "Yazara göre bu yanlış önermenin kalıplarına sokulacaksa doğrusu \"bizi en iyi biz anlarız\" olmalıdır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/biz-bize-benzeriz-saplantisi/",
+    "evidence": "Yukarıdaki yanlış önermenin kalıplarına sokulacaksa bu, doğrusu 'bizi en iyi biz anlarız' olmalıdır."
+  },
+  {
+    "id": "fact-043",
+    "input": "İbranice'yi anadili olarak konuşan son 2000 yılın ilk çocuğu kimdi?",
+    "expected_output": "1882'de Kudüs'te doğan, Litvanyalı öğretmen Eliezer Perlman'ın (sonradan Ben Yehuda) oğlu, son 2000 yılda anadili İbranice olan ilk çocuk olarak 'ilk İbrani çocuk' diye bilinir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/agada-sel-safot-dillerin-en-bi-guzeli/",
+    "evidence": "1882 yılında Kudüs’te doğan bir çocuk son 2000 yıldır kulağına İbranice ninni söylenen ilk çocuk oldu."
+  },
+  {
+    "id": "fact-044",
+    "input": "Elmalılı Hamdi Yazır'ın Metâlib ve Mezâhib'i hangi kitabın çevirisidir?",
+    "expected_output": "Metâlib ve Mezâhib, Paul Janet ile Gabriel Séailles'ın 1886 tarihli Histoire de la Philosophie adlı kitabının metafizik ve ilahiyat kısımlarının çevirisidir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/seslenis-elmalili-hamdi-yazir/",
+    "evidence": "Paul Janet ile Gabriel Séailles’ın 1886 tarihli Histoire de la Philosophie adlı kitabının metafizik ve ilahiyat kısımlarının çevirisi olan Metâlib ve Mezâhib’in başındaki bu münacatı, ondan daha meşhur olmuş olan dibace ile birlikte Elmalılı Hamdi Yazır’ın eklentileridir."
+  },
+  {
+    "id": "fact-045",
+    "input": "Kudüs'teki Fransız Tepesi adını nereden alıyor?",
+    "expected_output": "Birinci Dünya Savaşı'nda tepeyi Frank adlı bir yüzbaşının komutasındaki İngiliz birliği ele geçirmiş, General Allenby de onu ödüllendirmek için tepeye Frank Tepesi adını vermiştir. Arapçada Frenk Fransız anlamına geldiği için ad sonradan el-Tell el-Fransâvî (Fransız Tepesi) olmuştur.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/zeytin-dagi-ve-aksanin-cagrisi/",
+    "evidence": "General Allenby şehri tepeden seyreden bu stratejik tepeyi ele geçiren Yüzbaşı’yı ödüllendirmek için tepeye Frank Tepesi adını vermişti."
+  },
+  {
+    "id": "fact-046",
+    "input": "Araplar Yahudileri ve Hristiyanları kutsal günlerine göre nasıl adlandırır?",
+    "expected_output": "Araplar, kutsal zamana atfedilen önem nedeniyle Yahudilere 'Cumartesi ashabı', Hristiyanlara 'Pazar ashabı' der.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/zamandir-paylasilmasi-en-zor-kutsal-cunku-azdir/",
+    "evidence": "Hususen Doğu’da zamana atfedilen kutsallığın belirleyiciliği öylesine baskındır ki Araplar, Cumartesi ashabı, Pazar ashabı diye adlandırırlar Yahudi ve Hıristiyanları..."
+  },
+  {
+    "id": "fact-047",
+    "input": "Asya tipi kıskançlık yazısında Halil İnalcık'ın hangi tezine atıf yapılıyor?",
+    "expected_output": "Halil İnalcık'ın 'Osmanlı geri kalmadı, Avrupa ileri gitti; çalışılması gereken Osmanlı'nın neden geri kaldığı değil, Avrupa'nın neden ileri gittiğidir' tezine atıf yapılıyor. Yazara göre bu tez tez aşamasında kalmıştır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/islami-dusuncenin-acmazlarindan-asya-tipi-kiskanclik/",
+    "evidence": "Halil İnalcık’ın ‘Osmanlı geri kalmadı, Avrupa ileri gitti. Çalışılması gereken Osmanlı’nın neden geri kaldığı değil, Avrupa’nın neden ileri gittiğidir’ tezi, bu yıkılışı esas alan entelektüel saplantının tedavisine yönelik bir tezdir, ancak görülen o ki ancak tez aşamasında kalmıştır."
+  },
+  {
+    "id": "fact-048",
+    "input": "'Evliysen evin başkanı sensin' yazısında geçen İbranice 'nasui' kelimesi ne anlama geliyor?",
+    "expected_output": "'Nasui' İbranicede 'evli' demektir. Yaşlı Haredi Yahudi bunu 'nasi' (başkan) kelimesiyle ilişkilendirerek 'Evliysen evde başkan sensin' diye açıklamıştır.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/evliysen-evin-baskani-sensin/",
+    "evidence": "‘Nasui’nin evli demek olduğunu anlamıştım."
+  },
+  {
+    "id": "fact-049",
+    "input": "1009 yılında Kudüs'teki Kutsal Kabir (Golgotha) kilisesinin yıkılmasını kim emretti?",
+    "expected_output": "1009 yılında kilisenin yerle bir edilmesini Fatımi Halifesi El-Hakim emretmiştir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/tasin-etrafinda-taslasan-kalpler/",
+    "evidence": "1009 yılında, Golgotha Kayası kadar din değiştirmiş Fatımî Halifesi El-Hakim —binayı yıktırırsa annesinin Hıristiyan olmasının kendi benliğinde oluşturduğu “lanetli hafızayı” ortadan silebileceğini düşünerek olsa gerek— kilisenin yerle bir edilmesini emreder."
+  },
+  {
+    "id": "fact-050",
+    "input": "'Am kşe orho' ifadesi ne demek ve nereden geliyor?",
+    "expected_output": "'Am kşe orho' 'ensesi sert kavim' yani inatçı millet demektir. İfade Tevrat'ın Çıkış Kitabı'nın 32. ve 33. bablarında Allah'ın Hz. Musa ile İsrailoğulları hakkında konuşurken kullandığı bir ifadedir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/am-kse-orho-ensesi-sert-millet/",
+    "evidence": "Tevrat’ın Çıkış Kitabı 32 ve 33. bablarında Cenab-ı Allah İsrailoğulları hakkında Hz. Musa ile konuşurken ‘bu halk ‘am kşe orho’dur, ensesi sert kavimdir’ ifadesini kullanır."
+  },
+  {
+    "id": "fact-051",
+    "input": "Bir ulusun sözlüğündeki değişikliklerden tarihinin izinin sürülebileceğini hangi düşünür söylemiştir?",
+    "expected_output": "18. yüzyılın ansiklopedicisi Diderot, Encyclopédie adlı makalesinde bir ulusun sözlüğündeki değişiklikleri izleyerek o ulusun tarihi gelişiminin izinin sürülebileceğini kaydeder.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/bizim-dis-politika-sozlugumuzun-ruhu/",
+    "evidence": "18. yüzyılın meşhur ansiklopedicisi Diderot, tarihî bir dönüşümü işaretleyen Encyclopédieadlı makalesinde bir ulusun sözlüğündeki değişiklikleri izlemek suretiyle o ulusun tarihî gelişiminin izinin sürülebileceğini kaydeder."
+  },
+  {
+    "id": "fact-052",
+    "input": "'İsteslemû! Tavır ve davranışlarınızı Müslümanlaştırın!' yazısı ilk olarak nerede ve ne zaman yayımlandı?",
+    "expected_output": "Yazı, 5 Ocak 2004 tarihli Zaman Gazetesi'nde yayımlanan yazının güncellenmiş halidir.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/isteslemu-tavir-ve-davranislarinizi-muslumanlastirin/",
+    "evidence": "Bu yazı 5 Ocak 2004 tarihli Zaman Gazetesi’nde yayınlanmış yazının güncellenmiş halidir."
+  },
+  {
+    "id": "fact-053",
+    "input": "Kerim Balcı, Ortadoğu sorununun iki ırk arasındaki ontolojik bir farka dayandığı tezini kabul ediyor mu?",
+    "expected_output": "Hayır. 2003'te ilk yayımlanan ve Ali Bulaç'ın çağrısıyla başlayan tartışmaya katkı yapan bu yazı, Ortadoğu sorununun ontolojik temelli olduğu tezini reddediyor.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/ortadogu-catismasina-ontolojik-bakis-ve-edward-said/",
+    "evidence": "2003 yılında ilk yayınlandığında Ali Bulaç'ın çağrısıyla başlayan Ortadoğu sorununun bölgesel ve dinî bir sorun mu yoksa temeli ontolojik olan iki ırk arasındaki bir farka dayanan bir problem mi olduğu tartışmasına katkı yapan bu yazı ontoloji tezini reddediyor."
+  },
+  {
+    "id": "fact-054",
+    "input": "Kudüs'teki Altın Kapısı'nı ilk kim kapatmış?",
+    "expected_output": "Yazıya göre Altın Kapısı'nı ilk kapatanlar muhtemelen Haçlılardı. Sonra Selahaddin Eyyubi ile Memluk ve Osmanlı yöneticileri de güvenlik kaygısıyla kapıyı duvarla örülü tuttu.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/altin-kapisinda-atalar-mirasi-hikayelere-devam/",
+    "evidence": "Altın Kapısı’nı ilk kapatanlar muhtemeldir ki Haçlılardı."
+  },
+  {
+    "id": "fact-055",
+    "input": "Theodor Herzl'in İsrail devleti hayalini anlattığı kitabın adı nedir?",
+    "expected_output": "Herzl bu hayalini 'Altneuland' (Eski-Yeni Toprak) adlı kitabında anlatmış ve Kudüs'ü milli ve uluslararası bir merkez olarak sunmuştur.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/el-mebka-aglayan-sehir/",
+    "evidence": "Asrımızın başında, kuracağı İsrail Devletinin hayallerini “Altneuland” (Eski—Yeni Toprak) adıyla kitaplaştıran siyasal Siyonizm’in babası Theodor Hertzl kitabında Kudüs’ü milli ve uluslararası bir merkez olarak sunar."
+  },
+  {
+    "id": "fact-056",
+    "input": "'Hayata Çağrı' yazısına göre Londra'da aynı metro durağından kaç hat geçebiliyor?",
+    "expected_output": "Yazıya göre Londra'da yer yer aynı metro durağından sekiz hat birden geçer.",
+    "category": "direct_fact",
+    "source_url": "https://kerimbalci.com/hayata-cagri/",
+    "evidence": "Londra gibi yer yer aynı metro durağından sekiz hattın birden geçtiği bir şehirde bir müddet yaşayanlar metrosu olmayan şehre 'metropol' denmesinin anlamsız olduğunu öğrenirler."
+  }
+]

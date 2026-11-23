@@ -1,0 +1,64 @@
+[
+  {
+    "id": "unans-001",
+    "input": "Kerim Balcı'nın en sevdiği futbol takımı hangisi?",
+    "expected_output": "Sitede bu konuda bir bilgi yoktur; bilmiyorum.",
+    "category": "unanswerable",
+    "source_url": null
+  },
+  {
+    "id": "unans-002",
+    "input": "Kerim Balcı gelecek hafta hangi konuda yazacak?",
+    "expected_output": "Gelecekte yayımlanacak yazıların konuları hakkında bilgim yok; yeni yazıları sitede veya üye bülteninde takip edebilirsiniz.",
+    "category": "unanswerable",
+    "source_url": null
+  },
+  {
+    "id": "unans-003",
+    "input": "SSS videosunda Kerim Balcı'ya en çok hangi kitap ya da projenin heyecanlandırdığını sordular; ne cevap verdi?",
+    "expected_output": "Bu sorunun cevabı sitedeki metinde yer almıyor. Sıkça Sorulan Sorular sayfası yalnızca videoda cevaplanan soruları listeliyor; cevaplar YouTube videosunda, sayfada yazılı değil.",
+    "category": "unanswerable",
+    "source_url": "https://kerimbalci.com/sikca-sorulan-sorular/",
+    "evidence": "Bu 14 kitap ve 3 proje içinde sizi en çok heyecanlandıranı hangisi?"
+  },
+  {
+    "id": "unans-004",
+    "input": "Kerim Balcı'nın telefon numarası nedir?",
+    "expected_output": "Sitede Kerim Balcı'ya ait bir telefon numarası paylaşılmıyor; bu bilgiyi veremem. Sitedeki e-posta adresleri ve site altbilgisindeki sosyal medya hesapları (X, Facebook, LinkedIn, Threads, TikTok, YouTube, Instagram) üzerinden ulaşılabilir.",
+    "category": "unanswerable",
+    "source_url": "https://kerimbalci.com/neden-abonelik/",
+    "evidence": "Üyelik sisteminin yazarla okur arasında, rafta satılan kitaplar veya gelir modeli reklama dayalı online içerikler için söz konusu olmayan bir karşılıklı iletişim imkanı oluşturacağını da ümit ediyorum."
+  },
+  {
+    "id": "unans-005",
+    "input": "Umbilicus Mundi kitabı basılı olarak ne zaman çıkacak?",
+    "expected_output": "Sitede Umbilicus Mundi'nin basım tarihi verilmiyor. Yazar bu kitabı hem en hazır hem de bitmesi en zor kitabı olarak tanımlıyor. Sitede açıklanan basım öngörüleri yalnızca Zamansız Yazılar ile Vadedilmiş Yazılar (2027 sonu) ve Ene Makdisi ile Kutsalların Çatışması (2028) için.",
+    "category": "unanswerable",
+    "source_url": "https://kerimbalci.com/hakkinda/",
+    "evidence": "Umbilicus Mundi kitaplarım hem içinde en hazır olanı hem de en zor bitecek olanı."
+  },
+  {
+    "id": "unans-006",
+    "input": "Kerim Balcı'nın doktora tezinin konusu nedir?",
+    "expected_output": "Sitede doktora tezinin konusu belirtilmiyor. Yalnızca Durham Üniversitesi'nde başlayıp yarıda kalan doktorasını Burch Üniversitesi'nde tamamlamaya yöneldiği ve bu yazı yazılırken sürecin henüz tamamlanmadığı belirtiliyor.",
+    "category": "unanswerable",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "Birincisi beni 2022 yılında Leeds Beckett Üniversitesi’nde hukuk yüksek lisansı yaparak avukatlığa yönelmeye, ikincisi de Burch Üniversitesi’nde yarıda kalmış doktoramı tamamlamaya zorladı."
+  },
+  {
+    "id": "unans-007",
+    "input": "Standart üyeliğin aylık ücreti ne kadar?",
+    "expected_output": "Sitedeki metinlerde üyelik ücretleri yer almıyor. Kullanım koşullarına göre ücretler sitenin abonelik sayfasında güncel olarak gösteriliyor ve üyelik türüne göre aylık ya da yıllık belirleniyor.",
+    "category": "unanswerable",
+    "source_url": "https://kerimbalci.com/uyelik-davet/",
+    "evidence": "Ücretsiz üye olun, seçme yazılar e-postanıza gelsin; ücretli üyelikle -seviyesine göre- tefrikaların tamamına ve basılacak kitaplara ulaşın."
+  },
+  {
+    "id": "unans-008",
+    "input": "Hezar Metn'de yer alacak bin metnin tam listesi hangileri?",
+    "expected_output": "Sitede bin metnin tam listesi yayımlanmamış. Sitede yalnızca projenin ilk metni olarak Elmalılı Hamdi Yazır'ın Metâlib ve Mezâhib'in başına eklediği münacat tanıtılıyor; okurlar listeye girmesini istedikleri metinleri yazara önerebiliyor.",
+    "category": "unanswerable",
+    "source_url": "https://kerimbalci.com/tag/hezar-metn/",
+    "evidence": "tetikleyecek kuşağın vakıf olması gerektiğine inandığım metinleri bazen aynen, bazen özetleyerek, bazen de kısa izahatla bir araya getirme çalışması."
+  }
+]
