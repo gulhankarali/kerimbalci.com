@@ -110,3 +110,20 @@ def test_http_ve_site_ayarlari(monkeypatch):
     settings = get_settings()
     assert (settings.http_timeout, settings.site_url) == (5, "https://ornek.com")
     assert settings.site_workdir.parts[-2:] == ("tmp", "x")
+
+
+def test_chatbot_ve_kalite_kapisi_ayarlari(monkeypatch):
+    """Chatbot zaman asimi/yeniden deneme ve kalite kapisi esigi ortamdan okunur."""
+    for key in ("CHATBOT_TIMEOUT", "CHATBOT_MAX_RETRIES", "CHATBOT_RETRY_BACKOFF", "EVAL_MIN_PASS_RATE"):
+        monkeypatch.delenv(key, raising=False)
+    s = get_settings()
+    assert (s.chatbot_timeout, s.chatbot_max_retries, s.chatbot_retry_backoff) == (60.0, 2, 2.0)
+    assert s.eval_min_pass_rate == 0.85
+
+    monkeypatch.setenv("CHATBOT_TIMEOUT", "10")
+    monkeypatch.setenv("CHATBOT_MAX_RETRIES", "0")
+    monkeypatch.setenv("CHATBOT_RETRY_BACKOFF", "0.5")
+    monkeypatch.setenv("EVAL_MIN_PASS_RATE", "0.9")
+    s = get_settings()
+    assert (s.chatbot_timeout, s.chatbot_max_retries, s.chatbot_retry_backoff) == (10.0, 0, 0.5)
+    assert s.eval_min_pass_rate == 0.9

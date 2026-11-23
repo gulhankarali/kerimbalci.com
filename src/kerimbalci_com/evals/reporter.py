@@ -19,8 +19,10 @@ def _scores(result: CaseResult) -> list[float]:
     return [m.score for m in result.metrics if m.score is not None]
 
 
-def summarize(suite: EvalSuite, suite_result: SuiteResult) -> dict:
-    """Toplam ve tag bazli gecme orani / ortalama puan."""
+def summarize(
+    suite: EvalSuite, suite_result: SuiteResult, min_pass_rate: float | None = None
+) -> dict:
+    """Toplam ve tag bazli gecme orani / ortalama puan; verilirse kalite kapisi sonucu."""
     groups: dict[str, list[CaseResult]] = defaultdict(list)
     for result in suite_result.results:
         for tag in suite.tags_of(result.case) or ["(etiketsiz)"]:
@@ -36,13 +38,20 @@ def summarize(suite: EvalSuite, suite_result: SuiteResult) -> dict:
             "avg_score": round(sum(scores) / len(scores), 3) if scores else None,
         }
 
-    return {
+    summary = {
         "suite": suite_result.suite_name,
         "started_at": suite_result.started_at.isoformat(),
         "duration_seconds": round(suite_result.duration_seconds, 1),
         "overall": stats(suite_result.results),
         "by_tag": {tag: stats(rs) for tag, rs in sorted(groups.items())},
     }
+    if min_pass_rate is not None:
+        summary["quality_gate"] = {
+            "min_pass_rate": min_pass_rate,
+            "pass_rate": round(suite_result.pass_rate, 3),
+            "passed": suite_result.meets_quality_gate(min_pass_rate),
+        }
+    return summary
 
 
 def format_summary(summary: dict) -> str:
@@ -57,6 +66,13 @@ def format_summary(summary: dict) -> str:
         lines.append(
             f"{tag:<18}{s['passed']:>8}{s['total']:>8}{s['errored']:>6}"
             f"{s['pass_rate']:>8.0%}{avg:>10}"
+        )
+    gate = summary.get("quality_gate")
+    if gate:
+        verdict = "GECTI" if gate["passed"] else "KALDI"
+        lines.append(
+            f"Kalite kapisi: {verdict} (oran {gate['pass_rate']:.0%}, "
+            f"esik {gate['min_pass_rate']:.0%})"
         )
     return "\n".join(lines)
 
@@ -85,13 +101,18 @@ def _case_record(suite: EvalSuite, result: CaseResult) -> dict:
     }
 
 
-def write_json_report(suite: EvalSuite, suite_result: SuiteResult, directory: Path) -> Path:
+def write_json_report(
+    suite: EvalSuite,
+    suite_result: SuiteResult,
+    directory: Path,
+    min_pass_rate: float | None = None,
+) -> Path:
     """Ozet + case ayrintilarini <directory>/<suite>-<zaman>.json dosyasina yazar."""
     directory.mkdir(parents=True, exist_ok=True)
     stamp = suite_result.started_at.strftime("%Y%m%dT%H%M%SZ")
     path = directory / f"{suite_result.suite_name}-{stamp}.json"
     payload = {
-        "summary": summarize(suite, suite_result),
+        "summary": summarize(suite, suite_result, min_pass_rate),
         "cases": [_case_record(suite, r) for r in suite_result.results],
     }
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -50,6 +50,14 @@ class Settings:
     hf_chatbot_url: str | None = field(default_factory=lambda: os.getenv("HF_CHATBOT_URL"))
     hf_token: str | None = field(default_factory=lambda: os.getenv("HF_TOKEN"))
     chatbot_endpoint: str = field(default_factory=lambda: os.getenv("CHATBOT_API_ENDPOINT", "/cevapla"))
+    chatbot_timeout: float = field(default_factory=lambda: float(os.getenv("CHATBOT_TIMEOUT", "60")))
+    chatbot_max_retries: int = field(default_factory=lambda: int(os.getenv("CHATBOT_MAX_RETRIES", "2")))
+    chatbot_retry_backoff: float = field(
+        default_factory=lambda: float(os.getenv("CHATBOT_RETRY_BACKOFF", "2"))
+    )
+    eval_min_pass_rate: float = field(
+        default_factory=lambda: float(os.getenv("EVAL_MIN_PASS_RATE", "0.85"))
+    )
     factuality_judge_level: int = field(
         default_factory=lambda: int(os.getenv("FACTUALITY_JUDGE_LEVEL", "3"))
     )

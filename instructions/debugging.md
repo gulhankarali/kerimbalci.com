@@ -32,4 +32,6 @@ yazılabilir (commit etmeyin).
 | `DatasetError` | Dataset JSON'unda eksik alan / tekrarlı id — mesaj kaydı gösterir |
 | `JudgeConfigError` | Hakem YAML'ı şemaya uymuyor (eksik alan, rubric boşluğu/çakışması) — mesaj dosyayı gösterir |
 | Chatbot boş cevap | Space uyuyor olabilir; `test_hf_chatbot_space_erisebilir` ile kontrol edin |
+| `ChatbotError: ... N denemede basarisiz` | Space yanıt vermiyor; `CHATBOT_TIMEOUT` / `CHATBOT_MAX_RETRIES`'ı artırın, loglarda her denemenin hatası görünür |
+| Runner çıkış kodu 1 | Kalite kapısı kaldı (geçen oran < `EVAL_MIN_PASS_RATE`); `reports/*.json` içinde `passed: false` case'lere bakın |
 | Hakem 401/404 | `ANTHROPIC_API_KEY` veya `JUDGE_MODEL` hatalı — `test_connections.py` |

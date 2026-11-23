@@ -4,8 +4,9 @@
     uv run python -m kerimbalci_com.evals factuality --tags false_premise,unanswerable --limit 5
     uv run python -m kerimbalci_com.evals factuality --ids fact-001,premise-002 --level 1
 
-Varsayilanlar .env'den gelir (EVAL_TAGS, EVAL_CONCURRENCY, FACTUALITY_JUDGE_LEVEL).
-Cikis kodu: 0 = tum case'ler gecti, 1 = basarisiz/hata var, 2 = eksik ayar.
+Varsayilanlar .env'den gelir (EVAL_TAGS, EVAL_CONCURRENCY, FACTUALITY_JUDGE_LEVEL,
+EVAL_MIN_PASS_RATE).
+Cikis kodu: 0 = kalite kapisi gecti, 1 = kapi kaldi (gecen oran < esik), 2 = eksik ayar.
 DIKKAT: Hakem model icin ucretli API istegi atar.
 """
 
@@ -39,6 +40,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="hakem seviyesi; varsayilan FACTUALITY_JUDGE_LEVEL")
     parser.add_argument("--concurrency", type=int, default=None,
                         help="varsayilan EVAL_CONCURRENCY")
+    parser.add_argument("--min-pass-rate", type=float, default=None,
+                        help="kalite kapisi esigi 0-1; varsayilan EVAL_MIN_PASS_RATE")
     return parser.parse_args(argv)
 
 
@@ -70,9 +73,10 @@ def main(argv: list[str] | None = None) -> int:
         chatbot_factory=lambda: ChatbotClient(settings),
         concurrency=args.concurrency or settings.eval_concurrency,
     )
-    logger.info("\n%s", format_summary(summarize(suite, result)))
-    write_json_report(suite, result, settings.eval_report_dir)
-    return 0 if result.passed == len(result.results) else 1
+    min_pass_rate = args.min_pass_rate if args.min_pass_rate is not None else settings.eval_min_pass_rate
+    logger.info("\n%s", format_summary(summarize(suite, result, min_pass_rate)))
+    write_json_report(suite, result, settings.eval_report_dir, min_pass_rate)
+    return 0 if result.meets_quality_gate(min_pass_rate) else 1
 
 
 if __name__ == "__main__":

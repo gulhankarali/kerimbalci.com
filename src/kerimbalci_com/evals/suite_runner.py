@@ -65,6 +65,17 @@ class SuiteResult:
     def failed(self) -> int:
         return len(self.results) - self.passed - self.errored
 
+    @property
+    def pass_rate(self) -> float:
+        return self.passed / len(self.results) if self.results else 0.0
+
+    def meets_quality_gate(self, min_pass_rate: float) -> bool:
+        """Kalite kapisi: gecen oran >= min_pass_rate (hata alan case'ler basarisiz sayilir).
+
+        Bos kosu kapidan gecemez.
+        """
+        return bool(self.results) and self.pass_rate >= min_pass_rate
+
 
 def _run_case(suite: EvalSuite, case: Case, get_chatbot: Callable[[], Chatbot]) -> CaseResult:
     result = CaseResult(case=case)

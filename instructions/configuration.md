@@ -23,10 +23,14 @@ yeni bir `Settings` üretir (testlerde `monkeypatch` bu sayede çalışır).
 | `HF_CHATBOT_URL` | `Settings.hf_chatbot_url` | Test edilen chatbot'un HF Space adresi |
 | `CHATBOT_API_ENDPOINT` | `Settings.chatbot_endpoint` | Gradio endpoint (varsayılan `/cevapla`) |
 | `HF_TOKEN` | `Settings.hf_token` | Hugging Face token (gizli) |
+| `CHATBOT_TIMEOUT` | `Settings.chatbot_timeout` | Tek soru için zaman aşımı, sn (vars. 60) |
+| `CHATBOT_MAX_RETRIES` | `Settings.chatbot_max_retries` | Hata/zaman aşımında yeniden deneme sayısı (vars. 2; 0 = kapalı) |
+| `CHATBOT_RETRY_BACKOFF` | `Settings.chatbot_retry_backoff` | İlk bekleme, sn; her denemede iki katı (vars. 2 → 2, 4, …) |
 | `FACTUALITY_JUDGE_LEVEL` | `Settings.factuality_judge_level` | Hakem seviyesi: 1 basic, 2 intermediate, 3 advanced (vars. 3) |
 | `EVAL_FACTUALITY_THRESHOLD` | `Settings.factuality_threshold` | Eşik (0-1); boşsa hakem YAML'ındaki `threshold` |
 | `EVAL_CONCURRENCY` | `Settings.eval_concurrency` | Runner'da aynı anda çalışan case sayısı (vars. 4) |
 | `EVAL_TAGS` | `Settings.eval_tags` | Runner'da yalnızca bu tag'ler (virgülle; boş = hepsi) |
+| `EVAL_MIN_PASS_RATE` | `Settings.eval_min_pass_rate` | Runner kalite kapısı: geçen case oranı alt sınırı (vars. 0.85) |
 | `EVAL_REPORT_DIR` | `Settings.eval_report_dir` | JSON raporların klasörü, proje köküne göre (vars. `reports`) |
 | `ANTHROPIC_API_KEY` | Anthropic SDK / deepeval | Hakem model API anahtarı (gizli) |
 | `CONFIDENT_API_KEY` | deepeval | Sonuçları Confident AI'ya gönderir (gizli, opsiyonel) |

@@ -38,8 +38,9 @@ uv run pytest -m eval tests/factuality/ -k false_premise
 uv run python -m kerimbalci_com.evals factuality --tags unanswerable --level 3
 ```
 
-Hakem seviyesi `FACTUALITY_JUDGE_LEVEL`, eşzamanlılık `EVAL_CONCURRENCY`
-ile `.env`'den ayarlanır. Tüm değişkenler: [instructions/configuration.md](instructions/configuration.md).
+Hakem seviyesi `FACTUALITY_JUDGE_LEVEL`, eşzamanlılık `EVAL_CONCURRENCY`,
+kalite kapısı `EVAL_MIN_PASS_RATE` (runner geçen oran bunun altındaysa 1 ile
+çıkar) `.env`'den ayarlanır. Tüm değişkenler: [instructions/configuration.md](instructions/configuration.md).
 
 > Eval testleri hakem model için ücretli API istekleri atar; önce küçük bir
 > alt kümede deneyin.

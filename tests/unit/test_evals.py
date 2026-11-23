@@ -4,6 +4,7 @@ Gercek chatbot veya hakem modeli cagrilmaz; sahte nesneler kullanilir.
 """
 
 import json
+import logging
 import threading
 import time
 
@@ -17,6 +18,20 @@ from kerimbalci_com.evals.eval_suite import EvalSuite
 from kerimbalci_com.evals.reporter import format_summary, summarize, write_json_report
 from kerimbalci_com.evals.suite_runner import run_suite
 from kerimbalci_com.evals.suites import SUITES, factuality_suite
+
+
+@pytest.fixture(autouse=True)
+def _kok_logger_ayarini_koru():
+    """CLI testleri setup_logging() cagirir; kok logger'i test sonrasi eski haline getir.
+
+    Aksi halde pytest'in kapanmis stderr'ine bagli handler kalir ve oturum
+    sonunda 'Logging error' gurultusu olusur.
+    """
+    root = logging.getLogger()
+    handlers, level = root.handlers[:], root.level
+    yield
+    root.handlers[:] = handlers
+    root.setLevel(level)
 
 
 class FakeMetric(BaseMetric):
@@ -125,6 +140,15 @@ def test_run_suite_metric_hatasi_yakalanir():
     assert result.results[0].error == "ValueError: hakem yok"
 
 
+def test_kalite_kapisi():
+    result = run_suite(make_suite(), lambda: FakeChatbot(ANSWERS))  # 1/4 gecer
+    assert result.pass_rate == 0.25
+    assert result.meets_quality_gate(0.25)
+    assert not result.meets_quality_gate(0.26)
+    empty = run_suite(make_suite().filter(ids=["yok"]), lambda: FakeChatbot(ANSWERS))
+    assert not empty.meets_quality_gate(0.0)
+
+
 # --- reporter --------------------------------------------------------------
 
 def test_summarize_ve_json_rapor(tmp_path):
@@ -136,9 +160,15 @@ def test_summarize_ve_json_rapor(tmp_path):
                                   "pass_rate": 0.25, "avg_score": 0.5}
     assert summary["by_tag"]["x"]["passed"] == 1 and summary["by_tag"]["y"]["total"] == 3
     assert "overall" in format_summary(summary)
+    assert "quality_gate" not in summary
 
-    path = write_json_report(suite, result, tmp_path / "rapor")
+    gated = summarize(suite, result, min_pass_rate=0.5)
+    assert gated["quality_gate"] == {"min_pass_rate": 0.5, "pass_rate": 0.25, "passed": False}
+    assert "Kalite kapisi: KALDI" in format_summary(gated)
+
+    path = write_json_report(suite, result, tmp_path / "rapor", min_pass_rate=0.2)
     data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["summary"]["quality_gate"]["passed"] is True
     assert path.name.startswith("test-")
     assert data["cases"][0]["actual_output"] == "Cevap: Ankara"
     assert data["cases"][0]["metrics"][0]["name"] == "Fake"
@@ -184,3 +214,25 @@ def test_cli_eksik_ayarla_2_doner(monkeypatch):
     monkeypatch.setenv("HF_CHATBOT_URL", "")
     monkeypatch.setenv("JUDGE_MODEL", "")
     assert cli.main(["factuality"]) == 2
+
+
+@pytest.mark.parametrize("args, beklenen", [
+    ([], 1),                            # varsayilan esik (EVAL_MIN_PASS_RATE=0.5) > 0.25
+    (["--min-pass-rate", "0.25"], 0),   # esik tam tutturuldu
+    (["--tags", "x", "--min-pass-rate", "0.5"], 0),  # a gecer, b kalir -> 0.5
+    (["--ids", "yok"], 2),              # filtreye uyan case yok
+])
+def test_cli_kalite_kapisi_cikis_kodu(monkeypatch, tmp_path, args, beklenen):
+    monkeypatch.setenv("HF_CHATBOT_URL", "https://ornek.hf.space")
+    monkeypatch.setenv("JUDGE_MODEL", "sahte-model")
+    monkeypatch.setenv("EVAL_MIN_PASS_RATE", "0.5")
+    monkeypatch.setenv("EVAL_TAGS", "")
+    monkeypatch.setenv("EVAL_REPORT_DIR", str(tmp_path))
+    monkeypatch.setattr(cli, "AnthropicModel", lambda model: FakeLLM())
+    monkeypatch.setattr(cli, "ChatbotClient", lambda settings: FakeChatbot(ANSWERS))
+    monkeypatch.setitem(cli.SUITES, "sahte", lambda settings, model: make_suite())
+
+    assert cli.main(["sahte", *args]) == beklenen
+    if beklenen != 2:
+        report = json.loads(next(tmp_path.glob("test-*.json")).read_text(encoding="utf-8"))
+        assert report["summary"]["quality_gate"]["passed"] is (beklenen == 0)

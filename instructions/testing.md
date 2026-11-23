@@ -39,7 +39,14 @@ uv run python -m kerimbalci_com.evals factuality --ids fact-001,premise-002
 ```
 
 Sonunda tag bazlı özet tablo yazar ve `reports/factuality-L<N>-<zaman>.json`
-oluşturur (git'e girmez). Çıkış kodu: 0 hepsi geçti, 1 başarısız/hata, 2 eksik ayar.
+oluşturur (git'e girmez).
+
+**Kalite kapısı:** geçen case oranı `EVAL_MIN_PASS_RATE` (vars. 0.85) veya
+`--min-pass-rate` değerinin altındaysa koşu başarısızdır. Hata alan case'ler
+başarısız sayılır. Sonuç özet tablonun son satırında ve JSON'da
+`summary.quality_gate` altında yer alır.
+
+Çıkış kodu: 0 kapı geçti, 1 kapı kaldı, 2 eksik ayar / filtreye uyan case yok.
 pytest yolu Confident AI'ya yükler; runner yerel ve paralel çalışır.
 
 ## Kurallar
