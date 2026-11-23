@@ -127,3 +127,10 @@ def test_chatbot_ve_kalite_kapisi_ayarlari(monkeypatch):
     s = get_settings()
     assert (s.chatbot_timeout, s.chatbot_max_retries, s.chatbot_retry_backoff) == (10.0, 0, 0.5)
     assert s.eval_min_pass_rate == 0.9
+
+
+def test_compare_esigi(monkeypatch):
+    monkeypatch.delenv("EVAL_COMPARE_MIN_DELTA", raising=False)
+    assert get_settings().eval_compare_min_delta == 0.2
+    monkeypatch.setenv("EVAL_COMPARE_MIN_DELTA", "0.1")
+    assert get_settings().eval_compare_min_delta == 0.1
