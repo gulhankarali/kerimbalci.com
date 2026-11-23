@@ -1,0 +1,54 @@
+# Factuality Judge — Level 2 (Intermediate)
+# Level 1 + kanit (context = dataset kaydindaki `evidence` alintisi).
+# Uydurma (halusinasyon) ayrintilari ve eksik kilit olgulari da puanlar.
+# Kanitsiz kayitlarda (evidence yok) context otomatik cikarilir.
+
+name: Factuality L2 Intermediate
+level: 2
+description: >
+  Checks the core fact against the expected output and the source evidence
+  from kerimbalci.com, penalizes unsupported (hallucinated) details and
+  missing key facts.
+threshold: 0.6
+
+evaluation_params:
+  - input
+  - actual_output
+  - expected_output
+  - context
+
+criteria: >
+  Determine whether the actual output correctly answers the input according to
+  the expected output and the reference context (a verbatim quote from
+  kerimbalci.com). The answer must contain the core fact, must not contradict
+  the expected output or the context, must not add specific facts that are
+  unsupported by them, and should include the key facts of the expected output.
+
+evaluation_steps:
+  - Identify the core fact and any other key facts in the expected output.
+  - Check whether the actual output states the core fact consistently with the expected output and the context.
+  - List every specific factual claim in the actual output (names, dates, places, numbers, titles, membership details).
+  - For each claim, decide whether it is supported by, contradicted by, or absent from the expected output and the context.
+  - Treat specific claims that are absent from both and plausibly invented as hallucinations.
+  - Check whether key facts of the expected output are missing from the actual output.
+  - Judge meaning, not wording; the answers are in Turkish, so ignore phrasing, spelling, and diacritic differences.
+  - Ignore tone, length, and style.
+
+rules:
+  - The core fact must be present and correct; otherwise the score must be low regardless of fluency.
+  - Any contradiction of the expected output or the context is a severe error.
+  - Each hallucinated specific fact is a significant deduction, even if the core fact is correct.
+  - Missing key facts lead to a moderate deduction; missing minor details lead to a small deduction.
+  - General, non-specific framing sentences are neutral.
+
+rubric:
+  - score_range: [0, 2]
+    expected_outcome: Core fact is wrong or missing, or the answer contradicts the context.
+  - score_range: [3, 4]
+    expected_outcome: Core fact is partially correct, or it is correct but surrounded by hallucinated specific details.
+  - score_range: [5, 6]
+    expected_outcome: Core fact is correct with one hallucinated detail or several missing key facts.
+  - score_range: [7, 8]
+    expected_outcome: Core fact is correct, no hallucinations, but some key facts are missing.
+  - score_range: [9, 10]
+    expected_outcome: Core fact and key facts are correct and complete, no hallucinations or contradictions.

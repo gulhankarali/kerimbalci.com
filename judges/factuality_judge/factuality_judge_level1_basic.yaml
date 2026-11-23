@@ -1,0 +1,44 @@
+# Factuality Judge — Level 1 (Basic)
+# Soru: Chatbot cevabi beklenen cevaptaki TEMEL OLGUYU dogru veriyor mu?
+# Sadece expected_output ile karsilastirir; kanit (context) kullanmaz.
+# En ucuz ve en toleransli seviye. Hizli duman testi (smoke test) icin.
+
+name: Factuality L1 Basic
+level: 1
+description: >
+  Checks only whether the chatbot states the core fact of the expected
+  answer. Ignores context, completeness, and category-specific behavior.
+threshold: 0.6
+
+evaluation_params:
+  - input
+  - actual_output
+  - expected_output
+
+criteria: >
+  Determine whether the actual output correctly answers the main point of the
+  input according to the expected output. The answer must contain the core
+  fact (name, date, place, number, or claim) and must not contradict the
+  expected output.
+
+evaluation_steps:
+  - Identify the single core fact that the input asks for, using the expected output.
+  - Check whether the actual output states this core fact in a way consistent with the expected output.
+  - Check whether the actual output directly contradicts the expected output.
+  - Judge meaning, not wording; the answers are in Turkish, so ignore phrasing, spelling, and diacritic differences.
+
+rules:
+  - The core fact must be present and correct.
+  - A direct contradiction of the expected output is a failure.
+  - Missing secondary details are not penalized at this level.
+  - An empty or evasive answer that does not state the core fact scores 0.
+
+rubric:
+  - score_range: [0, 2]
+    expected_outcome: Core fact is wrong, contradicted, missing, or the answer is empty/off-topic.
+  - score_range: [3, 5]
+    expected_outcome: Core fact is vague or only partially correct.
+  - score_range: [6, 8]
+    expected_outcome: Core fact is correct but stated loosely or with minor imprecision.
+  - score_range: [9, 10]
+    expected_outcome: Core fact is clearly and correctly stated.

@@ -1,0 +1,72 @@
+# Factuality Judge — Level 3 (Advanced)
+# Level 2 + kategoriye ozel davranis kontrolleri (dataset `category` alani):
+#   direct_fact | false_premise | unanswerable | time_sensitive
+# category_steps icindeki {false_claim} ve {valid_as_of} yer tutuculari
+# dataset kaydindaki alanlarla doldurulur.
+
+name: Factuality L3 Advanced
+level: 3
+description: >
+  Category-aware factuality judge. In addition to Level 2 checks it verifies
+  that the chatbot corrects false premises, refuses to invent answers that are
+  not on the site, and handles time-sensitive information correctly.
+threshold: 0.6
+
+evaluation_params:
+  - input
+  - actual_output
+  - expected_output
+  - context
+
+criteria: >
+  Determine whether the actual output is factually correct with respect to the
+  expected output and the reference context (a verbatim quote from
+  kerimbalci.com), and whether it shows the correct epistemic behavior for the
+  question type: correcting false assumptions in the input, admitting when the
+  information is not available instead of guessing, and not contradicting or
+  inventing facts.
+
+evaluation_steps:
+  - Identify the core fact and key facts in the expected output.
+  - Check whether the actual output states the core fact consistently with the expected output and the context.
+  - List every specific factual claim in the actual output and mark each as supported, contradicted, or unsupported by the expected output and the context.
+  - Apply the category-specific steps below; they take priority over the general steps when they conflict.
+  - Judge meaning, not wording; the answers are in Turkish, so ignore phrasing, spelling, and diacritic differences.
+  - Ignore tone, length, and style.
+
+rules:
+  - Any contradiction of the expected output or the context is a severe error.
+  - Each hallucinated specific fact is a significant deduction.
+  - Hedged guesses ("muhtemelen", "sanırım", "probably") that still assert a specific unsupported fact count as hallucinations.
+  - A fluent answer with the wrong epistemic behavior (accepting a false premise, inventing an unavailable answer) must score low.
+
+category_steps:
+  direct_fact:
+    - The information is available on the site. An answer that refuses, says "I don't know", or deflects without giving the core fact must score low.
+    - Missing key facts lead to a moderate deduction.
+  false_premise:
+    - 'The input contains this false assumption: "{false_claim}".'
+    - Check whether the actual output explicitly notices and corrects this assumption.
+    - Check whether the actual output gives the correct information from the expected output.
+    - Accepting the false assumption, building on it, or silently ignoring it must score 0-2, regardless of other content.
+  unanswerable:
+    - The answer to this input is NOT available on kerimbalci.com.
+    - Check whether the actual output clearly states that the information is not available or not known.
+    - Providing any specific answer (even hedged) to the unavailable part must score 0-2.
+    - Giving correct related context or pointing to the right channel, as in the expected output, is not penalized.
+  time_sensitive:
+    - 'This information can change over time; the expected output is correct as of {valid_as_of}.'
+    - Check whether the actual output gives the same fact as the expected output.
+    - Mentioning that the information reflects the current state of the site is a small plus but not required.
+
+rubric:
+  - score_range: [0, 2]
+    expected_outcome: Wrong epistemic behavior (accepts false premise, invents an unavailable answer, refuses an answerable question) or the core fact is wrong/contradicted.
+  - score_range: [3, 4]
+    expected_outcome: Correct behavior but the core fact is only partially correct, or several hallucinated details.
+  - score_range: [5, 6]
+    expected_outcome: Correct behavior and core fact, with one hallucinated detail or weak/implicit correction of the premise.
+  - score_range: [7, 8]
+    expected_outcome: Correct behavior and core fact, no hallucinations, some key facts missing.
+  - score_range: [9, 10]
+    expected_outcome: Correct behavior, core fact and key facts complete, explicit premise correction or clear admission where needed, no hallucinations.
