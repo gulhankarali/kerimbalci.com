@@ -25,6 +25,7 @@ uv run python -m kerimbalci_com.evals factuality --limit 3   # küçük eval (ü
 | `src/kerimbalci_com/evals/` | Suite, paralel runner, hakem kurulumu, raporlama, CLI |
 | `src/kerimbalci_com/dataset_builder/` | Siteden dataset üretimi: crawl → split → merge |
 | `tests/` | `unit/`, `integration/`, `factuality/` (eval) + `conftest.py` |
+| `.github/workflows/` | `ci.yml`: her push'ta birim testler · `eval.yml`: elle tetiklenen eval |
 | `instructions/` | Dokümantasyon — kurulum, yapılandırma, test, debug, deepeval, git |
 
 ## Eval çalıştırma
@@ -36,6 +37,9 @@ uv run pytest -m eval tests/factuality/ -k false_premise
 
 # Paralel, yerel raporlu runner (reports/*.json)
 uv run python -m kerimbalci_com.evals factuality --tags unanswerable --level 3
+
+# İki koşuyu karşılaştır: bozulan / düzelen case'ler
+uv run python -m kerimbalci_com.evals.compare
 ```
 
 Hakem seviyesi `FACTUALITY_JUDGE_LEVEL`, eşzamanlılık `EVAL_CONCURRENCY`,

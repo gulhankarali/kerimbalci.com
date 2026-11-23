@@ -1,0 +1,28 @@
+# Her push ve PR'da ucretsiz birim testleri calistirir (ag/API/gizli anahtar gerekmez).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: uv kur
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Bagimliliklari kur (uv.lock ile birebir)
+        run: uv sync --locked
+
+      - name: Birim testler
+        run: uv run pytest -m "not integration"

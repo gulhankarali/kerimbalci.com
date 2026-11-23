@@ -31,6 +31,7 @@ yeni bir `Settings` üretir (testlerde `monkeypatch` bu sayede çalışır).
 | `EVAL_CONCURRENCY` | `Settings.eval_concurrency` | Runner'da aynı anda çalışan case sayısı (vars. 4) |
 | `EVAL_TAGS` | `Settings.eval_tags` | Runner'da yalnızca bu tag'ler (virgülle; boş = hepsi) |
 | `EVAL_MIN_PASS_RATE` | `Settings.eval_min_pass_rate` | Runner kalite kapısı: geçen case oranı alt sınırı (vars. 0.85) |
+| `EVAL_COMPARE_MIN_DELTA` | `Settings.eval_compare_min_delta` | Rapor karşılaştırmada "puanı değişen" eşiği (vars. 0.2) |
 | `EVAL_REPORT_DIR` | `Settings.eval_report_dir` | JSON raporların klasörü, proje köküne göre (vars. `reports`) |
 | `ANTHROPIC_API_KEY` | Anthropic SDK / deepeval | Hakem model API anahtarı (gizli) |
 | `CONFIDENT_API_KEY` | deepeval | Sonuçları Confident AI'ya gönderir (gizli, opsiyonel) |
@@ -48,6 +49,19 @@ yeni bir `Settings` üretir (testlerde `monkeypatch` bu sayede çalışır).
 4. Kodda `get_settings().yeni_ayar` ile kullan.
 5. `tests/unit/test_config.py`'ye varsayılan + ortamdan okuma testi ekle.
 6. Bu tabloya ekle.
+
+## GitHub Actions
+
+CI'da `.env` yoktur; değerler ortam değişkeni olarak verilir
+(repo → Settings → Secrets and variables → Actions):
+
+| Tür | Ad |
+|---|---|
+| Secret | `HF_TOKEN`, `ANTHROPIC_API_KEY`, `CONFIDENT_API_KEY` (opsiyonel) |
+| Variable | `HF_CHATBOT_URL`, `JUDGE_MODEL`, `CHATBOT_API_ENDPOINT` (opsiyonel) |
+
+Diğer ayarlar koddaki varsayılanlarla çalışır; değiştirmek için
+`.github/workflows/eval.yml` → `env:` bölümüne eklenir.
 
 ## Gizli bilgiler
 

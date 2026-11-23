@@ -47,6 +47,32 @@ başarısız sayılır. Sonuç özet tablonun son satırında ve JSON'da
 `summary.quality_gate` altında yer alır.
 
 Çıkış kodu: 0 kapı geçti, 1 kapı kaldı, 2 eksik ayar / filtreye uyan case yok.
+
+### Koşuları karşılaştırma (regresyon)
+
+```bash
+uv run python -m kerimbalci_com.evals.compare                    # aynı suite'in son iki raporu
+uv run python -m kerimbalci_com.evals.compare --suite factuality-L3
+uv run python -m kerimbalci_com.evals.compare reports/a.json reports/b.json
+```
+
+Tag bazında geçme oranı ve ortalama puan farkını, **bozulan** (geçti → kaldı),
+**düzelen** (kaldı → geçti) ve durumu aynı kalıp puanı `EVAL_COMPARE_MIN_DELTA`
+(vars. 0.2) kadar değişen case'leri listeler. Farklı suite/hakem seviyesi
+karşılaştırılırsa uyarır. Çıkış kodu: 0 bozulma yok, 1 bozulma var, 2 rapor yok.
+Chatbot veya hakem değişikliğinden önce ve sonra aynı filtreyle koşup
+karşılaştırın.
+
+## CI (GitHub Actions)
+
+| İş akışı | Tetikleyici | Ne yapar | Ücret |
+|---|---|---|---|
+| `.github/workflows/ci.yml` | Her push (main) ve PR | `uv sync --locked` + `pytest -m "not integration"` | Yok |
+| `.github/workflows/eval.yml` | Elle: Actions → Eval → Run workflow | Bağlantı testleri + runner (suite, seviye, tag, limit, eşik seçilir); `reports/` artifact olarak 90 gün saklanır | **Var** |
+
+Eval iş akışı için gereken secret/variable'lar: `configuration.md` → GitHub Actions.
+İki CI koşusunu karşılaştırmak için artifact'leri indirip `compare`'e iki dosya
+yolu olarak verin.
 pytest yolu Confident AI'ya yükler; runner yerel ve paralel çalışır.
 
 ## Kurallar

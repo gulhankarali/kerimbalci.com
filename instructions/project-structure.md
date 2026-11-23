@@ -10,6 +10,7 @@ kerimbalci.com/
 ├── .cache/                   # Taranan site metinleri, üretilen ham JSON'lar (COMMIT EDİLMEZ)
 ├── reports/                  # Runner JSON raporları (COMMIT EDİLMEZ)
 ├── .vscode/                  # launch.json (F5 debug), settings.json
+├── .github/workflows/        # ci.yml (birim testler), eval.yml (elle, ücretli eval)
 ├── instructions/             # Bu dokümantasyon
 ├── dataset/
 │   └── factuality/           # Factuality eval dataset'i (4 kategori, JSON)
@@ -28,6 +29,7 @@ kerimbalci.com/
 │       ├── suite_runner.py   # run_suite(): paralel çalıştırma, CaseResult/SuiteResult
 │       ├── judge_config.py   # load_judge() (YAML) + build_geval()
 │       ├── reporter.py       # Tag bazlı özet tablo + JSON rapor (reports/)
+│       ├── compare.py        # İki raporu karşılaştırır: bozulan/düzelen case'ler
 │       └── suites/
 │           ├── __init__.py   # SUITES kaydı
 │           └── factuality_suite.py  # dataset/factuality + judges/factuality_judge
@@ -38,6 +40,8 @@ kerimbalci.com/
     │   ├── test_datasets.py  # Dataset şeması + gerçek dataset
     │   ├── test_judges.py    # Hakem YAML şeması
     │   ├── test_dataset_builder.py  # Tarama, metin çıkarma, merge (sahte fetch)
+    │   ├── test_chatbot.py   # Zaman aşımı / yeniden deneme (sahte Gradio)
+    │   ├── test_compare.py   # Rapor karşılaştırma
     │   └── test_evals.py     # Suite, runner, reporter, CLI (sahte chatbot/hakem)
     ├── integration/
     │   └── test_connections.py  # HF Space, HF token, Anthropic, JUDGE_MODEL
