@@ -24,3 +24,10 @@ htmlcov/
 # Editor / OS
 .DS_Store
 .idea/
+
+# Eval raporlari ve uretilen dosyalar
+reports/
+.cache/
+
+# deepeval yerel onbellegi ve son kosu ciktilari
+.deepeval/

@@ -27,6 +27,17 @@ def _env_bool(key: str, default: bool = False) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _env_float(key: str) -> float | None:
+    """Ortam degiskenini float'a cevirir; tanimsiz veya bossa None."""
+    value = os.getenv(key, "").strip()
+    return float(value) if value else None
+
+
+def _env_list(key: str) -> tuple[str, ...]:
+    """Virgulle ayrilmis ortam degiskenini temizlenmis demete cevirir; bossa ()."""
+    return tuple(item.strip() for item in os.getenv(key, "").split(",") if item.strip())
+
+
 @dataclass(frozen=True)
 class Settings:
     """Ortamdan okunan uygulama ayarlari."""
@@ -35,6 +46,32 @@ class Settings:
     environment: str = field(default_factory=lambda: os.getenv("ENVIRONMENT", "development"))
     debug: bool = field(default_factory=lambda: _env_bool("DEBUG", default=False))
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "INFO").upper())
+    judge_model: str | None = field(default_factory=lambda: os.getenv("JUDGE_MODEL"))
+    hf_chatbot_url: str | None = field(default_factory=lambda: os.getenv("HF_CHATBOT_URL"))
+    hf_token: str | None = field(default_factory=lambda: os.getenv("HF_TOKEN"))
+    chatbot_endpoint: str = field(default_factory=lambda: os.getenv("CHATBOT_API_ENDPOINT", "/cevapla"))
+    factuality_judge_level: int = field(
+        default_factory=lambda: int(os.getenv("FACTUALITY_JUDGE_LEVEL", "3"))
+    )
+    # Bos birakilirsa hakem YAML'indaki threshold kullanilir.
+    factuality_threshold: float | None = field(
+        default_factory=lambda: _env_float("EVAL_FACTUALITY_THRESHOLD")
+    )
+
+    eval_concurrency: int = field(default_factory=lambda: int(os.getenv("EVAL_CONCURRENCY", "4")))
+    eval_tags: tuple[str, ...] = field(default_factory=lambda: _env_list("EVAL_TAGS"))
+    eval_report_dir: Path = field(
+        default_factory=lambda: PROJECT_ROOT / os.getenv("EVAL_REPORT_DIR", "reports")
+    )
+
+    http_timeout: int = field(default_factory=lambda: int(os.getenv("HTTP_TIMEOUT", "30")))
+    site_url: str = field(default_factory=lambda: os.getenv("SITE_URL", "https://kerimbalci.com"))
+    site_workdir: Path = field(
+        default_factory=lambda: PROJECT_ROOT / os.getenv("SITE_WORKDIR", ".cache/site")
+    )
+    crawl_user_agent: str = field(
+        default_factory=lambda: os.getenv("CRAWL_USER_AGENT", "Mozilla/5.0 (compatible; kerimbalci-com-eval)")
+    )
 
     @property
     def is_production(self) -> bool:

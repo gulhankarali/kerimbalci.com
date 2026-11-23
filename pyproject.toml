@@ -1,14 +1,18 @@
 [project]
 name = "kerimbalci-com"
 version = "0.1.0"
-description = "Add your description here"
+description = "kerimbalci.com chatbot'u icin LLM eval otomasyon framework'u (deepeval + Confident AI)"
 readme = "README.md"
 authors = [
     { name = "Gulhan Karali Balci", email = "gulhan.karali@gmail.com" }
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "anthropic>=2.7.0",
+    "deepeval>=4.3.3",
+    "gradio-client>=2.7.2",
     "python-dotenv>=1.2.4",
+    "pyyaml>=6.0.3",
 ]
 
 [project.scripts]
@@ -26,5 +30,9 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --strict-markers"
+markers = [
+    "integration: gercek ag baglantisi gerektiren testler (uv run pytest -m integration)",
+    "eval: hakem modelle ucretli LLM degerlendirmesi (uv run deepeval test run tests/factuality/)",
+]
 log_cli = true
 log_cli_level = "INFO"
