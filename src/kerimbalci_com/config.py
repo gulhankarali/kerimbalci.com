@@ -61,6 +61,9 @@ class Settings:
     eval_compare_min_delta: float = field(
         default_factory=lambda: float(os.getenv("EVAL_COMPARE_MIN_DELTA", "0.2"))
     )
+    eval_expected_behavior: bool = field(
+        default_factory=lambda: _env_bool("EVAL_EXPECTED_BEHAVIOR", default=True)
+    )
     factuality_judge_level: int = field(
         default_factory=lambda: int(os.getenv("FACTUALITY_JUDGE_LEVEL", "3"))
     )

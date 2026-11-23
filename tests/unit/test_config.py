@@ -134,3 +134,10 @@ def test_compare_esigi(monkeypatch):
     assert get_settings().eval_compare_min_delta == 0.2
     monkeypatch.setenv("EVAL_COMPARE_MIN_DELTA", "0.1")
     assert get_settings().eval_compare_min_delta == 0.1
+
+
+def test_expected_behavior_ayari(monkeypatch):
+    monkeypatch.delenv("EVAL_EXPECTED_BEHAVIOR", raising=False)
+    assert get_settings().eval_expected_behavior is True
+    monkeypatch.setenv("EVAL_EXPECTED_BEHAVIOR", "false")
+    assert get_settings().eval_expected_behavior is False

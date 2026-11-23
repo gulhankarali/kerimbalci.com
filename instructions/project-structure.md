@@ -15,7 +15,8 @@ kerimbalci.com/
 ├── dataset/
 │   └── factuality/           # Factuality eval dataset'i (4 kategori, JSON)
 ├── judges/
-│   └── factuality_judge/     # Hakem YAML'ları: level1_basic, level2_intermediate, level3_advanced
+│   ├── factuality_judge/     # Hakem YAML'ları: level1_basic, level2_intermediate, level3_advanced
+│   └── expected_behavior_judge/  # Davranış hakemi (dil, kısalık, ton, çerçeveleme)
 ├── src/kerimbalci_com/
 │   ├── __init__.py           # main(): ayarları yükler, loglamayı kurar
 │   ├── __main__.py           # python -m kerimbalci_com giriş noktası

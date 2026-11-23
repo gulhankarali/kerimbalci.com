@@ -4,7 +4,9 @@ import pytest
 import yaml
 
 from kerimbalci_com.datasets import CATEGORIES
-from kerimbalci_com.evals.judge_config import JudgeConfigError, load_judge
+from kerimbalci_com.evals.judge_config import (
+    EXPECTED_BEHAVIOR_JUDGE_FILE, JudgeConfigError, load_judge, load_judge_file,
+)
 
 VALID = {
     "name": "Test",
@@ -33,6 +35,18 @@ def test_gercek_hakem_dosyalari_gecerli(level):
     judge = load_judge(level)
     assert judge.level == level
     assert judge.source is not None and judge.source.name.startswith(f"factuality_judge_level{level}_")
+
+
+def test_expected_behavior_hakemi_gecerli():
+    judge = load_judge_file(EXPECTED_BEHAVIOR_JUDGE_FILE)
+    assert judge.evaluation_params == ["input", "actual_output"]
+    assert set(judge.category_steps) <= CATEGORIES
+    assert any("Do NOT judge whether the facts" in s for s in judge.steps_for("direct_fact"))
+
+
+def test_load_judge_file_yoksa_hata(tmp_path):
+    with pytest.raises(JudgeConfigError, match="bulunamadi"):
+        load_judge_file(tmp_path / "yok.yaml")
 
 
 def test_level3_tum_kategorileri_kapsar():

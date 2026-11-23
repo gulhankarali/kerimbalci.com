@@ -27,6 +27,7 @@ yeni bir `Settings` üretir (testlerde `monkeypatch` bu sayede çalışır).
 | `CHATBOT_MAX_RETRIES` | `Settings.chatbot_max_retries` | Hata/zaman aşımında yeniden deneme sayısı (vars. 2; 0 = kapalı) |
 | `CHATBOT_RETRY_BACKOFF` | `Settings.chatbot_retry_backoff` | İlk bekleme, sn; her denemede iki katı (vars. 2 → 2, 4, …) |
 | `FACTUALITY_JUDGE_LEVEL` | `Settings.factuality_judge_level` | Hakem seviyesi: 1 basic, 2 intermediate, 3 advanced (vars. 3) |
+| `EVAL_EXPECTED_BEHAVIOR` | `Settings.eval_expected_behavior` | Factuality suite'inde ikinci metric (davranış); `false` = kapalı (vars. `true`) |
 | `EVAL_FACTUALITY_THRESHOLD` | `Settings.factuality_threshold` | Eşik (0-1); boşsa hakem YAML'ındaki `threshold` |
 | `EVAL_CONCURRENCY` | `Settings.eval_concurrency` | Runner'da aynı anda çalışan case sayısı (vars. 4) |
 | `EVAL_TAGS` | `Settings.eval_tags` | Runner'da yalnızca bu tag'ler (virgülle; boş = hepsi) |
@@ -35,6 +36,7 @@ yeni bir `Settings` üretir (testlerde `monkeypatch` bu sayede çalışır).
 | `EVAL_REPORT_DIR` | `Settings.eval_report_dir` | JSON raporların klasörü, proje köküne göre (vars. `reports`) |
 | `ANTHROPIC_API_KEY` | Anthropic SDK / deepeval | Hakem model API anahtarı (gizli) |
 | `CONFIDENT_API_KEY` | deepeval | Sonuçları Confident AI'ya gönderir (gizli, opsiyonel) |
+| `ANTHROPIC_COST_PER_INPUT_TOKEN` / `..._OUTPUT_TOKEN` | deepeval | Opsiyonel: hakem fiyatı (token başına USD); boşsa deepeval'in tablosu |
 | `HTTP_TIMEOUT` | `Settings.http_timeout` | Dış HTTP istekleri zaman aşımı, sn (vars. 30) |
 | `SITE_URL` | `Settings.site_url` | Dataset için taranacak site (vars. `https://kerimbalci.com`) |
 | `SITE_WORKDIR` | `Settings.site_workdir` | İndirilen sayfa metinleri, proje köküne göre (vars. `.cache/site`, git'e girmez) |

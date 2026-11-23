@@ -21,6 +21,9 @@ from kerimbalci_com.datasets import CATEGORIES
 logger = logging.getLogger(__name__)
 
 FACTUALITY_JUDGE_DIR = PROJECT_ROOT / "judges" / "factuality_judge"
+EXPECTED_BEHAVIOR_JUDGE_FILE = (
+    PROJECT_ROOT / "judges" / "expected_behavior_judge" / "expected_behavior_judge.yaml"
+)
 
 EVALUATION_PARAMS = frozenset({"input", "actual_output", "expected_output", "context"})
 REQUIRED_KEYS = ("name", "level", "description", "threshold", "evaluation_params",
@@ -115,11 +118,18 @@ def load_judge(level: int, directory: Path | None = None) -> JudgeConfig:
             f"{directory} altinda level {level} icin tam olarak 1 YAML bekleniyordu, "
             f"{len(matches)} bulundu"
         )
-    path = matches[0]
+    judge = load_judge_file(matches[0])
+    if judge.level != level:
+        raise JudgeConfigError(f"{matches[0].name}: dosyadaki level ({judge.level}) adla uyusmuyor")
+    return judge
+
+
+def load_judge_file(path: Path) -> JudgeConfig:
+    """Tek bir hakem YAML dosyasini okur ve dogrular."""
+    if not path.is_file():
+        raise JudgeConfigError(f"Hakem dosyasi bulunamadi: {path}")
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     _validate(data, path)
-    if int(data["level"]) != level:
-        raise JudgeConfigError(f"{path.name}: dosyadaki level ({data['level']}) adla uyusmuyor")
     logger.debug("Hakem yuklendi: %s (%s)", data["name"], path.name)
     return JudgeConfig(
         name=data["name"],

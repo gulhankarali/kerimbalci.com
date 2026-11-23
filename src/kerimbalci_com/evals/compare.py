@@ -123,6 +123,10 @@ def format_comparison(cmp: Comparison) -> str:
              f"{cmp.new_suite} ({cmp.new_summary['started_at']})"]
     if cmp.old_suite != cmp.new_suite:
         lines.append("  UYARI: farkli suite/hakem seviyesi karsilastiriliyor")
+    old_cost = (cmp.old_summary["overall"].get("usage") or {}).get("cost")
+    new_cost = (cmp.new_summary["overall"].get("usage") or {}).get("cost")
+    if old_cost is not None and new_cost is not None:
+        lines.append(f"Hakem maliyeti: ${old_cost:.4f} -> ${new_cost:.4f} ({new_cost - old_cost:+.4f})")
     lines.append("Gecme orani:")
     lines.append(_rate_line("overall", cmp.old_summary["overall"], cmp.new_summary["overall"]))
     tags = sorted(set(cmp.old_summary["by_tag"]) | set(cmp.new_summary["by_tag"]))

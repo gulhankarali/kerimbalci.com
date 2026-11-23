@@ -41,6 +41,7 @@ class FakeMetric(BaseMetric):
         self.threshold = threshold
 
     def measure(self, test_case, *args, **kwargs):
+        self.evaluation_cost, self.input_tokens, self.output_tokens = 0.01, 100, 20
         self.score = 1.0 if test_case.expected_output in test_case.actual_output else 0.0
         self.success = self.score >= self.threshold
         self.reason = "ok" if self.success else "yanlis"
@@ -156,8 +157,15 @@ def test_summarize_ve_json_rapor(tmp_path):
     result = run_suite(suite, lambda: FakeChatbot(ANSWERS), concurrency=2)
     summary = summarize(suite, result)
 
-    assert summary["overall"] == {"total": 4, "passed": 1, "errored": 2,
-                                  "pass_rate": 0.25, "avg_score": 0.5}
+    assert summary["overall"] == {
+        "total": 4, "passed": 1, "errored": 2, "pass_rate": 0.25, "avg_score": 0.5,
+        # sadece olculen 2 case (a, b) maliyet bildirir; hata alanlarda metric yok
+        "usage": {"cost": 0.02, "input_tokens": 200, "output_tokens": 40},
+    }
+    assert summary["by_tag"]["y"]["usage"]["cost"] == 0.01  # b'nin payi
+    assert summary["by_metric"] == {"FakeMetric": {"total": 2, "passed": 1, "pass_rate": 0.5, "avg_score": 0.5}}
+    assert "Metric bazinda" not in format_summary(summary)  # tek metric varsa gosterilmez
+    assert "Hakem maliyeti: $0.0200, case basina $0.0050 (200 girdi / 40 cikti token)" in format_summary(summary)
     assert summary["by_tag"]["x"]["passed"] == 1 and summary["by_tag"]["y"]["total"] == 3
     assert "overall" in format_summary(summary)
     assert "quality_gate" not in summary
@@ -172,6 +180,9 @@ def test_summarize_ve_json_rapor(tmp_path):
     assert path.name.startswith("test-")
     assert data["cases"][0]["actual_output"] == "Cevap: Ankara"
     assert data["cases"][0]["metrics"][0]["name"] == "Fake"
+    assert data["cases"][0]["usage"] == {"cost": 0.01, "input_tokens": 100, "output_tokens": 20}
+    assert data["cases"][0]["metrics"][0]["cost"] == 0.01
+    assert data["cases"][2]["usage"] == {"cost": None, "input_tokens": 0, "output_tokens": 0}
     assert data["cases"][2]["error"].startswith("RuntimeError")
 
 
@@ -194,6 +205,34 @@ def test_factuality_suite_kurulur(monkeypatch, level):
     test_case = suite.build_test_case(premise, "cevap")
     assert test_case.context == [premise["evidence"]]
     assert test_case.tags == ["false_premise"]
+
+
+def test_factuality_suite_iki_metric(monkeypatch):
+    monkeypatch.setenv("FACTUALITY_JUDGE_LEVEL", "3")
+    monkeypatch.delenv("EVAL_EXPECTED_BEHAVIOR", raising=False)
+    suite = factuality_suite.build_suite(get_settings(), FakeLLM())
+    case = suite.filter(tags=["unanswerable"]).cases[-1]
+    factual, behavior = suite.metrics_for(case)
+
+    assert factual.name.startswith("Factuality L3") and behavior.name.startswith("Expected Behavior")
+    assert [p.name for p in behavior.evaluation_params] == ["INPUT", "ACTUAL_OUTPUT"]
+    assert any("not available" in s for s in behavior.evaluation_steps)  # kategori adimi
+    assert "Expected Behavior" in suite.description
+
+    monkeypatch.setenv("EVAL_EXPECTED_BEHAVIOR", "false")
+    suite = factuality_suite.build_suite(get_settings(), FakeLLM())
+    assert len(suite.metrics_for(case)) == 1
+
+
+def test_reporter_metric_bazinda_ozet():
+    class Other(FakeMetric):
+        name = "Davranis (direct_fact)"
+
+    suite = EvalSuite(name="t", description="d", cases=CASES[:2],
+                      metrics_for=lambda c: [FakeMetric(), Other()])
+    summary = summarize(suite, run_suite(suite, lambda: FakeChatbot(ANSWERS)))
+    assert set(summary["by_metric"]) == {"FakeMetric", "Davranis"}
+    assert "Metric bazinda" in format_summary(summary)
 
 
 def test_factuality_esik_ortamdan_ezilir(monkeypatch):

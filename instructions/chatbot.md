@@ -56,6 +56,10 @@ kuralların her biri bir dataset kategorisine karşılık gelir:
 - Chatbot'un çalışan sürümü Hugging Face Space'tedir (`HF_CHATBOT_URL`). Bu
   dosya referans metindir; Space'teki prompt değiştiğinde burası da
   güncellenmelidir.
+- Davranış kuralları (aşağıdaki System Prompt'un "Kaynak", "Doğruluk",
+  "Üslup" bölümleri) **Expected Behavior** hakemiyle ölçülür:
+  `judges/expected_behavior_judge/expected_behavior_judge.yaml`. Kurallar
+  değişirse o YAML da güncellenmelidir.
 - Prompt'a site olguları (fiyat, seri listesi vb.) **gömülmez**; bunlar bilgi
   tabanından (site içeriği) gelir. Prompt yalnızca davranışı tanımlar.
 

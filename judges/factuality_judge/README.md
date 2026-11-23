@@ -10,6 +10,7 @@ dosyalarından kurulur (`src/kerimbalci_com/evals/judge_config.py` → `load_jud
 | 3 | `factuality_judge_level3_advanced.yaml` | + kategoriye özel davranış (yanlış öncül, cevapsız, zamana bağlı) | `evidence` |
 
 Seçim: `.env` → `FACTUALITY_JUDGE_LEVEL=1|2|3` (varsayılan 3).
+Ton/stil bu hakemde bilerek yok sayılır; onları `../expected_behavior_judge/` ölçer.
 Eşik: YAML'daki `threshold`; `.env` → `EVAL_FACTUALITY_THRESHOLD` doluysa onu ezer.
 
 ## Şema

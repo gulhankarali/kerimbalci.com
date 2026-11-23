@@ -21,7 +21,7 @@ uv run python -m kerimbalci_com.evals factuality --limit 3   # küçük eval (ü
 | Klasör | İçerik |
 |---|---|
 | `dataset/factuality/` | 100 soru-cevap (4 kategori), her biri siteden birebir kanıtlı |
-| `judges/factuality_judge/` | Hakem tanımları (YAML): level 1 basic, 2 intermediate, 3 advanced |
+| `judges/` | Hakem tanımları (YAML): `factuality_judge/` (level 1-3) + `expected_behavior_judge/` (dil, ton, kısalık) |
 | `src/kerimbalci_com/evals/` | Suite, paralel runner, hakem kurulumu, raporlama, CLI |
 | `src/kerimbalci_com/dataset_builder/` | Siteden dataset üretimi: crawl → split → merge |
 | `tests/` | `unit/`, `integration/`, `factuality/` (eval) + `conftest.py` |

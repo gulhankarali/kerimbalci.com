@@ -55,6 +55,13 @@ def test_compare_reports_siniflandirir():
 
 def test_format_comparison_ve_farkli_suite_uyarisi():
     text = format_comparison(compare_reports(OLD, NEW, 0.2))
+    assert "Hakem maliyeti" not in text  # eski raporlarda usage yok
+    with_cost = {**NEW, "summary": {**NEW["summary"], "overall": {
+        **NEW["summary"]["overall"], "usage": {"cost": 0.5}}}}
+    old_cost = {**OLD, "summary": {**OLD["summary"], "overall": {
+        **OLD["summary"]["overall"], "usage": {"cost": 0.2}}}}
+    assert "Hakem maliyeti: $0.2000 -> $0.5000 (+0.3000)" in format_comparison(
+        compare_reports(old_cost, with_cost, 0.2))
     assert "BOZULAN (gecti -> kaldi): 1" in text and "a " in text
     assert "UYARI" not in text
     other = report("factuality-L1", "2026-11-24T00:00:00+00:00", NEW["cases"])
