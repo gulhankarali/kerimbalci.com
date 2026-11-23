@@ -1,7 +1,13 @@
-# Proje Talimatları (INSTRUCTIONS)
+# Proje Talimatları
 
 Bu dosya projenin çalışma kurallarını tanımlar. Projeye katkı yapan herkes
-(insan veya AI) bu kurallara uyar.
+(insan veya AI) bu kurallara uyar. Claude Code bu dosyayı her oturumun
+başında otomatik olarak okur.
+
+Proje: kerimbalci.com chatbot'u için LLM eval otomasyon framework'ü
+(deepeval + Confident AI). Ayrıntılı dokümantasyon **`instructions/`**
+klasöründedir (içindekiler: `instructions/README.md`); bir konuda çalışmadan
+önce ilgili dosyayı oku.
 
 ## 1. Araç Zinciri
 
@@ -27,7 +33,10 @@ Bu dosya projenin çalışma kurallarını tanımlar. Projeye katkı yapan herke
 - `.env` gerçek değerleri tutar, **asla git'e commit edilmez** (`.gitignore`'da).
 - `.env.example` şablondur, gizli bilgi içermez ve commit edilir.
 - Yeni kurulum: `cp .env.example .env`
-- Mevcut değişkenler: `APP_NAME`, `ENVIRONMENT`, `DEBUG`, `LOG_LEVEL`.
+- Değişkenlerin tam listesi ve açıklamaları: `instructions/configuration.md`.
+  Yeni değişken eklendiğinde o tablo da güncellenir.
+- Gizli anahtarlar (`HF_TOKEN`, `ANTHROPIC_API_KEY`, `CONFIDENT_API_KEY`)
+  loglanmaz, koda veya dokümana yazılmaz.
 
 ## 4. Debug
 
@@ -42,16 +51,23 @@ Bu dosya projenin çalışma kurallarını tanımlar. Projeye katkı yapan herke
 
 ## 5. Test
 
-- Her yeni modül/işlev için `tests/` altına test yazılır.
+- Her yeni modül/işlev için `tests/` altına test yazılır:
+  - `tests/unit/` — ağ/API gerektirmeyen testler (sahte chatbot/hakem),
+  - `tests/integration/` — dış servis bağlantı testleri (`-m integration`),
+  - `tests/<suite>/` — LLM eval testleri (`-m eval`, **ücretli**).
+- Ortak fixture'lar `tests/conftest.py`'dedir; ayar eksikse test atlanır (skip).
+- Eval testleri izin alınmadan tam set olarak çalıştırılmaz; önce `-k` ile
+  küçük bir alt kümede denenir.
 - Testlerde ortam değişkenleri `monkeypatch` ile ayarlanır; gerçek `.env`
   dosyasına bağımlı test yazılmaz.
-- Çalıştırma: `uv run pytest` (ayarlar `pyproject.toml` →
-  `[tool.pytest.ini_options]` bölümünde).
+- Hızlı kontrol: `uv run pytest -m "not integration"`
+  (ayarlar `pyproject.toml` → `[tool.pytest.ini_options]` bölümünde).
 
 ## 6. Git
 
 - Depo `uv init` ile oluşturuldu; gizli ve üretilen dosyalar `.gitignore`'dadır.
-- `.env`, `.venv`, `__pycache__`, `.pytest_cache` asla commit edilmez.
+- `.env`, `.venv`, `__pycache__`, `.pytest_cache`, `.deepeval/`, `.cache/`,
+  `reports/` asla commit edilmez.
 - Anlamlı, küçük commit'ler atılır; commit mesajı değişikliği özetler.
 
 ## 7. Bağımlılık Ekleme
@@ -59,3 +75,15 @@ Bu dosya projenin çalışma kurallarını tanımlar. Projeye katkı yapan herke
 - Çalışma zamanı bağımlılığı: `uv add <paket>`
 - Geliştirme bağımlılığı (test, lint vb.): `uv add --dev <paket>`
 - `uv.lock` dosyası commit edilir; böylece ortam her makinede aynı kurulur.
+
+## 8. Veri, Hakem ve Eval Yapısı
+
+- **Veri ve kriter koddan ayrıdır:** sorular `dataset/<suite>/*.json`,
+  hakem tanımları `judges/<suite>_judge/*.yaml`. Soru veya kriter değiştirmek
+  için Python kodu değiştirilmez.
+- Dataset beklenen cevapları yalnızca site içeriğine dayanır; her kayıt
+  birebir `evidence` alıntısı taşır (`instructions/dataset.md`).
+- Eval kodu `src/kerimbalci_com/evals/` altındadır: `EvalSuite` (suite tanımı),
+  `suite_runner` (paralel çalıştırma), `judge_config` (YAML → GEval),
+  `reporter`, `suites/<ad>_suite.py`. Yeni suite = yeni `suites/<ad>_suite.py`
+  + `SUITES` kaydı + `dataset/<ad>/` + `judges/<ad>_judge/` + `tests/<ad>/`.

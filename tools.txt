@@ -1,0 +1,73 @@
+KULLANILAN ARACLAR VE DOSYALAR
+==============================
+(Ayrintili dokumantasyon: instructions/ klasoru)
+
+ARACLAR
+-------
+uv (v0.13)
+    Python paket ve proje yoneticisi. Python surumunu, sanal ortami (.venv)
+    ve tum bagimliliklari yonetir. pip + virtualenv + pyenv yerine gecer.
+    Ornek: uv add <paket>, uv run pytest, uv sync
+
+Python 3.11
+    .python-version dosyasinda tanimli; uv bu surumu kullanir.
+
+pytest (v9.2)
+    Test framework'u. tests/unit, tests/integration, tests/<suite> klasorleri.
+    Marker'lar: integration (ag gerekir), eval (ucretli hakem modeli).
+
+python-dotenv (v1.2)
+    .env dosyasini yukler; ayarlar koda gomulmez (config.py -> Settings).
+
+deepeval (v4.3)
+    LLM eval framework'u. GEval metrigi + hakem model (JUDGE_MODEL) ile
+    chatbot cevaplarini puanlar. pytest ile entegre calisir.
+    Calistirma: uv run deepeval test run tests/factuality/
+
+Confident AI
+    deepeval'in bulut platformu (app.confident-ai.com). Test kosularini ve
+    skorlari izler. CONFIDENT_API_KEY (.env) ile baglanilir.
+
+anthropic (v2.7)
+    Hakem model (Claude) icin API istemcisi; deepeval AnthropicModel kullanir.
+
+gradio-client (v2.7)
+    Hugging Face Space'teki chatbot'a (Gradio) baglanir (chatbot.py).
+
+pyyaml (v6.0)
+    judges/ altindaki hakem YAML dosyalarini okur.
+
+git / GitHub
+    Surum kontrolu. .env, .venv, .cache, reports, .deepeval takip edilmez.
+
+DOSYALAR VE KLASORLER
+---------------------
+pyproject.toml / uv.lock   Proje tanimi, bagimliliklar, pytest ayarlari / sabit surumler
+.env / .env.example        Gercek ayarlar (GIZLI, commit edilmez) / sablon (commit edilir)
+CLAUDE.md                  Projenin temel kurallari (Claude Code her oturumda okur)
+README.md                  Proje ozeti ve hizli baslangic
+instructions/              Dokumantasyon (kurulum, yapilandirma, test, debug, deepeval, git)
+dataset/factuality/        Eval sorulari ve beklenen cevaplar (JSON, kanitli)
+judges/factuality_judge/   Hakem tanimlari (YAML, level 1-3)
+src/kerimbalci_com/
+    config.py              Settings: tum ayarlar ortamdan
+    chatbot.py             ChatbotClient: HF Space'e soru gonderir
+    datasets.py            Dataset yukleme ve sema dogrulama
+    dataset_builder/       Siteden dataset uretimi (crawl, split, merge)
+    evals/                 Suite, paralel runner, hakem (judge_config), reporter, CLI
+tests/
+    conftest.py            Ortak fixture'lar (settings, chatbot, judge_model)
+    unit/                  Ag gerektirmeyen testler
+    integration/           Baglanti testleri
+    factuality/            Factuality eval testi (ucretli)
+.vscode/                   F5 debug yapilandirmalari ve proje ayarlari
+
+SIK KULLANILAN KOMUTLAR
+-----------------------
+uv sync                                               Ortami kur / esitle
+uv run pytest -m "not integration"                    Hizli birim testler
+uv run pytest -m "integration and not eval"           Baglanti testleri
+uv run deepeval test run tests/factuality/            Factuality eval (Confident AI)
+uv run python -m kerimbalci_com.evals factuality      Paralel eval + reports/*.json
+uv run python -m kerimbalci_com.dataset_builder crawl Siteyi tara (dataset uretimi)
+uv add <paket> / uv add --dev <paket>                 Bagimlilik ekle

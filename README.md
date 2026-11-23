@@ -1,0 +1,47 @@
+# kerimbalci.com — Chatbot Eval Otomasyonu
+
+[kerimbalci.com](https://kerimbalci.com) sitesi hakkında soru cevaplayan
+chatbot'un (Hugging Face Space) kalitesini ölçen LLM eval framework'ü.
+Chatbot'a dataset'teki sorular sorulur, cevaplar bir hakem model
+(LLM-as-judge, Anthropic) tarafından [deepeval](https://deepeval.com) ile
+puanlanır; sonuçlar Confident AI'ya veya yerel JSON rapora yazılır.
+
+## Hızlı başlangıç
+
+```bash
+uv sync                                   # bağımlılıklar
+cp .env.example .env                      # gerçek değerleri doldur
+uv run pytest -m "not integration"        # birim testler (ücretsiz)
+uv run pytest -m "integration and not eval"   # bağlantı kontrolü
+uv run python -m kerimbalci_com.evals factuality --limit 3   # küçük eval (ücretli)
+```
+
+## Yapı
+
+| Klasör | İçerik |
+|---|---|
+| `dataset/factuality/` | 100 soru-cevap (4 kategori), her biri siteden birebir kanıtlı |
+| `judges/factuality_judge/` | Hakem tanımları (YAML): level 1 basic, 2 intermediate, 3 advanced |
+| `src/kerimbalci_com/evals/` | Suite, paralel runner, hakem kurulumu, raporlama, CLI |
+| `src/kerimbalci_com/dataset_builder/` | Siteden dataset üretimi: crawl → split → merge |
+| `tests/` | `unit/`, `integration/`, `factuality/` (eval) + `conftest.py` |
+| `instructions/` | Dokümantasyon — kurulum, yapılandırma, test, debug, deepeval, git |
+
+## Eval çalıştırma
+
+```bash
+# Confident AI'ya yükleyen pytest yolu
+uv run deepeval test run tests/factuality/
+uv run pytest -m eval tests/factuality/ -k false_premise
+
+# Paralel, yerel raporlu runner (reports/*.json)
+uv run python -m kerimbalci_com.evals factuality --tags unanswerable --level 3
+```
+
+Hakem seviyesi `FACTUALITY_JUDGE_LEVEL`, eşzamanlılık `EVAL_CONCURRENCY`
+ile `.env`'den ayarlanır. Tüm değişkenler: [instructions/configuration.md](instructions/configuration.md).
+
+> Eval testleri hakem model için ücretli API istekleri atar; önce küçük bir
+> alt kümede deneyin.
+
+Ayrıntılar için: [instructions/README.md](instructions/README.md)
