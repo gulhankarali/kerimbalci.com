@@ -21,11 +21,20 @@ answer = client.ask("Kerim Balcı kimdir?")
 | `HF_CHATBOT_URL` | Space adresi; yoksa `ValueError` (testlerde skip) |
 | `HF_TOKEN` | Özel Space için token (boşsa anonim) |
 | `CHATBOT_API_ENDPOINT` | Gradio `api_name` (varsayılan `/cevapla`) |
+| `CHATBOT_TIMEOUT` | Tek soru için zaman aşımı (sn); HTTP istekleri de bununla sınırlı |
+| `CHATBOT_MAX_RETRIES` | Hata/zaman aşımında yeniden deneme sayısı |
+| `CHATBOT_RETRY_BACKOFF` | İlk bekleme (sn); her denemede iki katına çıkar |
 
 - Space endpoint'i tek parametre alır: `mesaj`. Endpoint imzası değişirse
-  `ChatbotClient.ask` güncellenmelidir.
+  `ChatbotClient._ask_once` güncellenmelidir.
+- Soru `submit(...).result(timeout=CHATBOT_TIMEOUT)` ile gönderilir; zaman
+  aşımında iş iptal edilir ve yeniden denenir. Space'e bağlanma (istemci
+  kurulumu) da aynı şekilde yeniden denenir.
+- Tüm denemeler başarısızsa `ChatbotError` fırlatılır; runner bunu case'in
+  `error` alanına yazar, koşu durmaz.
 - Cevap metin değilse `str()` ile metne çevrilir.
-- Erişim kontrolü: `uv run pytest tests/integration/test_connections.py -k hf`.
+- Erişim kontrolü: `uv run pytest tests/integration/ -k "hf or chatbot"`
+  (`test_chatbot_gercek_soruya_cevap_veriyor` gerçek bir soru sorar; hakem çağırmaz, ücretsiz).
 - Uyuyan (sleeping) Space ilk istekte geç cevap verebilir.
 
 ## Amaç

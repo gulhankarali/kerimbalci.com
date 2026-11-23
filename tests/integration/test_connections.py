@@ -77,3 +77,12 @@ def test_judge_model_erisilebilir():
     assert status == 200
     data = json.loads(body)
     assert data.get("id") == judge_model
+
+
+def test_chatbot_gercek_soruya_cevap_veriyor(chatbot):
+    """ChatbotClient gercek Space'ten (zaman asimi/yeniden deneme ile) cevap alabiliyor mu?
+
+    Hakem modeli cagirmaz; ucretsizdir. Fixture: tests/conftest.py.
+    """
+    answer = chatbot.ask("Merhaba")
+    assert isinstance(answer, str) and answer.strip()
