@@ -1,33 +1,34 @@
 # Factuality Judge
 
-deepeval `GEval` hakem yapılandırmaları. Kod kriter içermez; hakem bu YAML
-dosyalarından kurulur (`src/kerimbalci_com/evals/judge_config.py` → `load_judge`, `build_geval`).
+deepeval `GEval` judge configurations. The code contains no criteria; the judge
+is built from these YAML files (`src/kerimbalci_com/evals/judge_config.py` →
+`load_judge`, `build_geval`).
 
-| Seviye | Dosya | Ne kontrol eder? | context |
+| Level | File | What it checks | context |
 |---|---|---|---|
-| 1 | `factuality_judge_level1_basic.yaml` | Temel olgu doğru mu? | Hayır |
-| 2 | `factuality_judge_level2_intermediate.yaml` | + uydurma ayrıntı, eksik kilit olgu | `evidence` |
-| 3 | `factuality_judge_level3_advanced.yaml` | + kategoriye özel davranış (yanlış öncül, cevapsız, zamana bağlı) | `evidence` |
+| 1 | `factuality_judge_level1_basic.yaml` | Is the core fact right? | No |
+| 2 | `factuality_judge_level2_intermediate.yaml` | + invented details, missing key facts | `evidence` |
+| 3 | `factuality_judge_level3_advanced.yaml` | + category-specific behavior (false premise, unanswerable, time-sensitive) | `evidence` |
 
-Seçim: `.env` → `FACTUALITY_JUDGE_LEVEL=1|2|3` (varsayılan 3).
-Ton/stil bu hakemde bilerek yok sayılır; onları `../expected_behavior_judge/` ölçer.
-Eşik: YAML'daki `threshold`; `.env` → `EVAL_FACTUALITY_THRESHOLD` doluysa onu ezer.
+Selection: `.env` → `FACTUALITY_JUDGE_LEVEL=1|2|3` (default 3).
+Tone/style are deliberately ignored by this judge; `../expected_behavior_judge/` measures them.
+Threshold: `threshold` from the YAML; `.env` → `EVAL_FACTUALITY_THRESHOLD` overrides it if set.
 
-## Şema
+## Schema
 
-| Alan | Zorunlu | GEval karşılığı |
+| Field | Required | GEval equivalent |
 |---|---|---|
-| `name`, `level`, `description` | Evet | `name` |
-| `threshold` (0-1) | Evet | `threshold` |
-| `evaluation_params` | Evet | `input`, `actual_output`, `expected_output`, `context` |
-| `criteria` | Evet | Dokümantasyon; `evaluation_steps` verildiği için GEval adımları kullanır |
-| `evaluation_steps` | Evet | `evaluation_steps` (ilk kısım) |
-| `rules` | Hayır | `"Rule: ..."` olarak adımlara eklenir |
-| `category_steps` | Hayır | Kaydın kategorisine ait adımlar en sona eklenir |
-| `rubric` | Evet | `Rubric(score_range, expected_outcome)`; aralıklar 0-10'u boşluksuz, çakışmasız kapsar |
+| `name`, `level`, `description` | Yes | `name` |
+| `threshold` (0-1) | Yes | `threshold` |
+| `evaluation_params` | Yes | `input`, `actual_output`, `expected_output`, `context` |
+| `criteria` | Yes | Documentation; since `evaluation_steps` are given, GEval uses the steps |
+| `evaluation_steps` | Yes | `evaluation_steps` (first part) |
+| `rules` | No | Appended to the steps as `"Rule: ..."` |
+| `category_steps` | No | The steps for the record's category are appended at the end |
+| `rubric` | Yes | `Rubric(score_range, expected_outcome)`; ranges cover 0-10 without gaps or overlaps |
 
-Kanıtı (`evidence`) olmayan kayıtlarda `context` parametresi otomatik çıkarılır.
+For records without `evidence`, the `context` parameter is dropped automatically.
 
-## Değiştirme
-YAML'ı düzenleyin → `uv run pytest tests/unit/test_judges.py` (şema) →
-`uv run pytest -m eval tests/factuality/ -k <kategori>` ile küçük deneme.
+## Changing it
+Edit the YAML → `uv run pytest tests/unit/test_judges.py` (schema) →
+try a small run with `uv run pytest -m eval tests/factuality/ -k <category>`.

@@ -1,31 +1,31 @@
-# Proje Talimatları — İçindekiler
+# Project Instructions — Contents
 
-Bu klasör kerimbalci.com chatbot değerlendirme (eval) projesinin
-dokümantasyonudur. Hem projeye katkı yapan kişiler hem de Claude Code gibi
-AI asistanlar için yazılmıştır. Temel kurallar kök dizindeki `CLAUDE.md`'de
-özetlenir; ayrıntılar buradadır.
+This folder is the documentation of the kerimbalci.com chatbot evaluation
+(eval) project. It is written both for contributors and for AI assistants such
+as Claude Code. The core rules are summarized in `CLAUDE.md` at the repository
+root; the details are here.
 
-| Dosya | Konu |
+| File | Topic |
 |---|---|
-| [setup.md](setup.md) | Sıfırdan kurulum ve ilk çalıştırma |
-| [configuration.md](configuration.md) | Ortam değişkenleri, `.env`, `Settings` |
-| [project-structure.md](project-structure.md) | Klasör ve modül yapısı |
-| [project-rules.md](project-rules.md) | Kodlama kuralları ve konvansiyonlar |
-| [testing.md](testing.md) | Test türleri, marker'lar, çalıştırma |
-| [debugging.md](debugging.md) | Loglama ve VS Code debug |
-| [deepeval.md](deepeval.md) | deepeval, hakem model, Confident AI |
-| [chatbot.md](chatbot.md) | Chatbot istemcisi ve beklenen davranış |
-| [dataset.md](dataset.md) | Eval dataset'lerinin hazırlanması |
-| [../judges/factuality_judge/](../judges/factuality_judge/README.md) | Hakem (LLM-as-judge) YAML'ları — seviye 1-3 |
-| [../judges/hallucination_judge/](../judges/hallucination_judge/README.md) | Hallucination hakemleri — seviye 1-3 |
-| [../dataset/hallucination/](../dataset/hallucination/README.md) | Hallucination dataset'i — kategoriler, şema, bakım |
-| [git.md](git.md) | Git akışı ve commit kuralları |
+| [setup.md](setup.md) | Setup from scratch and first run |
+| [configuration.md](configuration.md) | Environment variables, `.env`, `Settings` |
+| [project-structure.md](project-structure.md) | Folder and module structure |
+| [project-rules.md](project-rules.md) | Coding rules and conventions |
+| [testing.md](testing.md) | Test types, markers, running tests |
+| [debugging.md](debugging.md) | Logging and VS Code debugging |
+| [deepeval.md](deepeval.md) | deepeval, judge model, Confident AI |
+| [chatbot.md](chatbot.md) | Chatbot client and expected behavior |
+| [dataset.md](dataset.md) | Preparing the eval datasets |
+| [../judges/factuality_judge/](../judges/factuality_judge/README.md) | Factuality judge (LLM-as-judge) YAMLs — levels 1-3 |
+| [../judges/hallucination_judge/](../judges/hallucination_judge/README.md) | Hallucination judges — levels 1-3 |
+| [../dataset/hallucination/](../dataset/hallucination/README.md) | Hallucination dataset — categories, schema, maintenance |
+| [git.md](git.md) | Git workflow and commit rules |
 
-## Hızlı başlangıç
+## Quick start
 
 ```bash
-cp .env.example .env        # gerçek değerleri doldur
-uv sync                     # bağımlılıkları kur
-uv run pytest -m "not integration"   # hızlı, ücretsiz testler
-uv run python -m kerimbalci_com.evals factuality --limit 3   # küçük eval denemesi (ücretli)
+cp .env.example .env        # fill in the real values
+uv sync                     # install dependencies
+uv run pytest -m "not integration"   # fast, free tests
+uv run python -m kerimbalci_com.evals factuality --limit 3   # small eval trial (paid)
 ```

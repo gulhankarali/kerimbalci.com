@@ -1,27 +1,27 @@
 # Hallucination Judge
 
-deepeval `GEval` hakem yapılandırmaları. Factuality hakemiyle aynı şemayı
-kullanır (bkz. `../factuality_judge/README.md`); hakem
-`judge_config.load_judge(level, judges=HALLUCINATION_JUDGES)` ile kurulur.
+deepeval `GEval` judge configurations. Uses the same schema as the factuality
+judge (see `../factuality_judge/README.md`); the judge is built with
+`judge_config.load_judge(level, judges=HALLUCINATION_JUDGES)`.
 
-| Seviye | Dosya | Ne kontrol eder? |
+| Level | File | What it checks |
 |---|---|---|
-| 1 | `hallucination_judge_level1_basic.yaml` | Kanıtta ve beklenen cevapta dayanağı olmayan **bariz** bir uydurma var mı? |
-| 2 | `hallucination_judge_level2_intermediate.yaml` | + iddia iddia denetim: temkinli tahminler, yanlış atıf, genel bilgiden ekleme |
-| 3 | `hallucination_judge_level3_advanced.yaml` | + kategoriye özel tuzak kontrolü (`{hallucination_trap}`) |
+| 1 | `hallucination_judge_level1_basic.yaml` | Is there an **obvious** invention that neither the evidence nor the expected answer supports? |
+| 2 | `hallucination_judge_level2_intermediate.yaml` | + claim-by-claim audit: hedged guesses, wrong attributions, additions from general knowledge |
+| 3 | `hallucination_judge_level3_advanced.yaml` | + category-specific trap check (`{hallucination_trap}`) |
 
-Üç seviye de `context` (= kaydın `evidence` alıntısı) ve `expected_output`
-kullanır; fark denetimin derinliğindedir. "Sitede bu bilgi yok" demek hiçbir
-seviyede uydurma sayılmaz.
+All three levels use `context` (= the record's `evidence` quote) and
+`expected_output`; they differ in how deep the audit goes. Saying "this
+information is not on the site" never counts as an invention at any level.
 
-Seçim: `.env` → `HALLUCINATION_JUDGE_LEVEL=1|2|3` (varsayılan 3).
-Eşik: YAML'daki `threshold`; `.env` → `EVAL_HALLUCINATION_THRESHOLD` doluysa onu ezer.
-Ton/stil bu hakemde yok sayılır; onları `../expected_behavior_judge/` ölçer
+Selection: `.env` → `HALLUCINATION_JUDGE_LEVEL=1|2|3` (default 3).
+Threshold: `threshold` from the YAML; `.env` → `EVAL_HALLUCINATION_THRESHOLD` overrides it if set.
+Tone/style are ignored by this judge; `../expected_behavior_judge/` measures them
 (`EVAL_EXPECTED_BEHAVIOR`).
 
-`category_steps` anahtarları yalnızca hallucination kategorileri olabilir:
+`category_steps` keys may only be hallucination categories:
 `fabricated_detail`, `fake_attribution`, `entity_confusion`, `unsupported_addition`.
 
-## Değiştirme
-YAML'ı düzenleyin → `uv run pytest tests/unit/test_judges.py` (şema) →
-`HALLUCINATION_JUDGE_LEVEL=1 uv run pytest tests/hallucination -m eval -k <kategori>` ile küçük deneme.
+## Changing it
+Edit the YAML → `uv run pytest tests/unit/test_judges.py` (schema) →
+try a small run with `HALLUCINATION_JUDGE_LEVEL=1 uv run pytest tests/hallucination -m eval -k <category>`.

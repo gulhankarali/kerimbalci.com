@@ -1,69 +1,79 @@
 # Chatbot
 
-> **Kimin için:** İlk bölümler ekip içindir. `## System Prompt` başlığının
-> altındaki metin olduğu gibi chatbot'un system prompt'u olarak
-> kullanılabilir.
+> **Audience:** the first sections are for the team. The text under the
+> `## System Prompt` heading is a verbatim copy of the chatbot's system prompt
+> and stays in Turkish on purpose (see the note there).
 
-## İstemci (`src/kerimbalci_com/chatbot.py`)
+## Client (`src/kerimbalci_com/chatbot.py`)
 
-Test edilen chatbot bir Hugging Face Space'te çalışan Gradio uygulamasıdır.
-`ChatbotClient`, `gradio_client` ile Space'e bağlanır:
+The chatbot under test is a Gradio app running on a Hugging Face Space.
+`ChatbotClient` connects to the Space with `gradio_client`:
 
 ```python
 from kerimbalci_com.chatbot import ChatbotClient
 
-client = ChatbotClient()                 # ayarlar get_settings()'ten gelir
+client = ChatbotClient()                 # settings come from get_settings()
 answer = client.ask("Kerim Balcı kimdir?")
 ```
 
-| Ayar | Kullanım |
+| Setting | Usage |
 |---|---|
-| `HF_CHATBOT_URL` | Space adresi; yoksa `ValueError` (testlerde skip) |
-| `HF_TOKEN` | Özel Space için token (boşsa anonim) |
-| `CHATBOT_API_ENDPOINT` | Gradio `api_name` (varsayılan `/cevapla`) |
-| `CHATBOT_TIMEOUT` | Tek soru için zaman aşımı (sn); HTTP istekleri de bununla sınırlı |
-| `CHATBOT_MAX_RETRIES` | Hata/zaman aşımında yeniden deneme sayısı |
-| `CHATBOT_RETRY_BACKOFF` | İlk bekleme (sn); her denemede iki katına çıkar |
+| `HF_CHATBOT_URL` | Space URL; `ValueError` if missing (skip in tests) |
+| `HF_TOKEN` | Token for a private Space (anonymous if empty) |
+| `CHATBOT_API_ENDPOINT` | Gradio `api_name` (default `/cevapla`) |
+| `CHATBOT_TIMEOUT` | Timeout per question (s); HTTP requests are limited by it too |
+| `CHATBOT_MAX_RETRIES` | Retries on error/timeout |
+| `CHATBOT_RETRY_BACKOFF` | Initial backoff (s); doubles on every attempt |
 
-- Space endpoint'i tek parametre alır: `mesaj`. Endpoint imzası değişirse
-  `ChatbotClient._ask_once` güncellenmelidir.
-- Soru `submit(...).result(timeout=CHATBOT_TIMEOUT)` ile gönderilir; zaman
-  aşımında iş iptal edilir ve yeniden denenir. Space'e bağlanma (istemci
-  kurulumu) da aynı şekilde yeniden denenir.
-- Tüm denemeler başarısızsa `ChatbotError` fırlatılır; runner bunu case'in
-  `error` alanına yazar, koşu durmaz.
-- Cevap metin değilse `str()` ile metne çevrilir.
-- Erişim kontrolü: `uv run pytest tests/integration/ -k "hf or chatbot"`
-  (`test_chatbot_gercek_soruya_cevap_veriyor` gerçek bir soru sorar; hakem çağırmaz, ücretsiz).
-- Uyuyan (sleeping) Space ilk istekte geç cevap verebilir.
+- The Space endpoint takes one parameter: `mesaj`. If the endpoint signature
+  changes, `ChatbotClient._ask_once` must be updated.
+- The question is sent with `submit(...).result(timeout=CHATBOT_TIMEOUT)`; on
+  timeout the job is cancelled and retried. Connecting to the Space (client
+  setup) is retried the same way.
+- If every attempt fails, `ChatbotError` is raised; the runner stores it in the
+  case's `error` field and the run continues.
+- A non-text answer is converted to text with `str()`.
+- Access check: `uv run pytest tests/integration/ -k "hf or chatbot"`
+  (`test_chatbot_answers_a_real_question` asks a real question; it does not
+  call the judge and is free).
+- A sleeping Space may answer the first request slowly.
 
-## Amaç
+## Purpose
 
-kerimbalci.com chatbot'u, ziyaretçilerin site, Kerim Balcı, yazılar, seriler
-ve üyelik hakkındaki sorularını **yalnızca sitedeki içeriğe dayanarak**
-cevaplar. Chatbot'un kalitesi `dataset/factuality/` ile ölçülür; buradaki
-kuralların her biri bir dataset kategorisine karşılık gelir:
+The kerimbalci.com chatbot answers visitors' questions about the site, Kerim
+Balcı, the articles, series and membership **based only on the site content**.
+Its quality is measured with `dataset/factuality/` and `dataset/hallucination/`;
+each rule below maps to a dataset category:
 
-| Kural | Ölçen kategori |
+| Rule | Measured by |
 |---|---|
-| Sadece site içeriğine dayan, uydurma | `direct_fact`, `unanswerable` |
-| Bilmiyorsan bilmediğini söyle | `unanswerable` |
-| Sorudaki yanlış bilgiyi düzelt | `false_premise` |
-| Değişebilecek bilgiyi tarihle ver | `time_sensitive` |
+| Rely only on the site content, do not invent | `direct_fact`, `unanswerable`, `fabricated_detail`, `unsupported_addition` |
+| Say so when you do not know | `unanswerable`, `fabricated_detail` |
+| Correct false information in the question | `false_premise`, `fake_attribution` |
+| Attribute statements and properties to the right person/thing | `fake_attribution`, `entity_confusion` |
+| Give information that may change with a date | `time_sensitive` |
 
-## Notlar
+## Notes
 
-- Chatbot'un çalışan sürümü Hugging Face Space'tedir (`HF_CHATBOT_URL`). Bu
-  dosya referans metindir; Space'teki prompt değiştiğinde burası da
-  güncellenmelidir.
-- Davranış kuralları (aşağıdaki System Prompt'un "Kaynak", "Doğruluk",
-  "Üslup" bölümleri) **Expected Behavior** hakemiyle ölçülür:
-  `judges/expected_behavior_judge/expected_behavior_judge.yaml`. Kurallar
-  değişirse o YAML da güncellenmelidir.
-- Prompt'a site olguları (fiyat, seri listesi vb.) **gömülmez**; bunlar bilgi
-  tabanından (site içeriği) gelir. Prompt yalnızca davranışı tanımlar.
+- The live version of the chatbot is on the Hugging Face Space
+  (`HF_CHATBOT_URL`). This file is the reference text; when the prompt on the
+  Space changes, update it here too.
+- The behavior rules (the "Kaynak", "Doğruluk", "Üslup" sections of the System
+  Prompt below) are measured by the **Expected Behavior** judge:
+  `judges/expected_behavior_judge/expected_behavior_judge.yaml`. If the rules
+  change, update that YAML too.
+- Site facts (prices, series list, etc.) are **not** embedded in the prompt;
+  they come from the knowledge base (site content). The prompt only defines
+  behavior.
 
 ## System Prompt
+
+> Kept in Turkish: this is a verbatim copy of the prompt deployed on the Space.
+> In short, it tells the assistant to answer only from the site content, to say
+> clearly when something is not on the site, to correct false assumptions
+> politely, to flag information that may change, to frame the author's views
+> as his own, to answer in the user's language concisely, to name its source
+> page, and not to reproduce paid content.
 
 Sen kerimbalci.com'un asistanısın. kerimbalci.com, gazeteci ve yazar Kerim
 Balcı'nın düşünce, inanç ve zaman üzerine yazılarının yayımlandığı kişisel

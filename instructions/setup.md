@@ -1,36 +1,36 @@
-# Kurulum
+# Setup
 
-## Gereksinimler
+## Requirements
 
-- [uv](https://docs.astral.sh/uv/) (0.13+). Python'u da uv yönetir;
-  ayrıca Python kurmanız gerekmez.
-- Python sürümü `.python-version` dosyasındadır (3.11).
-- Erişim bilgileri: Hugging Face token, Anthropic API anahtarı, (opsiyonel)
-  Confident AI proje anahtarı.
+- [uv](https://docs.astral.sh/uv/) (0.13+). uv also manages Python; you do not
+  need to install Python separately.
+- The Python version is in `.python-version` (3.11).
+- Credentials: Hugging Face token, Anthropic API key, (optional) Confident AI
+  project key.
 
-## Adımlar
+## Steps
 
 ```bash
-git clone <depo-adresi> && cd kerimbalci.com
-uv sync                      # .venv oluşturur, uv.lock'taki sürümleri kurar
-cp .env.example .env         # şablonu kopyala
-# .env içindeki örnek değerleri gerçek değerlerle değiştir (bkz. configuration.md)
+git clone <repo-url> && cd kerimbalci.com
+uv sync                      # creates .venv, installs the versions from uv.lock
+cp .env.example .env         # copy the template
+# replace the example values in .env with real ones (see configuration.md)
 ```
 
-## Kurulumu doğrulama
+## Verifying the setup
 
 ```bash
-uv run pytest -m "not integration"   # birim testler — ağ/API gerektirmez
+uv run pytest -m "not integration"   # unit tests — no network/API needed
 uv run pytest -m integration -k "not eval" tests/integration/test_connections.py
-                                     # HF Space, HF token, Anthropic anahtarı, JUDGE_MODEL
-uv run python -m kerimbalci_com      # uygulama başlangıç logunu yazar
+                                     # HF Space, HF token, Anthropic key, JUDGE_MODEL
+uv run python -m kerimbalci_com      # writes the application start log
 ```
 
-`tests/integration/` testleri ilgili değişken tanımlı değilse **atlanır**
-(skip), başarısız olmaz. Hepsinin `PASSED` olduğunu görün.
+The `tests/integration/` tests are **skipped**, not failed, when their variable
+is not set. Make sure they all show `PASSED`.
 
-## Notlar
+## Notes
 
-- `pip install` veya `python -m venv` kullanılmaz; her şey `uv` ile.
-- VS Code, `.vscode/settings.json` sayesinde `.venv` yorumlayıcısını ve
-  `.env` dosyasını otomatik kullanır.
+- `pip install` and `python -m venv` are not used; everything goes through `uv`.
+- VS Code uses the `.venv` interpreter and the `.env` file automatically thanks
+  to `.vscode/settings.json`.

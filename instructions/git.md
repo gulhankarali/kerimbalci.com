@@ -1,33 +1,32 @@
 # Git
 
-## Ne commit edilir / edilmez
+## What is / is not committed
 
-| Commit edilir | Asla commit edilmez |
+| Committed | Never committed |
 |---|---|
-| Kaynak kod, testler | `.env`, `.env.local`, `.env.*.local` |
+| Source code, tests | `.env`, `.env.local`, `.env.*.local` |
 | `pyproject.toml`, `uv.lock` | `.venv/` |
 | `.env.example` | `__pycache__/`, `.pytest_cache/` |
-| `dataset/`, `instructions/` | API anahtarı, token içeren her dosya |
+| `dataset/`, `instructions/` | Any file containing an API key or token |
 | `.vscode/launch.json`, `settings.json` | `.DS_Store`, `.idea/` |
-| `judges/` | `.deepeval/`, `.cache/`, `reports/` (üretilen dosyalar) |
+| `judges/` | `.deepeval/`, `.cache/`, `reports/` (generated files) |
 
-Commit öncesi `git status` ile kontrol edin; gizli bilgi içeren dosya
-listede olmamalı.
+Check with `git status` before committing; no file with secrets may be in the list.
 
-## Commit kuralları
-- Küçük, tek konulu commit'ler: ör. dataset, eval testi ve dokümantasyon
-  ayrı commit'ler.
-- Mesaj değişikliği özetler, Türkçe, emir kipinde:
-  `Factuality dataset'ini tüm siteden üret`,
-  `Factuality hakem YAML'larını ekle`.
-- Commit öncesi: `uv run pytest -m "not integration"` geçmeli.
+## Commit rules
+- Small, single-topic commits: e.g. dataset, eval test and documentation in
+  separate commits.
+- The message summarizes the change, in English, in the imperative mood:
+  `Generate the factuality dataset from the whole site`,
+  `Add the factuality judge YAMLs`.
+- Before committing: `uv run pytest -m "not integration"` must pass.
 
-## Akış
+## Workflow
 
 ```bash
 git status
 uv run pytest -m "not integration"
-git add <dosyalar>          # git add . yerine dosya dosya
-git commit -m "Mesaj"
+git add <files>             # file by file instead of git add .
+git commit -m "Message"
 git push
 ```

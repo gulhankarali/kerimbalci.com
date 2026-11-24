@@ -1,35 +1,34 @@
-# Proje Kuralları
+# Project Rules
 
-Temel kurallar `CLAUDE.md`'dedir; bu dosya onları ayrıntılandırır.
-Çelişki olursa `CLAUDE.md` geçerlidir.
+The core rules are in `CLAUDE.md`; this file details them. If they conflict,
+`CLAUDE.md` wins.
 
-## Araçlar
-- Paket yönetimi yalnızca `uv`: `uv add <paket>`, `uv add --dev <paket>`,
-  `uv run <komut>`. `pip`/`venv` kullanılmaz.
-- `deepeval`, `anthropic`, `gradio-client`, `python-dotenv`, `pyyaml` çalışma
-  zamanı bağımlılığıdır (`src/kerimbalci_com/evals` kullanır); `pytest` dev grubundadır.
+## Tools
+- Package management only with `uv`: `uv add <package>`, `uv add --dev <package>`,
+  `uv run <command>`. No `pip`/`venv`.
+- `deepeval`, `anthropic`, `gradio-client`, `python-dotenv`, `pyyaml` are
+  runtime dependencies (used by `src/kerimbalci_com/evals`); `pytest` is in the dev group.
 
-## Kod
-- **Hardcoding yok:** ayar, URL, anahtar, eşik, yol → `.env` + `Settings`
-  (bkz. `configuration.md`). Yollar `PROJECT_ROOT` / `Path(__file__)` tabanlı.
-- **Veri ve prompt koddan ayrı:** sorular `dataset/`, hakem kriterleri
-  `judges/` altındaki YAML'larda durur.
-- `print()` yok; modül başında `logger = logging.getLogger(__name__)`.
-- Python dosyalarında açıklama, log ve hata mesajları ASCII Türkçe
-  yazılır (ör. `tanimli degil`); md ve JSON dosyalarında Türkçe karakter
-  kullanılır.
-- Tip ipuçları kullanılır (`str | None`); fonksiyonlarda kısa docstring.
-- Hata durumunda anlamlı mesajla özel exception (ör. `DatasetError`).
+## Code
+- **No hardcoding:** settings, URLs, keys, thresholds, paths → `.env` + `Settings`
+  (see `configuration.md`). Paths are based on `PROJECT_ROOT` / `Path(__file__)`.
+- **Data and prompts are separate from code:** questions live under `dataset/`,
+  judge criteria in the YAML files under `judges/`.
+- No `print()`; `logger = logging.getLogger(__name__)` at the top of the module.
+- Comments, docstrings, log and error messages in Python files are in English.
+  Dataset content (questions, expected answers, evidence) stays in Turkish.
+- Use type hints (`str | None`); short docstrings on functions.
+- On errors, raise a custom exception with a meaningful message (e.g. `DatasetError`).
 
-## Test
-- Her yeni modül/işlev için `tests/` altında test.
-- Ortam değişkenleri `monkeypatch` ile; gerçek `.env`'e bağımlı birim test yok.
-- Ağ gerektiren test `integration`, ücretli LLM çağrısı yapan test ayrıca
-  `eval` marker'ı taşır. Eksik ayar varsa test `skip` eder, fail etmez.
+## Tests
+- Tests under `tests/` for every new module/function.
+- Environment variables via `monkeypatch`; no unit test depends on the real `.env`.
+- Tests that need the network carry the `integration` marker; tests that make
+  paid LLM calls also carry `eval`. A missing setting makes the test `skip`, not fail.
 
 ## Dataset
-- Beklenen cevaplar yalnızca site içeriğine dayanır, her kayıt `evidence`
-  içerir (bkz. `dataset.md`).
+- Expected answers rely only on the site content; every record has `evidence`
+  (see `dataset.md`).
 
 ## Git
-- Bkz. `git.md`. `.env` ve üretilen dosyalar asla commit edilmez.
+- See `git.md`. `.env` and generated files are never committed.

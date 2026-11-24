@@ -1,15 +1,17 @@
 # Expected Behavior Judge
 
-Cevabın **davranışını** puanlayan hakem: dil, kısalık, odak, yazarın
-görüşünü çerçeveleme, ton, ücretli içerik. Kurallar
-`instructions/chatbot.md` → System Prompt'tan türetilmiştir; biri
-değişirse diğeri de güncellenmelidir.
+A judge that scores the **behavior** of the answer: language, concision, focus,
+framing of the author's views, tone, paid content. The rules are derived from
+`instructions/chatbot.md` → System Prompt; if one changes, update the other.
 
-- Olgusal doğruluk **ölçülmez** (Factuality metric'inin işi). Factuality
-  YAML'ları da tersine tonu/stili yok sayar; iki metric birbirini tamamlar.
-- `evaluation_params`: yalnızca `input` + `actual_output` (beklenen cevap
-  davranış için referans değildir).
-- Factuality ve hallucination suite'lerinde her case'e ikinci metric olarak eklenir; kapatmak
-  için `.env` → `EVAL_EXPECTED_BEHAVIOR=false` (maliyeti yaklaşık yarıya indirir).
-- Şema factuality hakemiyle aynıdır (bkz. `judges/factuality_judge/README.md`);
-  `src/kerimbalci_com/evals/judge_config.py` → `load_judge_file` ile okunur.
+- Factual correctness is **not** measured (that is the job of the Factuality /
+  Hallucination metrics). Conversely, those YAMLs ignore tone/style; the
+  metrics complement each other.
+- `evaluation_params`: only `input` + `actual_output` (the expected answer is
+  not a reference for behavior).
+- Added as the second metric to every case in the factuality and hallucination
+  suites; to turn it off set `.env` → `EVAL_EXPECTED_BEHAVIOR=false` (roughly
+  halves the cost).
+- The schema is the same as the factuality judge (see
+  `judges/factuality_judge/README.md`); it is read with
+  `src/kerimbalci_com/evals/judge_config.py` → `load_judge_file`.

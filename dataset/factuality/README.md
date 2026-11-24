@@ -1,53 +1,57 @@
 # Factuality Dataset
 
-Chatbot'un kerimbalci.com hakkında **doğru bilgi** verip vermediğini ölçen
-soru-cevap setleri (100 kayıt). Kaynak: sitenin **tamamı** — sitemap'teki
-52 yazı, 9 sayfa ve 10 seri/etiket sayfası (2026-11-23 itibarıyla). Sorular
-68 farklı sayfaya dağıtılmıştır; tek sayfadan en fazla 3 soru vardır.
+Question-answer sets (100 records) that measure whether the chatbot gives
+**correct information** about kerimbalci.com. Source: the **whole** site — 52
+articles, 9 pages and 10 series/tag pages from the sitemap (as of 2026-11-23).
+The questions are spread over 68 different pages; at most 3 questions per page.
 
-Her kaydın `evidence` alanı kaynak sayfadan **birebir alıntıdır** ve
-oluşturma sırasında sayfa metninde geçtiği otomatik doğrulanmıştır.
-Ücretli yazılarda yalnızca paywall öncesi public kısım kullanılmıştır.
+Each record's `evidence` field is a **verbatim quote** from the source page and
+was verified automatically against the page text when it was created. For paid
+articles only the public part before the paywall was used.
 
-| Dosya | Ne ölçer? |
+The questions, expected answers and evidence are in Turkish on purpose: the
+chatbot answers a Turkish site in Turkish.
+
+| File | What it measures |
 |---|---|
-| `direct_facts.json` | Tek doğru cevabı olan olgu soruları (biyografi, üyelik). |
-| `false_premise.json` | İçinde yanlış bilgi olan sorular; chatbot öncülü **düzeltmeli**, onaylamamalı. |
-| `unanswerable.json` | Sitede cevabı olmayan sorular; chatbot **uydurmamalı**, bilmediğini söylemeli. |
-| `time_sensitive.json` | Değişebilecek bilgiler; `valid_as_of` tarihinden sonra yeniden doğrulanmalı. |
+| `direct_facts.json` | Fact questions with a single correct answer (biography, membership). |
+| `false_premise.json` | Questions containing false information; the chatbot must **correct** the premise, not accept it. |
+| `unanswerable.json` | Questions whose answer is not on the site; the chatbot must **not invent** and should say it does not know. |
+| `time_sensitive.json` | Information that may change; re-verify after the `valid_as_of` date. |
 
-## Kayıt şeması
+## Record schema
 
 ```json
 {
-  "id": "fact-001",                 // zorunlu, tüm dosyalarda benzersiz
-  "input": "Soru",                  // zorunlu
-  "expected_output": "Beklenen",    // zorunlu
-  "category": "direct_fact",        // zorunlu: direct_fact | false_premise | unanswerable | time_sensitive
-  "source_url": "https://...",      // kaynak sayfa (genel unanswerable'da null olabilir)
-  "evidence": "...",                // kaynak sayfadan birebir alıntı (kanıt)
-  "false_claim": "...",             // false_premise için zorunlu
-  "valid_as_of": "2026-11-23",      // time_sensitive için zorunlu
-  "notes": "..."                    // opsiyonel
+  "id": "fact-001",                 // required, unique across all files
+  "input": "Question",              // required
+  "expected_output": "Expected",    // required
+  "category": "direct_fact",        // required: direct_fact | false_premise | unanswerable | time_sensitive
+  "source_url": "https://...",      // source page (may be null for generic unanswerable records)
+  "evidence": "...",                // verbatim quote from the source page (evidence)
+  "false_claim": "...",             // required for false_premise
+  "valid_as_of": "2026-11-23",      // required for time_sensitive
+  "notes": "..."                    // optional
 }
 ```
 
-`input` / `expected_output` alanları deepeval `Golden` ile birebir uyumludur.
-Yapı `tests/unit/test_datasets.py` ile doğrulanır (`uv run pytest tests/unit/test_datasets.py`).
+The `input` / `expected_output` fields map directly to deepeval's `Golden`.
+The structure is validated by `tests/unit/test_datasets.py` (`uv run pytest tests/unit/test_datasets.py`).
 
-## Chatbot'u bu setle değerlendirme
+## Evaluating the chatbot with this set
 
 ```bash
-uv run deepeval test run tests/factuality/           # hepsi (ücretli: hakem modele 100 istek)
-uv run pytest -m eval tests/factuality/ -k unanswerable   # tek kategori
+uv run deepeval test run tests/factuality/           # all (paid: 100 judge requests)
+uv run pytest -m eval tests/factuality/ -k unanswerable   # one category
 ```
 
-Her kategori kendi hakem kriteriyle puanlanır (bkz. `judges/factuality_judge/`).
-Hakem: `judges/factuality_judge/` (seviye `.env` → `FACTUALITY_JUDGE_LEVEL`).
-Eşik: YAML'daki `threshold`; `.env` → `EVAL_FACTUALITY_THRESHOLD` doluysa o.
+Each category is scored with its own judge criteria (see `judges/factuality_judge/`).
+Judge: `judges/factuality_judge/` (level from `.env` → `FACTUALITY_JUDGE_LEVEL`).
+Threshold: `threshold` from the YAML; `.env` → `EVAL_FACTUALITY_THRESHOLD` if set.
 
-## Bakım
+## Maintenance
 
-`time_sensitive` kayıtları (son yazı, üyelik içerikleri, basım planları)
-site güncellendikçe eskir; `valid_as_of` tarihine bakarak periyodik olarak
-yeniden doğrulayın.
+`time_sensitive` records (latest post, membership content, print plans) go
+stale as the site is updated; re-verify them periodically based on their
+`valid_as_of` date. To check all evidence quotes against the site text:
+`uv run python -m kerimbalci_com.dataset_builder verify factuality`.

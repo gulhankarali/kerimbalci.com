@@ -1,37 +1,35 @@
-# Debug
+# Debugging
 
-## Loglama
-- `print()` kullanılmaz; her modülde `logger = logging.getLogger(__name__)`.
-- `.env` → `DEBUG=true` olunca `setup_logging()` seviyeyi otomatik DEBUG
-  yapar; aksi halde `LOG_LEVEL` kullanılır.
-- pytest canlı log açıktır (`log_cli = true`, INFO). Ayrıntı için:
+## Logging
+- No `print()`; every module has `logger = logging.getLogger(__name__)`.
+- With `.env` → `DEBUG=true`, `setup_logging()` sets the level to DEBUG
+  automatically; otherwise `LOG_LEVEL` is used.
+- pytest live logging is on (`log_cli = true`, INFO). For more detail:
   `uv run pytest --log-cli-level=DEBUG ...`
-- `ChatbotClient.ask` DEBUG seviyesinde soruyu ve cevabın ilk 200
-  karakterini loglar — eval'de chatbot'un ne döndürdüğünü görmek için
-  kullanışlıdır.
+- `ChatbotClient.ask` logs the question and the first 200 characters of the
+  answer at DEBUG level — useful to see what the chatbot returned during an eval.
 
 ## VS Code (F5)
 
-`.vscode/launch.json` üç yapılandırma içerir; hepsi `.env`'i yükler:
+`.vscode/launch.json` contains three configurations; all of them load `.env`:
 
-| Yapılandırma | Ne yapar |
+| Configuration | What it does |
 |---|---|
-| Python: Uygulamayı Debug Et | `python -m kerimbalci_com` |
-| Python: Açık Dosyayı Debug Et | Editörde açık dosyayı çalıştırır |
-| Pytest: Testleri Debug Et | pytest'i debugger altında çalıştırır (`justMyCode: false`) |
+| Python: Debug the App | `python -m kerimbalci_com` |
+| Python: Debug Current File | Runs the file open in the editor |
+| Pytest: Debug Tests | Runs pytest under the debugger (`justMyCode: false`) |
 
-Tek bir eval kaydını debug etmek için Pytest yapılandırmasının `args`
-alanına geçici olarak `["-v", "tests/factuality/", "-k", "fact-001"]`
-yazılabilir (commit etmeyin).
+To debug a single eval record, temporarily set the `args` of the Pytest
+configuration to `["-v", "tests/factuality/", "-k", "fact-001"]` (do not commit it).
 
-## Sık karşılaşılanlar
+## Common issues
 
-| Belirti | Olası neden |
+| Symptom | Likely cause |
 |---|---|
-| Testler `SKIPPED` | İlgili değişken `.env`'de yok (`HF_CHATBOT_URL`, `JUDGE_MODEL` …) |
-| `DatasetError` | Dataset JSON'unda eksik alan / tekrarlı id — mesaj kaydı gösterir |
-| `JudgeConfigError` | Hakem YAML'ı şemaya uymuyor (eksik alan, rubric boşluğu/çakışması) — mesaj dosyayı gösterir |
-| Chatbot boş cevap | Space uyuyor olabilir; `test_hf_chatbot_space_erisebilir` ile kontrol edin |
-| `ChatbotError: ... N denemede basarisiz` | Space yanıt vermiyor; `CHATBOT_TIMEOUT` / `CHATBOT_MAX_RETRIES`'ı artırın, loglarda her denemenin hatası görünür |
-| Runner çıkış kodu 1 | Kalite kapısı kaldı (geçen oran < `EVAL_MIN_PASS_RATE`); `reports/*.json` içinde `passed: false` case'lere bakın |
-| Hakem 401/404 | `ANTHROPIC_API_KEY` veya `JUDGE_MODEL` hatalı — `test_connections.py` |
+| Tests `SKIPPED` | The variable is missing from `.env` (`HF_CHATBOT_URL`, `JUDGE_MODEL` …) |
+| `DatasetError` | Missing field / duplicate id in a dataset JSON — the message shows the record |
+| `JudgeConfigError` | A judge YAML does not match the schema (missing field, rubric gap/overlap) — the message shows the file |
+| Empty chatbot answer | The Space may be sleeping; check with `test_hf_chatbot_space_is_reachable` |
+| `ChatbotError: ... failed after N attempts` | The Space does not respond; increase `CHATBOT_TIMEOUT` / `CHATBOT_MAX_RETRIES`, the logs show the error of every attempt |
+| Runner exit code 1 | The quality gate failed (pass rate < `EVAL_MIN_PASS_RATE`); look at the `passed: false` cases in `reports/*.json` |
+| Judge 401/404 | `ANTHROPIC_API_KEY` or `JUDGE_MODEL` is wrong — `test_connections.py` |

@@ -1,138 +1,145 @@
-# Dataset Hazırlama Talimatları
+# Dataset Preparation Instructions
 
-> **Kimin için:** Üst kısım ekip içindir (süreç ve kalite kuralları).
-> `## Üretici Prompt` başlığının altındaki metin, soru-cevap üretecek
-> modele (Claude vb.) olduğu gibi verilir.
+> **Audience:** the upper part is for the team (process and quality rules).
+> The text under the `## Generator Prompt` heading is given as-is to the model
+> (Claude etc.) that generates the question-answer pairs.
 
-## Genel ilkeler
+## General principles
 
-1. **Tek doğruluk kaynağı site içeriğidir.** Beklenen cevaplar yalnızca
-   kerimbalci.com'daki public metne dayanır; modelin genel bilgisi veya bir
-   özet aracının çıktısı kaynak sayılmaz.
-2. **Her kayıt kanıtlıdır.** `evidence` alanı kaynak sayfadan birebir
-   alıntıdır ve otomatik olarak sayfa metninde aranarak doğrulanır.
-   Doğrulanamayan kayıt dataset'e girmez.
-3. **Kaynak çeşitliliği.** Sorular sitenin tamamına yayılır; tek sayfadan
-   en fazla 3 soru üretilir. Biyografi sayfası dataset'e hâkim olmamalıdır.
-4. **Paywall.** Ücretli yazılarda yalnızca herkese açık kısım kullanılır.
-5. Şema ve dosya düzeni için: `dataset/factuality/README.md` ve
+1. **The site content is the single source of truth.** Expected answers rely
+   only on the public text of kerimbalci.com; the model's general knowledge or
+   the output of a summarization tool does not count as a source.
+2. **Every record has evidence.** The `evidence` field is a verbatim quote from
+   the source page and is verified automatically by searching the page text.
+   A record that cannot be verified does not enter the dataset.
+3. **Source diversity.** Questions are spread over the whole site; at most 3
+   questions per page. The biography page must not dominate the dataset.
+4. **Paywall.** For paid articles only the public part is used.
+5. **Language.** Questions, expected answers and evidence stay in Turkish: the
+   chatbot answers a Turkish site in Turkish.
+6. Schema and file layout: `dataset/factuality/README.md` and
    `dataset/hallucination/README.md`.
-6. Kanıt doğrulama: `uv run python -m kerimbalci_com.dataset_builder verify <factuality|hallucination>`
-   her kaydın `evidence` alıntısını kaynak sayfa metninde arar.
+7. Evidence verification: `uv run python -m kerimbalci_com.dataset_builder verify <factuality|hallucination>`
+   searches every record's `evidence` quote in the source page text.
 
-## Kategoriler ve hedef oranlar
+## Categories and target ratios (factuality)
 
-| Kategori | Oran | Ne test eder? |
+| Category | Ratio | What it tests |
 |---|---|---|
-| `direct_fact` | ~%55 | Sitede açıkça yazan tek bir olgu |
-| `false_premise` | ~%25 | Yanlış varsayımı düzeltme (`false_claim` zorunlu) |
-| `time_sensitive` | ~%12 | Değişebilecek bilgi (`valid_as_of` zorunlu) |
-| `unanswerable` | ~%8 | Sitede olmayan bilgide uydurmama |
+| `direct_fact` | ~55% | A single fact stated clearly on the site |
+| `false_premise` | ~25% | Correcting a false assumption (`false_claim` required) |
+| `time_sensitive` | ~12% | Information that may change (`valid_as_of` required) |
+| `unanswerable` | ~8% | Not inventing information that is not on the site |
 
-## Süreç
+The hallucination categories are described in `dataset/hallucination/README.md`.
 
-Kod: `src/kerimbalci_com/dataset_builder/` (ayarlar: `SITE_URL`, `SITE_WORKDIR`).
+## Process
 
-1. **Tara ve metne çevir:**
+Code: `src/kerimbalci_com/dataset_builder/` (settings: `SITE_URL`, `SITE_WORKDIR`).
+
+1. **Crawl and convert to text:**
    `uv run python -m kerimbalci_com.dataset_builder crawl`
-   `SITE_URL/sitemap.xml` → alt sitemap'ler → tüm sayfalar. HTML'den
-   script/style/nav/header/footer/form çıkarılır; her dosyanın ilk satırı
-   meta (og:title, article:published_time, article:tag) JSON'dur. Çıktı:
-   `SITE_WORKDIR/text/<stem>.txt` + `SITE_WORKDIR/manifest.json` (stem → URL).
-2. **Grupla:** `uv run python -m kerimbalci_com.dataset_builder split --groups 4`
-   Metinleri kelime sayısına göre dengeli gruplara böler. Gruplar paralel
-   üretilebilir.
-3. **Üret:** Her grup için aşağıdaki Üretici Prompt'u, grubun dosya listesi
-   ve kategori hedefleriyle birlikte modele ver; çıktıları tek bir klasöre
-   (ör. `.cache/generated/A.json`, `B.json` …) kaydet.
-4. **Doğrula ve birleştir:**
+   `SITE_URL/sitemap.xml` → child sitemaps → all pages. script/style/nav/
+   header/footer/form are removed from the HTML; the first line of every file
+   is the metadata (og:title, article:published_time, article:tag) as JSON.
+   Output: `SITE_WORKDIR/text/<stem>.txt` + `SITE_WORKDIR/manifest.json` (stem → URL).
+2. **Group:** `uv run python -m kerimbalci_com.dataset_builder split --groups 4`
+   Splits the texts into groups balanced by word count. Groups can be
+   generated in parallel.
+3. **Generate:** for each group, give the model the Generator Prompt below
+   together with the group's file list and the category targets; save the
+   outputs into one folder (e.g. `.cache/generated/A.json`, `B.json` …).
+4. **Verify and merge:**
    `uv run python -m kerimbalci_com.dataset_builder merge .cache/generated`
-   Her `evidence`, Unicode NFC normalizasyonu ve boşluk sadeleştirmesinden
-   sonra kaynak metinde aranır; bulunamayan kayıt reddedilir ve loglanır.
-   Geçenlere `id` (`fact-001`, `premise-001`, `unans-001`, `time-001`) ve
-   manifest'ten `source_url` atanır. Mevcut dataset'teki kaynaksız
-   (`source_url: null`) elle yazılmış kayıtlar korunur. Son adımda şema
-   `load_factuality()` ile doğrulanır.
-5. **Elle düzeltme:** Gözden geçirmede düzeltilecek kayıtları `.cache/generated`
-   içindeki kaynak JSON'da düzeltip `merge`'ü yeniden çalıştırın; böylece
-   düzeltmeler bir sonraki üretimde kaybolmaz.
-6. **Gözden geçir (insan):** Aşağıdaki kontrol listesini uygula.
-7. **Test:** `uv run pytest tests/unit/test_datasets.py` (şema), ardından küçük
-   bir eval denemesi: `uv run pytest -m eval tests/factuality/ -k <kategori>`.
+   Every `evidence` is searched in the source text after Unicode NFC and
+   whitespace normalization; records that are not found are rejected and
+   logged. Passing records get an `id` (`fact-001`, `premise-001`,
+   `unans-001`, `time-001`) and a `source_url` from the manifest. Hand-written
+   records without a source (`source_url: null`) in the existing dataset are
+   kept. Finally the schema is validated with `load_factuality()`.
+5. **Manual fixes:** fix records found in review in the source JSON under
+   `.cache/generated` and run `merge` again, so the fixes are not lost in the
+   next generation.
+6. **Review (human):** apply the checklist below.
+7. **Test:** `uv run pytest tests/unit/test_datasets.py` (schema), then a small
+   eval trial: `uv run pytest -m eval tests/factuality/ -k <category>`.
 
-### Bilinen tuzaklar
+### Known pitfalls
 
-- Sayfalarda bölünmez boşluk (`\xa0`) ve ayrık yazılmış Türkçe harfler
-  (NFD) bulunabilir; doğrulamada normalize edin.
-- Footer metinden çıkarıldığı için sosyal medya linkleri gibi footer
-  bilgileri metinde görünmez. "Sitede X yok" diyen `unanswerable`
-  kayıtlarını canlı sitede ayrıca kontrol edin.
-- E-posta adresleri Cloudflare tarafından gizlenir (`[email protected]`);
-  kanıt olarak kullanmayın.
-- Etiket sayfalarındaki "en son yazı" sırası varsayımdır (Ghost'ta yeniden
-  eskiye); `time_sensitive` olarak işaretleyin.
+- Pages may contain non-breaking spaces (`\xa0`) and decomposed Turkish
+  letters (NFD); normalize when verifying.
+- Because the footer is removed from the text, footer information such as
+  social media links does not appear in it. Check `unanswerable` records that
+  claim "X is not on the site" on the live site as well.
+- Email addresses are obfuscated by Cloudflare (`[email protected]`); do not use
+  them as evidence.
+- The "latest post" order on tag pages is an assumption (newest first in
+  Ghost); mark such records as `time_sensitive`.
 
-### Gözden geçirme kontrol listesi
+### Review checklist
 
-- [ ] Cevap, `evidence` alıntısının söylediğinden fazlasını iddia etmiyor.
-- [ ] `false_premise` sorusundaki yanlış bilgi gerçekten yanlış ve makul
-      (kullanıcının gerçekten yapabileceği bir hata).
-- [ ] `unanswerable` sorusunun cevabı sitenin hiçbir yerinde yok (canlı
-      sitede arandı).
-- [ ] `time_sensitive` kayıtlarının `valid_as_of` tarihi güncel; eskiyenler
-      yeniden doğrulandı.
-- [ ] Yinelenen veya çok benzer soru yok.
+- [ ] The answer does not claim more than the `evidence` quote says.
+- [ ] The false information in a `false_premise` question is really false and
+      plausible (a mistake a user could actually make).
+- [ ] The answer to an `unanswerable` question is nowhere on the site
+      (searched on the live site).
+- [ ] The `valid_as_of` date of `time_sensitive` records is current; outdated
+      ones were re-verified.
+- [ ] No duplicate or very similar questions.
 
-## Üretici Prompt
+## Generator Prompt
 
-Bir chatbot (kerimbalci.com hakkında soru cevaplayan) için factuality testi
-hazırlıyoruz. Sana verilen metin dosyaları siteden indirilmiş sayfaların düz
-metnidir. Her dosyanın ilk satırı JSON meta (og:title,
-article:published_time, article:tag), sonrası sayfa metnidir. Ücretli
-yazılarda metin paywall'da kesilmiş olabilir; SADECE metinde yazanı kullan.
+We are preparing a factuality test for a chatbot that answers questions about
+kerimbalci.com. The text files you are given are the plain text of pages
+downloaded from the site. The first line of every file is JSON metadata
+(og:title, article:published_time, article:tag); the page text follows. For
+paid articles the text may be cut at the paywall; use ONLY what is written in
+the text.
 
-**Kesin kurallar**
-1. Beklenen cevaplar YALNIZCA dosyadaki metne dayanır. Genel bilginle
-   ekleme yapma, çıkarım yapma.
-2. Her kayıtta `evidence` alanı: kaynak metinden BİREBİR kopyalanmış
-   (karakteri karakterine, aynı noktalama) 1-2 cümlelik alıntı. Bir script
-   bu alıntının dosyada geçtiğini kontrol edecek; değiştirirsen kayıt
-   atılır. Alıntıyı tek paragraftan al.
-3. Sorular Türkçe, doğal, bir site ziyaretçisinin chatbot'a soracağı gibi.
-   İngilizce yazılar için de soru Türkçe olabilir.
-4. Sorular kısa ve tek bir doğrulanabilir olguya odaklı olsun; metinde
-   açıkça söylenen iddia, olgu, isim, tarih veya sayıya dayan. Yazarın
-   açıkça ifade ettiği görüş ("yazar X'i savunuyor") kabul edilir.
-5. Dosyalara dengeli dağıt; tek bir dosyadan 3'ten fazla soru çıkarma.
-6. Tekrarlı veya çok benzer soru yazma.
-7. Bir bilginin sitede OLMADIĞINI iddia etmeden önce sana verilen tüm
-   dosyalarda ara.
+**Strict rules**
+1. Expected answers rely ONLY on the text in the file. Do not add anything
+   from your general knowledge and do not infer.
+2. In every record, the `evidence` field is a 1-2 sentence quote copied
+   VERBATIM from the source text (character for character, same punctuation).
+   A script will check that this quote appears in the file; if you change it,
+   the record is dropped. Take the quote from a single paragraph.
+3. Write the questions, expected answers and evidence in **Turkish**, natural,
+   the way a site visitor would ask the chatbot. Questions about English
+   articles can also be in Turkish.
+4. Questions are short and focus on a single verifiable fact; rely on a claim,
+   fact, name, date or number stated explicitly in the text. A view the author
+   states explicitly ("the author argues X") is acceptable.
+5. Spread the questions evenly over the files; no more than 3 questions from a
+   single file.
+6. Do not write repeated or very similar questions.
+7. Before claiming that some information is NOT on the site, search all the
+   files you were given.
 
-**Kategoriler**
-- `direct_fact`: tek doğru cevabı olan olgu sorusu.
-- `false_premise`: soru metindeki bir olguyu YANLIŞ varsayar;
-  `expected_output` öncülün yanlış olduğunu söyler ve doğrusunu verir.
-  `false_claim` alanı zorunlu (yanlış iddianın kısa hali). `evidence` doğru
-  bilgiyi gösterir.
-- `unanswerable`: (yalnızca istenmişse) sitede cevabı OLMAYAN ama ilgili
-  görünen soru; `expected_output` bilginin sitede bulunmadığını söyler,
-  uydurmaz. `evidence`: konuyla ilgili en yakın bağlam alıntısı.
-- `time_sensitive`: değişebilecek bilgi (üyelik içerikleri, yayın tarihi,
-  serideki son yazı, planlanan şeyler). `valid_as_of`: üretim günü
-  (YYYY-AA-GG).
+**Categories**
+- `direct_fact`: a fact question with a single correct answer.
+- `false_premise`: the question assumes a fact from the text WRONGLY;
+  `expected_output` says the premise is wrong and gives the correct
+  information. The `false_claim` field is required (short form of the false
+  claim). `evidence` shows the correct information.
+- `unanswerable`: (only when requested) a question that looks related but whose
+  answer is NOT on the site; `expected_output` says the information is not on
+  the site and does not invent. `evidence`: the closest related context quote.
+- `time_sensitive`: information that may change (membership content,
+  publication dates, the latest post in a series, planned things).
+  `valid_as_of`: the generation date (YYYY-MM-DD).
 
-**Çıktı:** Yalnızca bir JSON listesi. Her kayıt:
+**Output:** Only a JSON list. Every record:
 
 ```json
 {
   "input": "...",
-  "expected_output": "1-3 cümle, tam ve kendi başına anlaşılır",
+  "expected_output": "1-3 sentences, complete and self-contained",
   "category": "direct_fact | false_premise | unanswerable | time_sensitive",
-  "source_file": "<dosya>.txt",
-  "evidence": "<birebir alıntı>",
-  "false_claim": "... (yalnızca false_premise)",
-  "valid_as_of": "YYYY-AA-GG (yalnızca time_sensitive)"
+  "source_file": "<file>.txt",
+  "evidence": "<verbatim quote>",
+  "false_claim": "... (false_premise only)",
+  "valid_as_of": "YYYY-MM-DD (time_sensitive only)"
 }
 ```
 
-`id` ve `source_url` ekleme; bunlar birleştirme adımında atanır.
+Do not add `id` or `source_url`; they are assigned in the merge step.
