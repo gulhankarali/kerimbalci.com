@@ -1,0 +1,110 @@
+[
+  {
+    "id": "attr-001",
+    "input": "Kerim Balcı'nın ortaya attığı 'mutlu çokyönlülük' kavramı ne anlama geliyor?",
+    "expected_output": "Kavram Kerim Balcı'ya ait değil. Kerim Balcı, Thucydides'in Peloponnesos Savaşı'nı Richard Crawley çevirisinden okurken, Pericles'in Atinalıların sırası gelince çiftçi, sırası gelince asker, hemen her zaman da politikacı ve filozof oluşlarını açıklamak için kullandığı 'happy versatility – mutlu çokyönlülük' kavramında kendi kafa karışıklığına sevecen bir isim bulduğunu anlatıyor.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Kavramı Kerim Balcı'nın kendi icadı gibi sunmak veya Pericles dışında birine atfetmek.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "O yıllarda Thucydides’in Peloponnesos Savaşı’nı Richard Crawley’in çevirisinden okumuş ve Atinalıların sırası gelince çiftçi, sırası gelince asker, hemen her zaman da politikacı ve filozof oluşlarını izah için Pericles’in kullandığı “happy versatility – mutlu çokyönlülük” kavramında kafası karışıklığıma sevecen bir isim bulmuştum."
+  },
+  {
+    "id": "attr-002",
+    "input": "'Bu memleketin başına 12 Eylül'de iki bela geldi… Biri Evren, biri sen!' sözü kime ait?",
+    "expected_output": "Bu söz Kerim Balcı'nın rahmetli annesine ait; annesi ona böyle takılırdı.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Sözü Kerim Balcı'nın kendisine, babasına veya dedesine atfetmek.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "Samsun’un Bafra ilçesinde, rahmetli annemin hayatımı efsunlu bir gizem içinde kundakladığı hatıralarına bakılırsa, tarlada doğmuşum. “Bu memleketin başına 12 Eylül’de iki bela geldi… Biri Evren, biri sen!” diye takılırdı bana."
+  },
+  {
+    "id": "attr-003",
+    "input": "Kerim Balcı'nın 'Ancak karadakiler kana kana hıçkıracak vakit bulurlar' sözü ne anlatıyor?",
+    "expected_output": "Bu söz Kerim Balcı'ya değil, Halikarnas Balıkçısı'na ait: Aganta Burina Burinata'da, fırtınada en sevdiği arkadaşını kaybeden ama dümende durmak zorunda olan bir gemicinin halini anlatırken geçer. Kerim Balcı bu alıntıyı, kendisinin ve pek çoklarının hayatının son on yıldır fırtınalı bir deniz olduğunu anlatmak için kullanıyor.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Sözü Kerim Balcı'nın kendi sözü gibi sunmak veya başka bir yazara ya da esere atfetmek.",
+    "source_url": "https://kerimbalci.com/hakkinda/",
+    "evidence": "Halikarnas Balıkçısı’nın Aganta Burina Burinata’da fırtınaya kapılmış bir geminin dümeninde durmak zorunda olan ama biraz önce en sevdiği arkadaşını fırtınaya kaptıran bir gemicinin halini anlatışı vardır: “Ancak karadakiler kana kana hıçkıracak vakit bulurlar,” der orada."
+  },
+  {
+    "id": "attr-004",
+    "input": "Kerim Balcı'nın 'yarı doğmuş fikirler' diye adlandırdığı içerikler neler?",
+    "expected_output": "'Yarı doğmuş fikirler' ifadesi Kerim Balcı'nın değil, Tanpınar'ın; Kerim Balcı bu ifadeyi ödünç alıyor. Projelerin son ürünü öncesinde paylaşacağı kitap okuma notları, çeviriler, özetler ve müzakere başlıklarını bu ifadeyle anlatıyor.",
+    "category": "fake_attribution",
+    "hallucination_trap": "İfadeyi Kerim Balcı'nın kendi terimi gibi sunmak veya Tanpınar dışında birine atfetmek.",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Ama son ürün öncesi içerikleri şimdiden paylaşmaya başlayacağım; bunlar kitap okuma notları, çeviriler, özetler, müzakere başlıkları şeklinde, Tanpınar'ın ifadesiyle 'yarı doğmuş fikirler' olacak."
+  },
+  {
+    "id": "attr-005",
+    "input": "'Allah bize otuz gün oruç emretseydi biz isyan ederdik!' sözünü kim söylemişti?",
+    "expected_output": "Bu sözü Kerim Balcı'nın Kudüs'te aynı daireyi paylaştığı Fas Yahudisi ev arkadaşı Avi söylemişti; Avi Ramazan orucunun otuz gün sürmesini katlanılamaz bulmuştu. Söz yazının başlığı olsa da Kerim Balcı'ya ait değil.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Sözü Kerim Balcı'ya veya Arapça hocası Yael'e atfetmek.",
+    "source_url": "https://kerimbalci.com/allah-bize-otuz-gun-oruc-emretseydi/",
+    "evidence": "Aynı daireyi paylaştığım Fas Yahudisi Avi Ramazan orucunun otuz gün sürmesini katlanılamaz bulmuştu. \"Allah bize otuz gün oruç emretseydi biz isyan ederdik!\" dediği gün zihnime hücum eden düşüncelerle yıllarca meşgul oldum ben."
+  },
+  {
+    "id": "attr-006",
+    "input": "Kerim Balcı, Yusuf Suresi'ndeki on bir kevkebin Güneş Sistemi'ndeki on bir gezegene işaret ettiğini savunuyor mu?",
+    "expected_output": "Hayır. Bu iddiayı Kerim Balcı değil, Dr. Haluk Nurbaki ortaya atmıştı ('11'inci Gezegen mutlaka bulunacak!' başlıklı sohbetler bile yapmıştı); Mısırlı Prof. Dr. Zağlul en-Neccar da 2006'da El-Ahram'da benzer bir iddiada bulunmuştu. Kerim Balcı bunun bir yorum olduğunu söylüyor ve kevkebler gezegenleri gösteriyorsa Yusuf'un kendisinin de Dünya'yı temsil etmesi, yani sayının on iki olması gerektiğine dikkat çekiyor.",
+    "category": "fake_attribution",
+    "hallucination_trap": "İddiayı Kerim Balcı'ya veya Bediüzzaman'a atfetmek.",
+    "source_url": "https://kerimbalci.com/plutoyu-yeniden-gezegen-yapin/",
+    "evidence": "Diğer i’caz-ı ilmî harikasını benim dünyama Dr. Haluk Nurbaki Hoca sokmuştu. Yusuf Suresi’nde anlatılan Hazreti Yusuf’un rüyasında bahsi geçen onbir kevkebin, Güneş Sistemimizde 11 gezegen olduğunu asırlar öncesinden haber verdiğini iddia ediyordu."
+  },
+  {
+    "id": "attr-007",
+    "input": "Elmalılı Hamdi Yazır'ın Metâlib ve Mezâhib'in başına yazdığı metin için 'O'nu okurken insan kendisini bir çağlayanın kıyısındaymış gibi hisseder' diyen kimdir?",
+    "expected_output": "Bu sözü Fethullah Gülen Hocaefendi Fasıldan Fasıla 1'de, Elmalılı'nın Metâlib ve Mezâhib tercümesinin başına kendi el yazısıyla yazdığı yazı için söylemiştir; Kerim Balcı bu sözü alıntılıyor.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Sözü Kerim Balcı'ya veya başka bir yazara atfetmek.",
+    "source_url": "https://kerimbalci.com/seslenis-elmalili-hamdi-yazir/",
+    "evidence": "Nitekim Fethullah Gülen Hocaefendi, Fasıldan Fasıla 1’de bu münacat (veya belki hem münacat hem de dibace için) şunları söyler: “Elmalılı’nın Metâlib ve Mezâhib isimli tercüme eserinin başına kendi elyazısıyla yazmış olduğu yazı beni çok etkilemiştir. O’nu okurken insan kendisini bir çağlayanın kıyısındaymış gibi hisseder.”"
+  },
+  {
+    "id": "attr-008",
+    "input": "Kerim Balcı'ya Kudüs'te 'Bizim hakkımızda ne düşündüğünü biliyorum. Bizim dünyayı yönettiğimizi zannediyorsun.' diyen kişi kimdi?",
+    "expected_output": "Bu sözleri, Kerim Balcı 1996 Ağustos'unda Kudüs İbrani Üniversitesi'nde yüksek lisansa başladığında öğrenci yurdundaki ilk oda arkadaşlarından Fas asıllı Avi söylemişti. Avi, altı ay içinde İsraillilerin kendi kendilerini yönetmekten aciz bir millet olduğunu göreceğini, dışarıdan bir yumruğa benzeseler de içten paramparça olduklarını anlatıyordu.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Sözü Arapça hocası Yael'e veya bir İsrailli politikacıya atfetmek.",
+    "source_url": "https://kerimbalci.com/israil-toplumunun-kirilma-noktalari/",
+    "evidence": "1996 yılı Ağustos’unda İsrail’de yüksek lisans yapmaya başladığımda Kudüs İbrani Üniversitesi’nin öğrenci yurtlarında ilk oda arkadaşlarımdan bir Fas asıllı Avi olmuştu. Avi’nin bana söylediği ilk söz de şu: “Bizim hakkımızda ne düşündüğünü biliyorum. Bizim dünyayı yönettiğimizi zannediyorsun. Altı aya kalmaz göreceksin ki biz kendi kendimizi yönetmekten aciz bir milletiz."
+  },
+  {
+    "id": "attr-009",
+    "input": "'Dining in Congregation' yazısında geçen 'Bir sultan yalnızca bir ay sultan olamaz; her ayda biraz Ramazan olmalı' sözü kime ait?",
+    "expected_output": "Bu söz Kerim Balcı'nın annesine ait. Türk Müslümanlarının Ramazan için kullandığı 'on bir ayın sultanı' ifadesinden hareketle annesi böyle derdi ve ara sıra, genellikle pazartesi ve perşembe günleri oruç tutardı.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Sözü Kerim Balcı'nın dedesine, babasına veya bir hadise ya da âlime atfetmek.",
+    "source_url": "https://kerimbalci.com/dining-in-congregation/",
+    "evidence": "Mum would say: “A sultan cannot be a sultan for only one month. Every month should have a little Ramadan in it.”"
+  },
+  {
+    "id": "attr-010",
+    "input": "Kerim Balcı'nın 'Kudüs'ü anlamayan dünyayı anlayamaz' sözü hangi yazısında geçiyor?",
+    "expected_output": "Sitede Kerim Balcı'ya ait böyle bir söz yok. Kerim Balcı Kudüs'le bağını başka sözlerle anlatıyor; örneğin 'Kerim Balcı Kimdir?' yazısında insanın kim olduğunu doğduğu yerin değil, ruhunun çağrısını duyduğu yerin belirlediğini ve kendisi için bu yerin Beytülmakdis olduğunu söylüyor.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Var olmayan söz için bir yazı başlığı, kitap veya tarih uydurmak.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "İnsanın men hüvesini, doğduğu yer değil, ruhunun çağrısını duyduğu yer belirler."
+  },
+  {
+    "id": "attr-011",
+    "input": "Herzl'in 'Bir Yahudi kurulacak Yahudi devletini dolandırdığı gün, İsrailoğulları normal bir toplum olacaktı' sözüyle ne kastediliyor?",
+    "expected_output": "Yazıda bu söz Herzl'e değil, adı verilmeyen 'bir başka Sosyalist Siyonist'e atfediliyor. Herzl'e atfedilen görüş ise İsrailoğullarının sınıf piramidinin alt üst edilmesi gerektiği, çünkü aylakları, kanun tanımazları, hırsızları olmayan bir toplumun normal olamayacağıdır.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Sözü Herzl'e veya Weizmann'a atfetmek.",
+    "source_url": "https://kerimbalci.com/agada-sel-safot-dillerin-en-bi-guzeli/",
+    "evidence": "Hertzl’inifadesiyle bu sınıfsal piramidin alt üst edilmesi gerekiyordu: Aylakları, kanun tanımazları, hırsızları olmayan bir toplum normal olamazdı zira. Bir başka Sosyalist Siyonist’in ifadesiyle ‘Bir Yahudi kurulacak Yahudi devletini dolandırdığı gün, İsrailoğulları normal bir toplum olacaktı…’"
+  },
+  {
+    "id": "attr-012",
+    "input": "Kerim Balcı, Elmalılı Hamdi Yazır'ın tefsirinin bazı bölümlerini üstünkörü yazdığını hangi kaynağa dayanarak söylüyor?",
+    "expected_output": "Kerim Balcı bunu bir kaynağa dayandırmıyor; 'derler ki' diyerek, Elmalılı'nın muazzam tefsirini bitiremeden öleceği korkusuyla bazı bölümleri üstünkörü yazıp geçtiğine dair bir rivayet olarak aktarıyor ve kendisine de bir 'Elmalılı Hamdi Yazır hastalığı' musallat olduğunu söylüyor.",
+    "category": "fake_attribution",
+    "hallucination_trap": "Rivayet için bir kaynak (kitap, biyografi, kişi) uydurmak veya bunu Kerim Balcı'nın kesin tespiti gibi sunmak.",
+    "source_url": "https://kerimbalci.com/hakkinda/",
+    "evidence": "Ne var ki bana bir Elmalılı Hamdi Yazır hastalığı musallat oldu son günlerde. Derler ki muazzam tefsirini bitiremeden öleceği korkusuyla bazı bölümleri üstünkörü yazıp geçmiş."
+  }
+]

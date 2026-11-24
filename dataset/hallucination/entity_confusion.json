@@ -1,0 +1,110 @@
+[
+  {
+    "id": "conf-001",
+    "input": "Kerim Balcı yarıda kalan doktorasını hangi üniversitede tamamlamaya çalışıyor?",
+    "expected_output": "Burch Üniversitesi'nde. Doktorasına daha önce, Londra'ya yerleştikten sonra Durham Üniversitesi'nde devam etmişti; 2022 yılında ise Leeds Beckett Üniversitesi'nde hukuk yüksek lisansı yaparak avukatlığa yöneldi.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Doktora üniversitesi olarak Burch yerine Durham'ı veya Leeds Beckett'i vermek.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "Birincisi beni 2022 yılında Leeds Beckett Üniversitesi’nde hukuk yüksek lisansı yaparak avukatlığa yönelmeye, ikincisi de Burch Üniversitesi’nde yarıda kalmış doktoramı tamamlamaya zorladı."
+  },
+  {
+    "id": "conf-002",
+    "input": "Kerim Balcı'nın Today's Zaman ve Turkish Review'daki görevleri neydi?",
+    "expected_output": "Today's Zaman gazetesinin Ankara temsilcisiydi (2006 Aralığından 2010 yazına kadar); Turkish Review dergisinin ise yayın yönetmeniydi ve bu görev için 2010 yazında İstanbul'a döndü. Derginin son sayısını İngiltere'ye yerleştikten sonra 2016'da yayınlayabildi.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Görevleri karıştırmak: Today's Zaman'ın yayın yönetmeni veya Turkish Review'ın Ankara temsilcisi demek.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "Yeni kurulan Today’s Zaman gazetesinin Ankara temsilcisi olarak başkente taşındığım 2006 Aralığından Turkish Review yayın yönetmeni olarak İstanbul’a döneceğim 2010 yazına kadar Ankara gazeteciliğini tanıma bahtsızlığına katlandım."
+  },
+  {
+    "id": "conf-003",
+    "input": "Kerim Balcı'nın Kudüs anılarında geçen Avi ile Yael kimlerdir?",
+    "expected_output": "Avi, Kerim Balcı'nın Kudüs İbrani Üniversitesi yatakhanelerinde ev arkadaşlığı yaptığı Fas asıllı Yahudi gençtir; dindar bir ailenin dinden uzaklaşmış çocuğudur. Yael (Yael Kohen) ise Kerim Balcı'nın Arapça hocasıdır; laik bir aileden gelip öğrencilik yıllarında dindarlaşmış, askerlikte dinden ve dindarlardan soğumuş bir kadındır.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Avi ile Yael'in rollerini karıştırmak (ör. Avi'yi Arapça hocası, Yael'i ev arkadaşı yapmak).",
+    "source_url": "https://kerimbalci.com/allah-bize-otuz-gun-oruc-emretseydi/",
+    "evidence": "Kudüs İbrani Üniversitesi'nin öğrenci yatakhanelerinde kaldığım dönemde bir Koreli ve bir Japon öğrencinin yanı sıra Fas asıllı Yahudi Avi ile de ev arkadaşlığı yaptım."
+  },
+  {
+    "id": "conf-004",
+    "input": "Kerim Balcı'nın anlattığına göre Yom Kippur öncesindeki gece ibadetleri Sefarad (Fas) Yahudileri ile Aşkenaz Yahudileri arasında nasıl farklılaşıyor?",
+    "expected_output": "Sefarad Yahudileri Yom Kippur öncesinde başlayan gece yarısı ibadetlerini kırk gün boyunca ve sinagogda yapıyor; Aşkenaz Yahudileri ise bu ibadeti on güne indirmiş ve evlerinde yapmaya başlamış.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Süreleri veya yerleri ters çevirmek (Aşkenazlara kırk gün ve sinagog, Sefaradlara on gün ve ev demek).",
+    "source_url": "https://kerimbalci.com/allah-bize-otuz-gun-oruc-emretseydi/",
+    "evidence": "Aşkenaz Yahudilerin on güne indirdikleri ve evlerinde yapmaya başladıkları bu ibadeti Sefarad Yahudileri kırk gün boyunca yapıyorlardı ve bu gece yarısı ibadetinin sinagogda yapılması zorunluluğu on yaşındaki bir çocuk için fazlasıyla ağır bir imtihandı."
+  },
+  {
+    "id": "conf-005",
+    "input": "Pluto yazısına göre Bediüzzaman Üçüncü Şua'da kaç seyyare yıldızdan bahsediyor?",
+    "expected_output": "On iki. Kerim Balcı, Yusuf'un rüyasındaki on bir kevkeb gezegenleri gösteriyorsa Yusuf'un kendisinin de Dünya'yı temsil etmesi ve sayının on iki olması gerektiğini söylüyor ve Bediüzzaman'ın Üçüncü Şua'da 'on iki seyyare yıldız'dan bahsettiğini hatırlatıyor.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Yusuf'un rüyasındaki on bir kevkeble karıştırıp 'on bir' demek.",
+    "source_url": "https://kerimbalci.com/plutoyu-yeniden-gezegen-yapin/",
+    "evidence": "Nitekim Hazreti Bediüzzaman Üçüncü Şua’da “on iki seyyare yıldız”dan bahsediyordu."
+  },
+  {
+    "id": "conf-006",
+    "input": "Myanmar Genelkurmay Başkanı Min Aung Hlaing hakkında tutuklama kararı başvurusunu hangi mahkeme yaptı?",
+    "expected_output": "Başvuruyu Uluslararası Ceza Mahkemesi savcıları 2024 yılında yaptı. Gambia v. Myanmar kararını veren Uluslararası Adalet Divanı ise şahıslar hakkında değil yalnızca devletler hakkında karar verebildiği için Min Aung Hlaing hakkında tutuklama veya hapis kararı vermedi.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Tutuklama başvurusunu Uluslararası Adalet Divanı'na atfetmek.",
+    "source_url": "https://kerimbalci.com/rohingya-soykirimi-kararindan-dersler/",
+    "evidence": "Uluslararası Ceza Mahkemesi savcıları 2024 yılında Min Aung Hlaing için bir tutuklama kararı başvurusu yapmışlardı."
+  },
+  {
+    "id": "conf-007",
+    "input": "Kudüs'teki Nârenc Havuzu ile Kasım Paşa Sebili arasındaki fark nedir?",
+    "expected_output": "Nârenc Havuzu, 1922'ye kadar Şafilerin Harem alanındaki iki abdest yerinden biriydi; Şafiler durağan sudan abdest alabildikleri için ellerini havuza daldırarak abdest alırlardı ve havuz bir Osmanlı eseri değildir. Kasım Paşa Sebili ise Nârenc Havuzu'nun hemen güneyindedir; Hanefiler akan sudan abdest alabildikleri için Osmanlılar şehri alır almaz Hanefi askerler için yaptırmıştır ve yazıdaki Yusuf'a göre Kudüs'te Osmanlıların yaptırdığı ilk binadır.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Havuzu Hanefilere, sebili Şafilere bağlamak veya Nârenc Havuzu'nu Osmanlı eseri saymak.",
+    "source_url": "https://kerimbalci.com/kasimpasa-sebili-kudusun-en-eski-osmanli-mirasi/",
+    "evidence": "Şafiler durağan sudan abdest alabildikleri için, ellerini havuzun içine daldırıp dışarı çıkardıkları su ile abdest alırlarmış."
+  },
+  {
+    "id": "conf-008",
+    "input": "'Agada Şel Safot' yazısında geçen Eliezer Perlman ile Eliezer Ben Yehuda arasındaki ilişki nedir?",
+    "expected_output": "İkisi aynı kişidir. Litvanyalı, verem hastası bir öğretmen olan Eliezer Perlman, fazlasıyla Yidiş olan soyadını değiştirerek 'Ben Yehuda' (Yehuda'nın Oğlu) adını almıştır. 1882'de Kudüs'te doğan oğlu, son 2000 yılda anadili İbranice olan ilk çocuk olmuştur.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Perlman ile Ben Yehuda'yı iki ayrı kişi gibi anlatmak.",
+    "source_url": "https://kerimbalci.com/agada-sel-safot-dillerin-en-bi-guzeli/",
+    "evidence": "Kendisi de fazlasıyla Yidiş olan soyadını değiştirdi ve “Ben Yehuda” (Yehuda’nın Oğlu) adını aldı."
+  },
+  {
+    "id": "conf-009",
+    "input": "Exordium projesinde Fatiha için hangi transliterasyon sistemi kullanılıyor?",
+    "expected_output": "Projede Encyclopaedia of the Qur'ān'ın kullandığı fonetik transliterasyon benimseniyor; bu sistem IJMES transliterasyonundan daha az akademik ama çok daha okunaklı olduğu için tercih edilmiş.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Kullanılan sistemi IJMES olarak vermek.",
+    "source_url": "https://kerimbalci.com/tanwir-al-miqbas-min-tafsir-ibn-abbas/",
+    "evidence": "The transliteration adapted in Project Exordium is a phonetic one used by the Encyclopaedia of the Qur’ān, which is less academic than the IJMES transliteration, but much more readable."
+  },
+  {
+    "id": "conf-010",
+    "input": "Yeryüzü Mirasçıları ile Hayal Avcısı kitapları arasındaki fark nedir?",
+    "expected_output": "Yeryüzü Mirasçıları, Enbiya Suresi 105. ayete Fethullah Gülen Hocaefendi'nin altmış yıllık aksiyon ve düşünce hayatıyla yazdığı tefsiri ele alan, yükseköğretimde okutulabilecek bir ders kitabıdır. Hayal Avcısı ise başta Fethullah Gülen olmak üzere Bediüzzaman Said Nursi, Nurettin Topçu, Sezai Karakoç, Necip Fazıl Kısakürek, Peyami Sefa ve Süleyman Hilmi Tunahan gibi önderlerin hayatlarına sığmayan hayallerini tarihçi hassasiyeti ve gazeteci anlatımıyla aktaran bir derlemedir.",
+    "category": "entity_confusion",
+    "hallucination_trap": "İki kitabın içeriklerini karıştırmak (ör. Hayal Avcısı'nı Enbiya 105 tefsiri olarak tanımlamak).",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Enbiya 105 ayetine Fethullah Gülen Hocaefendi'nin altmış yıllık aksiyon ve düşünce hayatıyla yazmış olduğu tefsir…"
+  },
+  {
+    "id": "conf-011",
+    "input": "'Dining in Congregation' yazısında evde kılınan akşam namazında imamlığı kim yapıyordu?",
+    "expected_output": "Akşam namazını evde babası kıldırırdı ve her gün Kerim Balcı'yı ya da ağabeyini müezzin seçerdi. Dedesi ise köyün asıl imamı sayılırdı; yatsı için gidilen camide imam acele ederse onu azarlardı.",
+    "category": "entity_confusion",
+    "hallucination_trap": "Akşam namazı imamlığını dedeye veya köy imamına atfetmek.",
+    "source_url": "https://kerimbalci.com/dining-in-congregation/",
+    "evidence": "My father would lead as imam and each day would choose either me or my elder brother as the muezzin."
+  },
+  {
+    "id": "conf-012",
+    "input": "Zamansız Yazılar ile Vadedilmiş Yazılar arasındaki fark nedir?",
+    "expected_output": "Zamansız Yazılar, Kerim Balcı'nın 1996-2016 yılları arasında Zaman Gazetesi'nde yayınladığı köşe yazılarının güncellenmiş, kapsamı genişletilmiş ve tarihsel döneminden bağımsızlaştırılmış versiyonlarıdır. Vadedilmiş Yazılar ise modern İsrail toplumunun kültürel ve düşünsel kodlarını deşifre etmeye çalışan yazılardır; bir kısmı Zaman'daki yazıların geliştirilmiş hali, bir kısmı da sonraki on yılın çalışmalarının ürünüdür.",
+    "category": "entity_confusion",
+    "hallucination_trap": "İki serinin içeriğini karıştırmak (ör. İsrail yazılarını Zamansız Yazılar'a koymak).",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Zamansız Yazılar kategorisindeki yazılar 1996-2016 yılları arasında Zaman Gazetesi'nde yayınladığım köşe yazılarımın güncellenmiş, kapsamı genişletilmiş ve tarihsel döneminden bağımsızlaştırılmış versiyonları."
+  }
+]

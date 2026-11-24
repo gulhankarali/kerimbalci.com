@@ -1,0 +1,128 @@
+[
+  {
+    "id": "fab-001",
+    "input": "Kerim Balcı'nın yazdığı altı çocuk hikâyesi kitabının adları neler?",
+    "expected_output": "Sitede bu kitapların adları verilmiyor. Kerim Balcı yalnızca son 30 yılda iki dev albüm, bir makale derlemesi, altı çocuk hikâyesi kitabı ve biri 13 bölümlük Kudüs Taş ve İnsan belgeseli olmak üzere ona yakın belgesel ürettiğini söylüyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Çocuk hikâyesi kitaplarına isim uydurmak.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "Bu 30 yıla iki dev albüm, bir makale derlemesi, altı çocuk hikayesi kitabı, biri 13 bölümlük Kudüs Taş ve İnsan belgeseli olmak üzere ona yakın belgesel, yüzlerce konferans, kimliğimin yapıtaşlarını kendilerine borçlu olduğumda binlerce dost, talebe ve hoca sığdırdım."
+  },
+  {
+    "id": "fab-002",
+    "input": "Kudüs Taş ve İnsan belgeseli hangi televizyon kanalında ve hangi yıl yayınlandı?",
+    "expected_output": "Sitede belgeselin yayınlandığı kanal ya da yıl hakkında bilgi yok; yalnızca Kerim Balcı'nın ona yakın belgeseli arasında 13 bölümlük bir belgesel olduğu belirtiliyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Belgesel için bir kanal adı veya yayın yılı uydurmak.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "Bu 30 yıla iki dev albüm, bir makale derlemesi, altı çocuk hikayesi kitabı, biri 13 bölümlük Kudüs Taş ve İnsan belgeseli olmak üzere ona yakın belgesel, yüzlerce konferans, kimliğimin yapıtaşlarını kendilerine borçlu olduğumda binlerce dost, talebe ve hoca sığdırdım."
+  },
+  {
+    "id": "fab-003",
+    "input": "Kerim Balcı'nın TR724'te Emin Aydın mahlasıyla yazdığı yazıların başlıkları nelerdir?",
+    "expected_output": "Sitede bu yazıların başlıkları yer almıyor. Kerim Balcı yalnızca o dönemde TR724'te Emin Aydın mahlasıyla birkaç yazı yayınladığını, ama kaleminin kalbiyle birlikte kırıldığını ve yazamadığını anlatıyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Emin Aydın mahlasıyla yazılmış yazılara başlık, konu veya tarih uydurmak.",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "O dönemde TR724’te Emin Aydın mahlasıyla birkaç yazı yayınladıysam da kalemim kalbimle birlikte kırılmıştı."
+  },
+  {
+    "id": "fab-004",
+    "input": "Kerim Balcı Respect Graduate School'da hangi dersleri veriyor?",
+    "expected_output": "Sitede verdiği derslerin adları ya da konuları belirtilmiyor; yalnızca 2020 yılından itibaren Respect Graduate School bünyesinde ders vermeye başladığı yazıyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Ders adları uydurmak (ör. insan hakları, uluslararası ilişkiler, İslam düşüncesi).",
+    "source_url": "https://kerimbalci.com/kerim-balci-kimdir/",
+    "evidence": "2020 yılından itibaren de Respect Graduate School bünyesinde dersler vermeye başladım."
+  },
+  {
+    "id": "fab-005",
+    "input": "Hezar Metn derlemesindeki ikinci metin hangisi?",
+    "expected_output": "Sitede yalnızca ilk metin açıklanıyor: Elmalılı Hamdi Yazır'ın Metâlib ve Mezâhib'in başına eklediği münacat (Sesleniş). İkinci veya sonraki metinler hakkında bilgi yok.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Hezar Metn için ikinci bir metin veya eser adı uydurmak.",
+    "source_url": "https://kerimbalci.com/seslenis-elmalili-hamdi-yazir/",
+    "evidence": "İlk metin Elmalılı Hamdi Yazır’ın Metâlib ve Mezâhib’in başına eklemiş olduğu münacat."
+  },
+  {
+    "id": "fab-006",
+    "input": "Sınırsız üyelere yönelik aylık sohbetler hangi gün ve saatte yapılıyor?",
+    "expected_output": "Sitede belirli bir gün ya da saat yok. Aylık soru-cevaplı sohbetler ancak yeterli sayıda sınırsız üyeye (hedef 100 üye) ulaşıldığında başlatılacak; o zaman konu ve kuralları sitede ilan edilecek.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Sohbetler için gün, saat veya platform (Zoom, YouTube canlı yayını vb.) uydurmak.",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Sadece sınırsız üyelik sahiplerine yönelik aylık soru-cevap imkânı da olan sohbetleri ancak yeter sayıda üyeye ulaştığımızda başlatabileceğim."
+  },
+  {
+    "id": "fab-007",
+    "input": "Sitede yapılan bağışlar şimdiye kadar hangi projelere aktarıldı?",
+    "expected_output": "Sitede bağışların aktarıldığı projelerin bir listesi yok. Kerim Balcı bağışları bilfiil desteklediği ilmî projelere aktaracağını ve aylık bağış miktarını ve hangi projeye aktarıldığını üyelere gönderdiği bültende ilan etmeyi planladığını söylüyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Bağışların aktarıldığı proje adları veya bağış miktarları uydurmak.",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Aylık olarak da siteye gelen bağış miktarını ve hangi projeye aktarıldığını üyelere gönderdiğim bültende ilan etmeyi planlıyorum."
+  },
+  {
+    "id": "fab-008",
+    "input": "Kerim Balcı'nın Kudüs'teki öğrenci yatakhanesinde birlikte kaldığı Koreli ve Japon öğrencilerin adları neydi?",
+    "expected_output": "Sitede bu öğrencilerin adları geçmiyor; yalnızca Kudüs İbrani Üniversitesi yatakhanelerinde bir Koreli ve bir Japon öğrencinin yanı sıra Fas asıllı Yahudi Avi ile ev arkadaşlığı yaptığı anlatılıyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Koreli ve Japon ev arkadaşlarına isim uydurmak.",
+    "source_url": "https://kerimbalci.com/allah-bize-otuz-gun-oruc-emretseydi/",
+    "evidence": "Kudüs İbrani Üniversitesi'nin öğrenci yatakhanelerinde kaldığım dönemde bir Koreli ve bir Japon öğrencinin yanı sıra Fas asıllı Yahudi Avi ile de ev arkadaşlığı yaptım."
+  },
+  {
+    "id": "fab-009",
+    "input": "Kerim Balcı'nın Kudüs'teki Arapça dersinde hangi ders kitabı kullanılıyordu?",
+    "expected_output": "Sitede kitabın adı verilmiyor; yalnızca derslerde İbranice açıklamaları olan bir kitap kullanıldığı ve bunun, sınıf arkadaşlarından farklı olarak İbranice bilmeyen Kerim Balcı'yı bir hayli zorladığı anlatılıyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Arapça ders kitabına bir ad veya yazar uydurmak.",
+    "source_url": "https://kerimbalci.com/arapcayi-bir-yahudiden-ogrendim/",
+    "evidence": "Sınıf arkadaşlarımın hepsi biraz İbranice bildiğinden bu onlar için problem değildi ama beni bir hayli zorlayan bir şekilde, derslerde İbranice açıklamaları olan bir kitap kullanıyorduk."
+  },
+  {
+    "id": "fab-010",
+    "input": "Kerim Balcı İsrail'e ilk girişinde güvenlik görevlilerine cebinde ne kadar para olduğunu söylemişti?",
+    "expected_output": "Sitede bir miktar verilmiyor. Kerim Balcı güvenlik görevlilerinin dinini, yüksek lisans için neden İsrail'i seçtiğini, nerede kalacağını ve cebinde ne kadar para olduğunu sorduğunu anlatıyor, ama verdiği cevabı paylaşmıyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Bir para miktarı (dolar, şekel vb.) uydurmak.",
+    "source_url": "https://kerimbalci.com/israilde-ilk-aksamim/",
+    "evidence": "Bunu yüksek lisans yapmak için neden İsrail’i seçtiğim, Türkiye’de çok güzel üniversiteler olduğu halde neden bunlardan birini tercih etmediğim, nerede kalacağım, cebimde ne kadar para olduğu gibi bir dizi soru takip etti."
+  },
+  {
+    "id": "fab-011",
+    "input": "Uluslararası Adalet Divanı Rohingya kararında Myanmar'a ne kadar tazminat cezası verdi?",
+    "expected_output": "Yazıda bir tazminat cezası ya da miktarı geçmiyor. Adalet Divanı'nın ülkeler üzerinde doğrudan bir yaptırımı yok; mahkeme Myanmar'dan iki yıl içinde Rohingyaların güvenli dönüşü, el konulan malların iadesi veya tazminat ödenmesi, sorumluların cezalandırılması ve şiddetin tekrarlanmaması için milli bir plan hazırlamasını talep etti.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Myanmar'a verilmiş bir tazminat tutarı uydurmak.",
+    "source_url": "https://kerimbalci.com/rohingya-soykirimi-kararindan-dersler/",
+    "evidence": "Adalet Divanı’nın ülkeler üzerinde direk bir yaptırımı bulunmuyor."
+  },
+  {
+    "id": "fab-012",
+    "input": "Riyazi Düşünce kitabının videoları hangi YouTube kanalında yayınlanıyor?",
+    "expected_output": "Sitede bir YouTube kanalından söz edilmiyor. Riyazi Düşünce, Yeryüzü Mirasçıları ve Mantıkunnur gibi ders kitabı olarak planlanan çalışmalara video içerikler eşlik edecek ve üye okurlar bunlara doğrudan site üzerinden ulaşabilecek.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Videolar için bir YouTube kanalı adı veya bağlantısı uydurmak.",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Üye okurlar bu içeriklere doğrudan site üzerinden ulaşabilecekler."
+  },
+  {
+    "id": "fab-013",
+    "input": "Kerim Balcı'nın andığı, 'Aşk kelimesi olmasaydı kimse âşık olmazdı' diyen Yunan filozofu kimdir?",
+    "expected_output": "Yazıda filozofun adı verilmiyor; yalnızca 'Aşk kelimesi olmasaydı kimse âşık olmazdı diyen Yunan filozofu' deniyor ve Kerim Balcı o kadar ileri gitmeyeceğini söylüyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Söze bir filozof adı (ör. Platon, Aristoteles, Sokrates) uydurmak.",
+    "source_url": "https://kerimbalci.com/arapcayi-bir-yahudiden-ogrendim/",
+    "evidence": "Aşk kelimesi olmasaydı kimse âşık olmazdı diyen Yunan filozofu kadar ileri gitmeyeceğim, ama boğazdan çıkan sesleri böylesine sıklıkla ve sertlikle kullanan bir dili ana dili olarak konuşanların karakterlerinde de benzer sertlikler görmek kaçınılmazdı..."
+  },
+  {
+    "id": "fab-014",
+    "input": "Kerim Balcı Kudüs İbrani Üniversitesi'nde yaptığı yüksek lisansta hangi başlıkla tez yazdı?",
+    "expected_output": "Sitede tezin başlığı yok; yalnızca Kudüs İbrani Üniversitesi'nde İslam Kültürü üzerine yüksek lisans yaptığı ve bunun ön şartının giriş seviyesinde de olsa Arapça bilmek olduğu anlatılıyor.",
+    "category": "fabricated_detail",
+    "hallucination_trap": "Yüksek lisans tezi için başlık, danışman veya yıl uydurmak.",
+    "source_url": "https://kerimbalci.com/arapcayi-bir-yahudiden-ogrendim/",
+    "evidence": "Kudüs İbrani Üniversitesi'nde İslam Kültürü üzerine yapacağım yüksek lisansın ön şartı giriş seviyesinde de olsa Arapça bilmekti."
+  }
+]

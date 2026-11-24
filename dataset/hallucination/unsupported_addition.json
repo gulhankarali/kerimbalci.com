@@ -1,0 +1,110 @@
+[
+  {
+    "id": "add-001",
+    "input": "Herzl, Altneuland kitabında Kudüs'ü nasıl hayal ediyordu?",
+    "expected_output": "Yazıya göre Herzl Kudüs'ü milli ve uluslararası bir merkez, gelenekle gelişmenin kaynaştığı 3000 yaşında modern bir şehir olarak hayal ediyordu. Kutsal olmayan her şey Eski Şehir'in dışına çıkarılacak, Eski Şehir uluslararası toprak olacak ve merkezde, İkinci Beytülmakdis'in yapısında ama bütün insanların ibadet mekânı olacak bir 'Barış Mabedi' kurulacaktı.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Kitabın yayın yılı (1902), Hayfa veya 'If you will it, it is no dream' gibi yazıda olmayan Altneuland bilgileri eklemek.",
+    "source_url": "https://kerimbalci.com/el-mebka-aglayan-sehir/",
+    "evidence": "Hayalindeki şehir gelenekle gelişmenin kaynaştığı 3000 yaşındaki modern bir şehirdir."
+  },
+  {
+    "id": "add-002",
+    "input": "Sitede uygulandığı söylenen mudaraba yöntemi nedir?",
+    "expected_output": "Kerim Balcı bağış, bahşiş ve karşılıksız destek kabul etmediğini; sitede İslam iktisadının mudaraba dediği, ürünün henüz hasadı yapılmadan alınmasına dayanan bir hizmet alımı metodunun uygulandığını söylüyor. Sitede yapılan bağışları da desteklediği ilmî projelere aktaracağını belirtiyor.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Mudarabayı sitede olmayan ders kitabı tanımıyla (sermaye sahibi ile emek sahibi arasında kâr ortaklığı, rabbü'l-mal/mudarib) açıklamak.",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Bu sitede, İslam iktisadının mudaraba dediği, ürünün henüz hasadı yapılmadan alınmasına dayanan bir hizmet alımı metodu hayata geçiriliyor."
+  },
+  {
+    "id": "add-003",
+    "input": "Kudüs'ün Türk Tarihi kitabı Kudüs'teki Türk hâkimiyetini kimden başlatıyor?",
+    "expected_output": "Abbasi Halifesi Muktedir Billah'ın annesi Çiçek Hatun'dan. Kitabın tanıtımına göre ondan sonra aralıklarla da olsa bin yıl boyunca Kudüs'e Türkler (Kürtlerle birlikte) hükmetmiş ve Türk varlığı günümüze kadar sürmüş; ama bu Türk mührü Kudüs tarihi kitaplarında hak ettiği yeri bulamamış.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Yazıda olmayan yıllar veya hanedanlar (Tolunoğulları, İhşidiler, Selçuklular vb.) eklemek.",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Abbasi Halifesi Muktedir Billah'ın annesi Çiçek Hatun'dan sonra aralıklarla da olsa bin yıl boyunca Kudüs'e Türkler (Kürtlerle birlikte) hükmetmiş, Kudüs'teki Türk varlığı günümüze kadar da devam etmiştir."
+  },
+  {
+    "id": "add-004",
+    "input": "Pluto yazısına göre Gezegen X arayışı nasıl başladı ve nasıl sona erdi?",
+    "expected_output": "1915'te astronom Percival Lowell, Uranüs ve Neptün'ün yörüngelerindeki sıradışılıklardan hareketle bir Gezegen X olması gerektiği hipotezini ortaya attı. 1930'da bulunan Pluto önce aranan gezegen sanıldı, ama büyüklüğü ve yeri bunu açıklamıyordu. Arayış 1992'ye kadar sürdü; o yıl Lowell'ın Neptün'ün kütlesiyle ilgili hesaplarının yanlış olduğu anlaşıldı ve Gezegen X arayışından vazgeçildi.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Voyager 2, Myles Standish veya Clyde Tombaugh gibi yazıda olmayan isim ve ayrıntılar eklemek.",
+    "source_url": "https://kerimbalci.com/plutoyu-yeniden-gezegen-yapin/",
+    "evidence": "O yıl Neptün’ün kütlesiyle alakalı Lowell’ın hesaplamalarının yanlış olduğu anlaşıldı da bir Gezegen X arayışından vazgeçildi."
+  },
+  {
+    "id": "add-005",
+    "input": "Rohingya kararına göre Adalet Divanı Myanmar'dan ne talep etti?",
+    "expected_output": "Mahkeme Myanmar'dan iki yıl içinde Rohingyaların güvenli bir şekilde geri dönebilmeleri için gerekli tedbirleri, el konulmuş mallarının iadesini veya tazminat ödenmesini, sorumluların belirlenip cezalandırılmasını ve benzer şiddetin tekrarlanmaması için milli bir plan hazırlamasını talep etti. Divanın doğrudan yaptırım gücü olmadığından Gambia kararı BM Güvenlik Konseyi'ne götürebilir.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "2020 ihtiyati tedbir kararı, Aung San Suu Kyi'nin Lahey'deki savunması veya mülteci sayıları gibi yazıda olmayan ayrıntılar eklemek.",
+    "source_url": "https://kerimbalci.com/rohingya-soykirimi-kararindan-dersler/",
+    "evidence": "Nitekim Mahkeme Myanmar’dan iki yıl içinde Rohingya’ların güvenli bir şekilde geri dönebilmeleri için gerekli tedbirler, el konulmuş mallarının iadesi veya tazminatların ödenmesi, sorumluların belirlenip cezalandırılması ve benzer şiddet olaylarının bir daha olmaması için milli bir plan hazırlamasını talep etti."
+  },
+  {
+    "id": "add-006",
+    "input": "'Diaspora Sendromu' yazısına göre Yahudiliğin milli hafızasını oluşturan 'gidişler' hangileri?",
+    "expected_output": "İbrahim'in Harran'dan Kenan Diyarı'na göçü, Yakup'un evlatlarıyla Mısır'a göçü, Musa'nın Mısır'dan çıkışı, Babil Sürgünü, Titus Sürgünü, İspanya Sürgünü, Rusya pogromlarından kaçış ve nihayet Siyonist geri dönüş hikâyeleri.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Listeye yazıda olmayan olaylar (Asur sürgünü vb.) veya tarihler (MÖ 586, MS 70, 1492) eklemek.",
+    "source_url": "https://kerimbalci.com/diaspora-sendromu/",
+    "evidence": "Gidicilik düşüncesi İsrailoğullarının tarih boyunca yaşadıkları \"gidişlerin\" destanlaşmasına yol açmış, İbrahim'in Harran'dan Kenan Diyarı'na göçü, Yakup'un evlatlarıyla birlikte Mısır'a göçü, Musa'nın Mısır'dan çıkışı, Babil Sürgünü, Titus Sürgünü, İspanya Sürgünü, Rusya Pogromlarından kaçış ve nihayet Siyonist geri dönüş hikayeleri Yahudiliğin \"milli hafızası\" haline gelmişlerdir."
+  },
+  {
+    "id": "add-007",
+    "input": "Altın Kapısı yazısına göre Arapça ve İbranicede 'kapı' kelimeleri ne anlama geliyor?",
+    "expected_output": "Araplar 'bâb', İbraniler 'şa'ar' diyor; ikisi de bölümlere ayırmak anlamındaki bir kökten türemiş. Bu yüzden şehir kapıları için kullanılan kelime aynı zamanda kitap bölümleri için de kullanılıyor; Türkçedeki gibi kapatmakla bir ilişkisi yok.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Kök harfleri veya başka dillerden etimoloji gibi yazıda olmayan dilbilgisi bilgileri eklemek.",
+    "source_url": "https://kerimbalci.com/altin-kapisinda-atalar-mirasi-hikayelere-devam/",
+    "evidence": "‘Kapı’ kelimesinin dilimizde kapatmakla kurduğu ilişki Semitik dillerde mevcut değil. Araplar ‘bâb’ diyorlar, İbraniler ‘Şa’ar’. Her ikisi de bölümlere ayırmak manasına gelen bir kökten türemiş."
+  },
+  {
+    "id": "add-008",
+    "input": "'İsrail'de İlk Akşamım' yazısına göre İsrailli yolcular uçak Ben Gurion Havaalanı'na indiğinde nasıl davranıyordu?",
+    "expected_output": "İsrailli yolcular tekerlekler yere değer değmez alkış ve ıslık başlatır, kemer çözme ışıkları yanmadan el bagajlarını almak için telaşa düşerlerdi. Kerim Balcı, dışarıdan bakan birinin onları büyük bir felaketten kurtulmuş insanlar sanabileceğini yazıyor.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Havalimanının tarihi (Lod, 1936), güvenlik prosedürleri veya El Al gibi yazıda olmayan bilgiler eklemek.",
+    "source_url": "https://kerimbalci.com/israilde-ilk-aksamim/",
+    "evidence": "İsrailli yolcuların uçağın tekerlekleri yere değer değmez başlattıkları alkış ve ıslıkların ve kemer çözme ışıkları yanmadan el bagajlarını almak için gösterdikleri tehalükün de bunda etkisi olabilir."
+  },
+  {
+    "id": "add-009",
+    "input": "'Dining in Congregation' yazısında iftar vaktinde televizyonda hangi dua okunuyordu?",
+    "expected_output": "Ülkenin tek televizyon kanalındaki iftar programında imamın okuduğu, ülkenin en bilinen dualarından biri: 'Rabbim! Senin için oruç tuttum, sana güvendim ve senin verdiğin rızıkla orucumu açtım. Bize verdiğin nimetler, sağlık ve afiyet için şükürler olsun. Rabbim! Beni, annemi, babamı ve bütün müminleri bağışla. Amin.'",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Duanın Arapça metnini ('Allahümme leke sumtü...') veya kanal adını (TRT) eklemek.",
+    "source_url": "https://kerimbalci.com/dining-in-congregation/",
+    "evidence": "That supplication must be one of the best-known prayers in my country: “O my Lord! I fasted for Your sake. I trusted in You, and I broke my fast with the food You provided for me. Thanks be for the blessings You bestowed upon us, and for health and well-being. My Lord! Forgive me, my mother, my father and all the believers. Amen.”"
+  },
+  {
+    "id": "add-010",
+    "input": "Exordium projesi hangi tefsir ekollerinin izini sürmeyi planlıyor?",
+    "expected_output": "Proje bir tefsir yazmayı değil, bir Fatiha Suresi tefsir tarihi araştırması yapmayı vadediyor; İslam tarihindeki bütün tefsir ekollerinin izini sürmeyi, Sünni, Şii, İbahi, Mutezili, Cebri, İşari ve Hurufi tefsirlerin dökümünü yapmayı ve her yorumun ilk dile getirildiği kaynağa ulaşmayı planlıyor.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Listeye yazıda olmayan ekoller (Maturidi, Zahiri, Selefi) veya belirli tefsirler (Taberi, Razi) eklemek.",
+    "source_url": "https://kerimbalci.com/ucretli-uyelik-neler-vadediyor/",
+    "evidence": "Bunun için İslam tarihinde ortaya çıkan bütün tefsir ekollerinin izini sürmeyi, Sünni, Şii, İbahi, Mutezili, Cebri, İşari, Hurufi tefsirlerin dökümünü yapmayı, her yorumun ilk telaffuz edildiği kaynağa ulaşmayı planlıyor."
+  },
+  {
+    "id": "add-011",
+    "input": "Elmalılı Hamdi Yazır'ın Sesleniş münacatında hangi konular işleniyor?",
+    "expected_output": "Yazıya göre Elmalılı bu metinde vicdan ve vücut, çekim ve ruh, esir teorisi eleştirisi, ruh ve beden, vahdet-i vücut ve Hallâc ve nihayet nübüvvetin lüzumu konularını ele alıyor; münacat, dibacenin şiirsel bir üslupla özetlenmiş hali olarak okunabilir.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Hak Dini Kur'an Dili tefsirinden veya Elmalılı'nın biyografisinden yazıda olmayan bilgiler eklemek.",
+    "source_url": "https://kerimbalci.com/seslenis-elmalili-hamdi-yazir/",
+    "evidence": "Elmalılı bu metinde vicdan ve vücut, çekim ve ruh, esir teorisi eleştirisi, ruh ve beden, vahdet-i vücut ve Hallâc ve nihayet nübüvvetin lüzumu konularını ele alır."
+  },
+  {
+    "id": "add-012",
+    "input": "'Dining in Congregation' yazısına göre Kerim Balcı'nın annesi sık oruç tuttuğu halde neden zayıf değildi?",
+    "expected_output": "Annesi ara sıra, genellikle pazartesi ve perşembe günleri oruç tutardı ama köyün en iri yapılı kadınıydı; çünkü onun kendi kendine öğrendiği bilgeliğe göre oruç aynı zamanda 'cemaatle yemek'ti ve toplu yenince daha çok yenir. İftar ziyaretleri de fazla yemeye yol açıyordu.",
+    "category": "unsupported_addition",
+    "hallucination_trap": "Oruç ve metabolizma hakkında tıbbi açıklamalar veya pazartesi-perşembe orucunun hadis kaynakları gibi yazıda olmayan bilgiler eklemek.",
+    "source_url": "https://kerimbalci.com/dining-in-congregation/",
+    "evidence": "In her self-taught wisdom, fasting was, among other things, about “eating in congregation”, and we all know that when you eat in a group, you eat more."
+  }
+]
