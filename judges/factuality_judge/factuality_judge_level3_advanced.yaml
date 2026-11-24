@@ -1,8 +1,8 @@
 # Factuality Judge — Level 3 (Advanced)
-# Level 2 + kategoriye ozel davranis kontrolleri (dataset `category` alani):
+# Level 2 + category-specific behavior checks (dataset `category` field):
 #   direct_fact | false_premise | unanswerable | time_sensitive
-# category_steps icindeki {false_claim} ve {valid_as_of} yer tutuculari
-# dataset kaydindaki alanlarla doldurulur.
+# The {false_claim} and {valid_as_of} placeholders in category_steps are
+# filled from the fields of the dataset record.
 
 name: Factuality L3 Advanced
 level: 3

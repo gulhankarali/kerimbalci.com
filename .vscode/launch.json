@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Uygulamayi Debug Et",
+            "name": "Python: Debug the App",
             "type": "debugpy",
             "request": "launch",
             "module": "kerimbalci_com",
@@ -11,7 +11,7 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Acik Dosyayi Debug Et",
+            "name": "Python: Debug Current File",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
@@ -20,7 +20,7 @@
             "justMyCode": true
         },
         {
-            "name": "Pytest: Testleri Debug Et",
+            "name": "Pytest: Debug Tests",
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",

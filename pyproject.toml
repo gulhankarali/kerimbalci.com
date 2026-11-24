@@ -1,7 +1,7 @@
 [project]
 name = "kerimbalci-com"
 version = "0.1.0"
-description = "kerimbalci.com chatbot'u icin LLM eval otomasyon framework'u (deepeval + Confident AI)"
+description = "LLM eval automation framework for the kerimbalci.com chatbot (deepeval + Confident AI)"
 readme = "README.md"
 authors = [
     { name = "Gulhan Karali Balci", email = "gulhan.karali@gmail.com" }
@@ -31,8 +31,8 @@ dev = [
 testpaths = ["tests"]
 addopts = "-v --strict-markers"
 markers = [
-    "integration: gercek ag baglantisi gerektiren testler (uv run pytest -m integration)",
-    "eval: hakem modelle ucretli LLM degerlendirmesi (tests/factuality/, tests/hallucination/)",
+    "integration: tests that need a real network connection (uv run pytest -m integration)",
+    "eval: paid LLM evaluation with the judge model (tests/factuality/, tests/hallucination/)",
 ]
 log_cli = true
 log_cli_level = "INFO"

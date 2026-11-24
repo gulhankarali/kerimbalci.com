@@ -1,9 +1,9 @@
 # Expected Behavior Judge
-# Soru: Chatbot cevabi, instructions/chatbot.md'deki DAVRANIS kurallarina uyuyor mu?
-# (dil, kisalik, odak, yazarin gorusunu cerceveleme, ton, ucretli icerik)
-# Olgusal dogruluk BILEREK disaridadir; o Factuality metric'inin isidir.
-# Factuality ve hallucination suite'lerinde her case'e ikinci metric olarak eklenir
-# (.env -> EVAL_EXPECTED_BEHAVIOR=false ile kapatilir).
+# Question: does the chatbot answer follow the BEHAVIOR rules in instructions/chatbot.md?
+# (language, concision, focus, framing of the author's views, tone, paid content)
+# Factual correctness is DELIBERATELY out of scope; that is the Factuality metric's job.
+# Added as the second metric to every case in the factuality and hallucination suites
+# (disabled with .env -> EVAL_EXPECTED_BEHAVIOR=false).
 
 name: Expected Behavior
 level: 1

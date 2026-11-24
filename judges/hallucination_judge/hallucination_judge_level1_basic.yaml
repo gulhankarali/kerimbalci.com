@@ -1,8 +1,8 @@
 # Hallucination Judge — Level 1 (Basic)
-# Soru: Chatbot cevabinda, kanitta (context = dataset `evidence`) ve beklenen
-# cevapta dayanagi olmayan BELIRGIN bir uydurma var mi?
-# Iddia iddia denetim ve kategoriye ozel tuzak kontrolu yapmaz.
-# En ucuz ve en toleransli seviye. Hizli duman testi (smoke test) icin.
+# Question: does the chatbot answer contain an OBVIOUS invention that neither the
+# evidence (context = dataset `evidence`) nor the expected answer supports?
+# No claim-by-claim audit and no category-specific trap check.
+# The cheapest and most lenient level. For quick smoke tests.
 
 name: Hallucination L1 Basic
 level: 1

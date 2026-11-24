@@ -1,7 +1,7 @@
 # Factuality Judge — Level 2 (Intermediate)
-# Level 1 + kanit (context = dataset kaydindaki `evidence` alintisi).
-# Uydurma (halusinasyon) ayrintilari ve eksik kilit olgulari da puanlar.
-# Kanitsiz kayitlarda (evidence yok) context otomatik cikarilir.
+# Level 1 + evidence (context = the record's `evidence` quote).
+# Also scores invented (hallucinated) details and missing key facts.
+# For records without evidence, context is dropped automatically.
 
 name: Factuality L2 Intermediate
 level: 2

@@ -9,12 +9,12 @@ wheels/
 # Virtual environments
 .venv
 
-# Ortam degiskenleri - gizli bilgiler, asla commit edilmez
+# Environment variables - secrets, never committed
 .env
 .env.local
 .env.*.local
 
-# Test ve arac onbellekleri
+# Test and tool caches
 .pytest_cache/
 .coverage
 htmlcov/
@@ -25,9 +25,9 @@ htmlcov/
 .DS_Store
 .idea/
 
-# Eval raporlari ve uretilen dosyalar
+# Eval reports and generated files
 reports/
 .cache/
 
-# deepeval yerel onbellegi ve son kosu ciktilari
+# deepeval local cache and last run outputs
 .deepeval/

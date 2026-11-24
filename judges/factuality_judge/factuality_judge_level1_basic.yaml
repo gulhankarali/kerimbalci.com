@@ -1,7 +1,7 @@
 # Factuality Judge — Level 1 (Basic)
-# Soru: Chatbot cevabi beklenen cevaptaki TEMEL OLGUYU dogru veriyor mu?
-# Sadece expected_output ile karsilastirir; kanit (context) kullanmaz.
-# En ucuz ve en toleransli seviye. Hizli duman testi (smoke test) icin.
+# Question: does the chatbot answer state the CORE FACT of the expected answer correctly?
+# Compares only with expected_output; does not use the evidence (context).
+# The cheapest and most lenient level. For quick smoke tests.
 
 name: Factuality L1 Basic
 level: 1

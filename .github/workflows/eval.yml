@@ -1,34 +1,34 @@
-# Elle tetiklenen (ucretli) chatbot eval kosusu.
-# GitHub -> Actions -> "Eval" -> "Run workflow" ile parametre secilerek calistirilir.
+# Manually triggered (paid) chatbot eval run.
+# Run it from GitHub -> Actions -> "Eval" -> "Run workflow" and pick the parameters.
 #
-# Gerekli ayarlar (repo -> Settings -> Secrets and variables -> Actions):
-#   Secrets  : HF_TOKEN, ANTHROPIC_API_KEY, CONFIDENT_API_KEY (opsiyonel)
-#   Variables: HF_CHATBOT_URL, JUDGE_MODEL, CHATBOT_API_ENDPOINT (opsiyonel)
+# Required settings (repo -> Settings -> Secrets and variables -> Actions):
+#   Secrets  : HF_TOKEN, ANTHROPIC_API_KEY, CONFIDENT_API_KEY (optional)
+#   Variables: HF_CHATBOT_URL, JUDGE_MODEL, CHATBOT_API_ENDPOINT (optional)
 name: Eval
 
 on:
   workflow_dispatch:
     inputs:
       suite:
-        description: "Suite adi"
+        description: "Suite name"
         type: choice
         options: [factuality, hallucination]
         default: factuality
       level:
-        description: "Hakem seviyesi (1 basic, 2 intermediate, 3 advanced)"
+        description: "Judge level (1 basic, 2 intermediate, 3 advanced)"
         type: choice
         options: ["1", "2", "3"]
         default: "3"
       tags:
-        description: "Sadece bu tag'ler (virgulle; bos = hepsi)"
+        description: "Only these tags (comma-separated; empty = all)"
         type: string
         default: ""
       limit:
-        description: "En fazla N case (bos = hepsi; maliyet icin once kucuk deneyin)"
+        description: "At most N cases (empty = all; try small first to limit cost)"
         type: string
         default: "5"
       min_pass_rate:
-        description: "Kalite kapisi esigi (0-1)"
+        description: "Quality gate threshold (0-1)"
         type: string
         default: "0.85"
 
@@ -50,8 +50,8 @@ jobs:
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       CONFIDENT_API_KEY: ${{ secrets.CONFIDENT_API_KEY }}
-      # Workflow girdileri komut satirina dogrudan gomulmez (enjeksiyon riski);
-      # ortam degiskeni olarak aktarilir.
+      # Workflow inputs are not embedded in the command line (injection risk);
+      # they are passed as environment variables.
       IN_SUITE: ${{ inputs.suite }}
       IN_LEVEL: ${{ inputs.level }}
       IN_TAGS: ${{ inputs.tags }}
@@ -60,25 +60,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: uv kur
+      - name: Install uv
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
 
-      - name: Bagimliliklari kur
+      - name: Install dependencies
         run: uv sync --locked
 
-      - name: Baglanti kontrolu (ucretsiz)
+      - name: Connection check (free)
         run: uv run pytest -m "integration and not eval"
 
-      - name: Eval kosusu
+      - name: Eval run
         run: |
           args=("$IN_SUITE" --level "$IN_LEVEL" --min-pass-rate "$IN_MIN_PASS_RATE")
           [ -n "$IN_TAGS" ] && args+=(--tags "$IN_TAGS")
           [ -n "$IN_LIMIT" ] && args+=(--limit "$IN_LIMIT")
           uv run python -m kerimbalci_com.evals "${args[@]}"
 
-      - name: Raporu sakla
+      - name: Keep the report
         if: always()
         uses: actions/upload-artifact@v4
         with:

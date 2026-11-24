@@ -1,8 +1,8 @@
 # Hallucination Judge — Level 3 (Advanced)
-# Level 2 + kategoriye ozel tuzak kontrolleri (dataset `category` alani):
+# Level 2 + category-specific trap checks (dataset `category` field):
 #   fabricated_detail | fake_attribution | entity_confusion | unsupported_addition
-# category_steps icindeki {hallucination_trap} yer tutucusu dataset kaydindaki
-# `hallucination_trap` alaniyla (chatbot'un uydurmaya meyilli olacagi sey) doldurulur.
+# The {hallucination_trap} placeholder in category_steps is filled from the
+# record's `hallucination_trap` field (what the chatbot is tempted to invent).
 
 name: Hallucination L3 Advanced
 level: 3

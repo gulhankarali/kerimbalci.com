@@ -1,7 +1,7 @@
 # Hallucination Judge — Level 2 (Intermediate)
-# Level 1 + beklenen cevap (expected_output) + iddia iddia denetim.
-# Cevaptaki her belirli iddia kanit ve beklenen cevapla karsilastirilir;
-# temkinli tahminler ("muhtemelen ...") de uydurma sayilir.
+# Level 1 + claim-by-claim audit.
+# Every specific claim in the answer is checked against the evidence and the
+# expected answer; hedged guesses ("muhtemelen ...") also count as inventions.
 
 name: Hallucination L2 Intermediate
 level: 2

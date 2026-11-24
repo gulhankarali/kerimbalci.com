@@ -1,4 +1,4 @@
-# Her push ve PR'da ucretsiz birim testleri calistirir (ag/API/gizli anahtar gerekmez).
+# Runs the free unit tests on every push and PR (no network/API/secrets needed).
 name: CI
 
 on:
@@ -16,13 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: uv kur
+      - name: Install uv
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
 
-      - name: Bagimliliklari kur (uv.lock ile birebir)
+      - name: Install dependencies (exactly as in uv.lock)
         run: uv sync --locked
 
-      - name: Birim testler
+      - name: Unit tests
         run: uv run pytest -m "not integration"
