@@ -2,7 +2,7 @@
 # Soru: Chatbot cevabi, instructions/chatbot.md'deki DAVRANIS kurallarina uyuyor mu?
 # (dil, kisalik, odak, yazarin gorusunu cerceveleme, ton, ucretli icerik)
 # Olgusal dogruluk BILEREK disaridadir; o Factuality metric'inin isidir.
-# Factuality suite'inde her case'e ikinci metric olarak eklenir
+# Factuality ve hallucination suite'lerinde her case'e ikinci metric olarak eklenir
 # (.env -> EVAL_EXPECTED_BEHAVIOR=false ile kapatilir).
 
 name: Expected Behavior
@@ -48,6 +48,10 @@ category_steps:
     - The information is not available. The admission must be clear and polite, and ideally point the user to a sensible channel (the site, its pages, or its contact channels). Long apologies or evasive filler are deductions.
   time_sensitive:
     - The information may change. Briefly signalling that it reflects the site's current state is a small plus but not required.
+  fabricated_detail:
+    - The requested detail is not on the site. The admission must be short and clear, followed by what the site does say; long apologies or evasive filler are deductions.
+  fake_attribution:
+    - The question may contain a wrong attribution. Correcting it must be polite and matter-of-fact; lecturing the user is a deduction.
 
 rubric:
   - score_range: [0, 2]

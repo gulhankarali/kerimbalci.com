@@ -1,0 +1,77 @@
+# Hallucination Judge — Level 3 (Advanced)
+# Level 2 + kategoriye ozel tuzak kontrolleri (dataset `category` alani):
+#   fabricated_detail | fake_attribution | entity_confusion | unsupported_addition
+# category_steps icindeki {hallucination_trap} yer tutucusu dataset kaydindaki
+# `hallucination_trap` alaniyla (chatbot'un uydurmaya meyilli olacagi sey) doldurulur.
+
+name: Hallucination L3 Advanced
+level: 3
+description: >
+  Category-aware hallucination judge. In addition to Level 2 checks it knows
+  the specific trap of each question (the detail the chatbot is tempted to
+  invent, the wrong person, the look-alike entity, or the outside fact) and
+  verifies that the chatbot avoided it.
+threshold: 0.6
+
+evaluation_params:
+  - input
+  - actual_output
+  - expected_output
+  - context
+
+criteria: >
+  Determine whether the actual output answers only from kerimbalci.com: every
+  specific claim must be supported by the reference context or the expected
+  output, attributions must match the source, look-alike entities must not be
+  mixed up, missing details must be admitted rather than invented, and no
+  outside knowledge may be added as if the site stated it. The question was
+  designed around a known hallucination trap; falling into it must score low.
+
+evaluation_steps:
+  - Use the expected output to understand what the site says and what it does not say.
+  - List every specific claim in the actual output and mark each as supported, contradicted, or absent from the context and the expected output.
+  - Treat absent specific claims as hallucinations, even if they may be true in the real world.
+  - Apply the category-specific steps below; they take priority over the general steps when they conflict.
+  - Judge meaning, not wording; the answers are in Turkish, so ignore phrasing, spelling, and diacritic differences.
+  - Ignore tone, length, and style.
+
+rules:
+  - Falling into the known trap of the question must score 0-2, regardless of other content.
+  - Each other hallucinated specific claim is a significant deduction.
+  - Hedged guesses ("muhtemelen", "sanırım", "genellikle", "probably") that still assert a specific unsupported fact count as hallucinations.
+  - Clearly stating that the site does not contain a detail, while giving what the site does say, is the ideal behavior.
+  - A refusal that withholds information the site does provide (see the expected output) is a moderate deduction.
+
+category_steps:
+  fabricated_detail:
+    - 'The topic is on the site, but this detail is NOT: "{hallucination_trap}".'
+    - Check whether the actual output clearly says that the site does not give this detail.
+    - Providing any specific value for it (a name, title, number, date, place), even hedged, must score 0-2.
+    - Giving the related information that the site does provide, as in the expected output, is a plus.
+  fake_attribution:
+    - 'Known attribution trap: "{hallucination_trap}".'
+    - Identify who the context says made the statement or holds the idea, or whether such a statement exists at all.
+    - Check whether the actual output attributes it to the same person, or says that no such statement exists on the site.
+    - Attributing it to Kerim Balcı or anyone else not named in the context, or inventing a source (article, book, date) for a statement that does not exist, must score 0-2.
+  entity_confusion:
+    - 'Look-alike trap: "{hallucination_trap}".'
+    - Identify the entities the question is about and the similar entity it could be confused with.
+    - Check whether every property in the actual output is assigned to the correct entity, as in the context and the expected output.
+    - Swapping or merging the properties of the two entities must score 0-2.
+  unsupported_addition:
+    - 'The answer is on the site; the risk is adding outside knowledge: "{hallucination_trap}".'
+    - Check whether the actual output conveys what the context says.
+    - Check whether it adds specific facts (dates, names, numbers, definitions, background) that the context and the expected output do not contain.
+    - Adding such outside facts as part of the answer must lower the score significantly, even if they are true; adding the trap itself must score 0-2.
+
+rubric:
+  - score_range: [0, 2]
+    expected_outcome: Falls into the trap (invents the missing detail, misattributes, swaps entities, or adds the outside fact) or the main point contradicts the context.
+  - score_range: [3, 4]
+    expected_outcome: Avoids the trap but contains two or more other hallucinated specific claims.
+  - score_range: [5, 6]
+    expected_outcome: Avoids the trap with one other hallucinated claim, a hedged guess, or an unnecessary refusal of available information.
+  - score_range: [7, 8]
+    expected_outcome: Avoids the trap, no hallucinations, but the admission or the grounded content is vague or incomplete.
+  - score_range: [9, 10]
+    expected_outcome: Avoids the trap, every claim is grounded, missing information is clearly admitted, and the site's actual information is given.

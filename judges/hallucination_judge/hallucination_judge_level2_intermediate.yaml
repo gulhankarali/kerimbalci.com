@@ -1,0 +1,55 @@
+# Hallucination Judge — Level 2 (Intermediate)
+# Level 1 + beklenen cevap (expected_output) + iddia iddia denetim.
+# Cevaptaki her belirli iddia kanit ve beklenen cevapla karsilastirilir;
+# temkinli tahminler ("muhtemelen ...") de uydurma sayilir.
+
+name: Hallucination L2 Intermediate
+level: 2
+description: >
+  Claim-by-claim grounding check against the source context and the expected
+  output. Penalizes invented details, hedged guesses, wrong attributions, and
+  unsupported additions from general knowledge.
+threshold: 0.6
+
+evaluation_params:
+  - input
+  - actual_output
+  - expected_output
+  - context
+
+criteria: >
+  Determine whether every specific claim in the actual output is supported by
+  the reference context (a verbatim quote from kerimbalci.com) or the expected
+  output. The answer must not invent details, must not attribute statements or
+  ideas to the wrong person, must not mix up similar entities, and must not
+  add facts from general knowledge that the site does not state. When the
+  site does not contain the requested detail, the answer must say so instead
+  of guessing.
+
+evaluation_steps:
+  - Use the expected output to understand what the site actually says and what it does not say.
+  - List every specific claim in the actual output (names, titles, dates, numbers, places, quotations, attributions, causal explanations).
+  - For each claim, decide whether it is supported by the context or the expected output, contradicted by them, or absent from both.
+  - Treat absent specific claims as hallucinations, even if they may be true in the real world; the chatbot must answer only from the site.
+  - Check every attribution ("X said / X argues"); the person must match the context.
+  - Judge meaning, not wording; the answers are in Turkish, so ignore phrasing, spelling, and diacritic differences.
+  - Ignore tone, length, and style.
+
+rules:
+  - Each hallucinated specific claim is a significant deduction; two or more must score at most 4.
+  - Hedged guesses ("muhtemelen", "sanırım", "genellikle", "probably") that still assert a specific unsupported fact count as hallucinations.
+  - Attributing a statement or idea to the wrong person is a severe error.
+  - Clearly stating that the site does not contain a detail, while giving what the site does say, is the ideal behavior and must not be penalized.
+  - General, non-specific framing sentences are neutral.
+
+rubric:
+  - score_range: [0, 2]
+    expected_outcome: The answer's main point is invented, misattributed, or contradicts the context.
+  - score_range: [3, 4]
+    expected_outcome: Grounded main point but two or more hallucinated specific claims.
+  - score_range: [5, 6]
+    expected_outcome: Grounded main point with one hallucinated specific claim or a hedged guess.
+  - score_range: [7, 8]
+    expected_outcome: No hallucinations; minor imprecision or a borderline generalization.
+  - score_range: [9, 10]
+    expected_outcome: Every specific claim is grounded; missing information is clearly admitted.

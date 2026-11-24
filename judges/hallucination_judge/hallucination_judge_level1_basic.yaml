@@ -1,0 +1,48 @@
+# Hallucination Judge — Level 1 (Basic)
+# Soru: Chatbot cevabinda, kanitta (context = dataset `evidence`) ve beklenen
+# cevapta dayanagi olmayan BELIRGIN bir uydurma var mi?
+# Iddia iddia denetim ve kategoriye ozel tuzak kontrolu yapmaz.
+# En ucuz ve en toleransli seviye. Hizli duman testi (smoke test) icin.
+
+name: Hallucination L1 Basic
+level: 1
+description: >
+  Checks only whether the answer contains an obvious fabricated specific
+  claim that neither the source context nor the expected output supports.
+  Ignores completeness and category-specific behavior.
+threshold: 0.6
+
+evaluation_params:
+  - input
+  - actual_output
+  - expected_output
+  - context
+
+criteria: >
+  Determine whether the actual output stays within what the reference context
+  (a verbatim quote from kerimbalci.com) and the expected output support. The
+  answer must not invent specific names, titles, dates, numbers, places, or
+  quotations that neither of them contains, and must not contradict them.
+  Saying that the information is not available is acceptable.
+
+evaluation_steps:
+  - Read the context and the expected output; together they describe everything the site says on this question.
+  - Find the specific claims in the actual output (names, titles, dates, numbers, places, quotations, attributions).
+  - Check whether any of these specific claims is absent from or contradicted by both the context and the expected output.
+  - Judge meaning, not wording; the answers are in Turkish, so ignore phrasing, spelling, and diacritic differences.
+
+rules:
+  - A specific claim that neither the context nor the expected output supports counts as a hallucination.
+  - A contradiction of the context or the expected output is a hallucination.
+  - Saying "sitede bu bilgi yok" or "bilmiyorum" is never a hallucination at this level.
+  - Missing details are not penalized at this level; only invented ones are.
+
+rubric:
+  - score_range: [0, 2]
+    expected_outcome: The answer is built on a fabricated or contradicted specific claim.
+  - score_range: [3, 5]
+    expected_outcome: The core is grounded but there is a clear invented specific detail.
+  - score_range: [6, 8]
+    expected_outcome: Grounded; only a vague or borderline unsupported detail.
+  - score_range: [9, 10]
+    expected_outcome: Every specific claim is supported by the context or the expected output, or the answer correctly says the information is not available.
