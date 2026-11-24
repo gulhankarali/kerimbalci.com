@@ -77,6 +77,21 @@ def test_factuality_ayarlari(monkeypatch):
     assert get_settings().factuality_threshold == 0.8
 
 
+def test_hallucination_ayarlari(monkeypatch):
+    """Hakem seviyesi varsayilan 3; esik bos ise None (YAML'daki kullanilir)."""
+    monkeypatch.delenv("HALLUCINATION_JUDGE_LEVEL", raising=False)
+    monkeypatch.setenv("EVAL_HALLUCINATION_THRESHOLD", "")
+    settings = get_settings()
+    assert settings.hallucination_judge_level == 3
+    assert settings.hallucination_threshold is None
+
+    monkeypatch.setenv("HALLUCINATION_JUDGE_LEVEL", "1")
+    monkeypatch.setenv("EVAL_HALLUCINATION_THRESHOLD", "0.7")
+    settings = get_settings()
+    assert settings.hallucination_judge_level == 1
+    assert settings.hallucination_threshold == 0.7
+
+
 def test_eval_runner_ayarlari(monkeypatch):
     """Eszamanlilik, tag listesi ve rapor klasoru ortamdan okunur."""
     for key in ("EVAL_CONCURRENCY", "EVAL_TAGS", "EVAL_REPORT_DIR"):

@@ -1,4 +1,4 @@
-"""evals paketinin cevrimdisi testleri: suite, runner, reporter, factuality suite, CLI.
+"""evals paketinin cevrimdisi testleri: suite, runner, reporter, factuality/hallucination suite, CLI.
 
 Gercek chatbot veya hakem modeli cagrilmaz; sahte nesneler kullanilir.
 """
@@ -17,7 +17,7 @@ from kerimbalci_com.evals import __main__ as cli
 from kerimbalci_com.evals.eval_suite import EvalSuite
 from kerimbalci_com.evals.reporter import format_summary, summarize, write_json_report
 from kerimbalci_com.evals.suite_runner import run_suite
-from kerimbalci_com.evals.suites import SUITES, factuality_suite
+from kerimbalci_com.evals.suites import SUITES, factuality_suite, hallucination_suite
 
 
 @pytest.fixture(autouse=True)
@@ -239,6 +239,65 @@ def test_factuality_esik_ortamdan_ezilir(monkeypatch):
     monkeypatch.setenv("EVAL_FACTUALITY_THRESHOLD", "0.9")
     suite = factuality_suite.build_suite(get_settings(), FakeLLM())
     assert suite.metrics_for(suite.cases[0])[0].threshold == 0.9
+
+
+# --- hallucination suite ---------------------------------------------------
+
+@pytest.mark.parametrize("level", [1, 2, 3])
+def test_hallucination_suite_kurulur(monkeypatch, level):
+    monkeypatch.setenv("HALLUCINATION_JUDGE_LEVEL", str(level))
+    monkeypatch.delenv("EVAL_HALLUCINATION_THRESHOLD", raising=False)
+    suite = hallucination_suite.build_suite(get_settings(), FakeLLM())
+
+    assert suite.name == f"hallucination-L{level}"
+    assert "hallucination" in SUITES
+    assert len(suite.cases) == 50
+    case = suite.filter(tags=["fake_attribution"]).cases[0]
+    metric = suite.metrics_for(case)[0]
+    assert metric.name.startswith(f"Hallucination L{level}")
+    assert metric.async_mode is False
+    assert "CONTEXT" in [p.name for p in metric.evaluation_params]
+    trap_in_steps = any(case["hallucination_trap"] in step for step in metric.evaluation_steps)
+    assert trap_in_steps is (level == 3)  # tuzak yalnizca L3'te hakeme verilir
+
+    test_case = suite.build_test_case(case, "cevap")
+    assert test_case.context == [case["evidence"]]
+    assert test_case.tags == ["fake_attribution"]
+
+
+def test_hallucination_suite_davranis_metrigi_ve_esik(monkeypatch):
+    monkeypatch.setenv("HALLUCINATION_JUDGE_LEVEL", "3")
+    monkeypatch.delenv("EVAL_EXPECTED_BEHAVIOR", raising=False)
+    monkeypatch.setenv("EVAL_HALLUCINATION_THRESHOLD", "0.9")
+    monkeypatch.setenv("EVAL_FACTUALITY_THRESHOLD", "0.1")  # diger suite'in esigi etkilemez
+    suite = hallucination_suite.build_suite(get_settings(), FakeLLM())
+    case = suite.filter(tags=["fabricated_detail"]).cases[0]
+    main, behavior = suite.metrics_for(case)
+
+    assert main.threshold == 0.9
+    assert behavior.name.startswith("Expected Behavior")
+    assert any("not on the site" in s for s in behavior.evaluation_steps)  # kategori adimi
+
+    monkeypatch.setenv("EVAL_EXPECTED_BEHAVIOR", "false")
+    suite = hallucination_suite.build_suite(get_settings(), FakeLLM())
+    assert len(suite.metrics_for(case)) == 1
+
+
+def test_cli_level_her_iki_suiteye_uygulanir(monkeypatch, tmp_path):
+    monkeypatch.setenv("HF_CHATBOT_URL", "https://ornek.hf.space")
+    monkeypatch.setenv("JUDGE_MODEL", "sahte-model")
+    monkeypatch.setenv("EVAL_REPORT_DIR", str(tmp_path))
+    monkeypatch.setattr(cli, "AnthropicModel", lambda model: FakeLLM())
+    monkeypatch.setattr(cli, "ChatbotClient", lambda settings: FakeChatbot(ANSWERS))
+    seen = {}
+
+    def factory(settings, model):
+        seen.update(f=settings.factuality_judge_level, h=settings.hallucination_judge_level)
+        return make_suite()
+
+    monkeypatch.setitem(cli.SUITES, "sahte", factory)
+    cli.main(["sahte", "--level", "1", "--min-pass-rate", "0"])
+    assert seen == {"f": 1, "h": 1}
 
 
 # --- CLI -------------------------------------------------------------------

@@ -32,7 +32,7 @@ testpaths = ["tests"]
 addopts = "-v --strict-markers"
 markers = [
     "integration: gercek ag baglantisi gerektiren testler (uv run pytest -m integration)",
-    "eval: hakem modelle ucretli LLM degerlendirmesi (uv run deepeval test run tests/factuality/)",
+    "eval: hakem modelle ucretli LLM degerlendirmesi (tests/factuality/, tests/hallucination/)",
 ]
 log_cli = true
 log_cli_level = "INFO"

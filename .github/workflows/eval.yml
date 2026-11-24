@@ -12,7 +12,7 @@ on:
       suite:
         description: "Suite adi"
         type: choice
-        options: [factuality]
+        options: [factuality, hallucination]
         default: factuality
       level:
         description: "Hakem seviyesi (1 basic, 2 intermediate, 3 advanced)"

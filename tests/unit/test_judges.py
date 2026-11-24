@@ -1,11 +1,11 @@
-"""judges modulunun ve judges/factuality_judge/*.yaml dosyalarinin testleri."""
+"""judge_config modulunun ve judges/*/*.yaml hakem dosyalarinin testleri."""
 
 import pytest
 import yaml
 
-from kerimbalci_com.datasets import CATEGORIES
+from kerimbalci_com.datasets import ALL_CATEGORIES, CATEGORIES, HALLUCINATION_CATEGORIES
 from kerimbalci_com.evals.judge_config import (
-    EXPECTED_BEHAVIOR_JUDGE_FILE, JudgeConfigError, load_judge, load_judge_file,
+    EXPECTED_BEHAVIOR_JUDGE_FILE, HALLUCINATION_JUDGES, JudgeConfigError, load_judge, load_judge_file,
 )
 
 VALID = {
@@ -40,8 +40,30 @@ def test_gercek_hakem_dosyalari_gecerli(level):
 def test_expected_behavior_hakemi_gecerli():
     judge = load_judge_file(EXPECTED_BEHAVIOR_JUDGE_FILE)
     assert judge.evaluation_params == ["input", "actual_output"]
-    assert set(judge.category_steps) <= CATEGORIES
+    assert set(judge.category_steps) <= ALL_CATEGORIES
     assert any("Do NOT judge whether the facts" in s for s in judge.steps_for("direct_fact"))
+
+
+@pytest.mark.parametrize("level", [1, 2, 3])
+def test_gercek_hallucination_hakemleri_gecerli(level):
+    judge = load_judge(level, judges=HALLUCINATION_JUDGES)
+    assert judge.level == level
+    assert judge.source.name.startswith(f"hallucination_judge_level{level}_")
+    assert "context" in judge.evaluation_params
+
+
+def test_hallucination_level3_tum_kategorileri_kapsar():
+    judge = load_judge(3, judges=HALLUCINATION_JUDGES)
+    assert judge.category_steps.keys() == HALLUCINATION_CATEGORIES
+    steps = judge.steps_for("fabricated_detail", hallucination_trap="TUZAK")
+    assert any("TUZAK" in s for s in steps)
+
+
+def test_hallucination_hakemi_factuality_kategorisini_reddeder(tmp_path):
+    data = {**VALID, "category_steps": {"false_premise": ["x"]}}
+    _write(tmp_path, data, "hallucination_judge_level1_test.yaml")
+    with pytest.raises(JudgeConfigError, match="bilinmeyen kategori"):
+        load_judge(1, tmp_path, judges=HALLUCINATION_JUDGES)
 
 
 def test_load_judge_file_yoksa_hata(tmp_path):

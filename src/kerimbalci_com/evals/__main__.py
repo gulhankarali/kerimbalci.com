@@ -3,9 +3,10 @@
     uv run python -m kerimbalci_com.evals factuality
     uv run python -m kerimbalci_com.evals factuality --tags false_premise,unanswerable --limit 5
     uv run python -m kerimbalci_com.evals factuality --ids fact-001,premise-002 --level 1
+    uv run python -m kerimbalci_com.evals hallucination --tags fake_attribution --level 1
 
 Varsayilanlar .env'den gelir (EVAL_TAGS, EVAL_CONCURRENCY, FACTUALITY_JUDGE_LEVEL,
-EVAL_MIN_PASS_RATE).
+HALLUCINATION_JUDGE_LEVEL, EVAL_MIN_PASS_RATE).
 Cikis kodu: 0 = kalite kapisi gecti, 1 = kapi kaldi (gecen oran < esik), 2 = eksik ayar.
 DIKKAT: Hakem model icin ucretli API istegi atar.
 """
@@ -37,7 +38,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--ids", type=_csv, default=[], help="virgulle case id'leri")
     parser.add_argument("--limit", type=int, default=None, help="en fazla N case")
     parser.add_argument("--level", type=int, choices=[1, 2, 3], default=None,
-                        help="hakem seviyesi; varsayilan FACTUALITY_JUDGE_LEVEL")
+                        help="hakem seviyesi; varsayilan <SUITE>_JUDGE_LEVEL (.env)")
     parser.add_argument("--concurrency", type=int, default=None,
                         help="varsayilan EVAL_CONCURRENCY")
     parser.add_argument("--min-pass-rate", type=float, default=None,
@@ -49,7 +50,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     settings = get_settings()
     if args.level is not None:
-        settings = dataclasses.replace(settings, factuality_judge_level=args.level)
+        settings = dataclasses.replace(
+            settings, factuality_judge_level=args.level, hallucination_judge_level=args.level
+        )
     setup_logging(settings)
 
     missing = [k for k, v in (("HF_CHATBOT_URL", settings.hf_chatbot_url),

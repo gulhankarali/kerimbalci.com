@@ -7,7 +7,9 @@ import json
 
 import pytest
 
-from kerimbalci_com.datasets import DatasetError, load_factuality, validate_record
+from kerimbalci_com.datasets import (
+    HALLUCINATION, DatasetError, load_factuality, load_hallucination, validate_record,
+)
 
 VALID = {"id": "x-1", "input": "Soru?", "expected_output": "Cevap.", "category": "direct_fact"}
 
@@ -19,6 +21,30 @@ def test_gercek_factuality_dataseti_gecerli():
     assert {r["category"] for r in records} == {
         "direct_fact", "false_premise", "unanswerable", "time_sensitive"
     }
+
+
+def test_gercek_hallucination_dataseti_gecerli():
+    """50 kayit, 4 kategori; her kayit kanitli ve tuzak tarifi tasir."""
+    records = load_hallucination()
+    assert len(records) == 50
+    assert {r["category"] for r in records} == set(HALLUCINATION.categories)
+    assert all(r["source_url"].startswith("https://") for r in records)
+
+
+H_VALID = {**VALID, "category": "fabricated_detail", "source_url": "https://x/",
+           "evidence": "alinti", "hallucination_trap": "uydurma"}
+
+
+@pytest.mark.parametrize("patch, message", [
+    ({"evidence": ""}, "'evidence'"),
+    ({"hallucination_trap": None}, "'hallucination_trap'"),
+    ({"source_url": None}, "'source_url'"),
+    ({"category": "direct_fact"}, "gecersiz kategori"),
+])
+def test_hallucination_semasi(patch, message):
+    validate_record(H_VALID, HALLUCINATION)
+    with pytest.raises(DatasetError, match=message):
+        validate_record({**H_VALID, **patch}, HALLUCINATION)
 
 
 @pytest.mark.parametrize(

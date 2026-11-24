@@ -71,6 +71,13 @@ class Settings:
     factuality_threshold: float | None = field(
         default_factory=lambda: _env_float("EVAL_FACTUALITY_THRESHOLD")
     )
+    hallucination_judge_level: int = field(
+        default_factory=lambda: int(os.getenv("HALLUCINATION_JUDGE_LEVEL", "3"))
+    )
+    # Bos birakilirsa hakem YAML'indaki threshold kullanilir.
+    hallucination_threshold: float | None = field(
+        default_factory=lambda: _env_float("EVAL_HALLUCINATION_THRESHOLD")
+    )
 
     eval_concurrency: int = field(default_factory=lambda: int(os.getenv("EVAL_CONCURRENCY", "4")))
     eval_tags: tuple[str, ...] = field(default_factory=lambda: _env_list("EVAL_TAGS"))
