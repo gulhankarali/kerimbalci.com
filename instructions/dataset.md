@@ -15,7 +15,10 @@
 3. **Kaynak çeşitliliği.** Sorular sitenin tamamına yayılır; tek sayfadan
    en fazla 3 soru üretilir. Biyografi sayfası dataset'e hâkim olmamalıdır.
 4. **Paywall.** Ücretli yazılarda yalnızca herkese açık kısım kullanılır.
-5. Şema ve dosya düzeni için: `dataset/factuality/README.md`.
+5. Şema ve dosya düzeni için: `dataset/factuality/README.md` ve
+   `dataset/hallucination/README.md`.
+6. Kanıt doğrulama: `uv run python -m kerimbalci_com.dataset_builder verify <factuality|hallucination>`
+   her kaydın `evidence` alıntısını kaynak sayfa metninde arar.
 
 ## Kategoriler ve hedef oranlar
 

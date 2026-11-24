@@ -27,8 +27,10 @@ yeni bir `Settings` üretir (testlerde `monkeypatch` bu sayede çalışır).
 | `CHATBOT_MAX_RETRIES` | `Settings.chatbot_max_retries` | Hata/zaman aşımında yeniden deneme sayısı (vars. 2; 0 = kapalı) |
 | `CHATBOT_RETRY_BACKOFF` | `Settings.chatbot_retry_backoff` | İlk bekleme, sn; her denemede iki katı (vars. 2 → 2, 4, …) |
 | `FACTUALITY_JUDGE_LEVEL` | `Settings.factuality_judge_level` | Hakem seviyesi: 1 basic, 2 intermediate, 3 advanced (vars. 3) |
-| `EVAL_EXPECTED_BEHAVIOR` | `Settings.eval_expected_behavior` | Factuality suite'inde ikinci metric (davranış); `false` = kapalı (vars. `true`) |
 | `EVAL_FACTUALITY_THRESHOLD` | `Settings.factuality_threshold` | Eşik (0-1); boşsa hakem YAML'ındaki `threshold` |
+| `HALLUCINATION_JUDGE_LEVEL` | `Settings.hallucination_judge_level` | Hallucination hakem seviyesi: 1 basic, 2 intermediate, 3 advanced (vars. 3) |
+| `EVAL_HALLUCINATION_THRESHOLD` | `Settings.hallucination_threshold` | Hallucination eşiği (0-1); boşsa hakem YAML'ındaki `threshold` |
+| `EVAL_EXPECTED_BEHAVIOR` | `Settings.eval_expected_behavior` | Factuality ve hallucination suite'lerinde ikinci metric (davranış); `false` = kapalı (vars. `true`) |
 | `EVAL_CONCURRENCY` | `Settings.eval_concurrency` | Runner'da aynı anda çalışan case sayısı (vars. 4) |
 | `EVAL_TAGS` | `Settings.eval_tags` | Runner'da yalnızca bu tag'ler (virgülle; boş = hepsi) |
 | `EVAL_MIN_PASS_RATE` | `Settings.eval_min_pass_rate` | Runner kalite kapısı: geçen case oranı alt sınırı (vars. 0.85) |

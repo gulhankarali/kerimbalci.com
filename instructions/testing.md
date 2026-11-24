@@ -26,6 +26,8 @@ uv run pytest -m "integration and not eval"   # bağlantı testleri
 uv run deepeval test run tests/factuality/   # factuality eval (100 soru)
 uv run pytest -m eval tests/factuality/ -k unanswerable   # tek kategori
 uv run pytest -m eval tests/factuality/ -k "fact-001"               # tek kayıt
+HALLUCINATION_JUDGE_LEVEL=1 uv run pytest tests/hallucination -m eval -k fab-001   # hallucination, tek kayıt
+uv run deepeval test run tests/hallucination/   # hallucination eval (50 soru)
 ```
 
 Eval testleri önce `-k` ile küçük bir alt kümede denenmelidir.
@@ -36,6 +38,7 @@ Eval testleri önce `-k` ile küçük bir alt kümede denenmelidir.
 uv run python -m kerimbalci_com.evals factuality --limit 3          # duman testi
 uv run python -m kerimbalci_com.evals factuality --tags unanswerable --level 3
 uv run python -m kerimbalci_com.evals factuality --ids fact-001,premise-002
+uv run python -m kerimbalci_com.evals hallucination --tags entity_confusion --level 1
 ```
 
 Sonunda tag bazlı özet tablo yazar ve `reports/factuality-L<N>-<zaman>.json`

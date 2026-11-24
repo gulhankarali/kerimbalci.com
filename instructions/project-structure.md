@@ -13,27 +13,31 @@ kerimbalci.com/
 ├── .github/workflows/        # ci.yml (birim testler), eval.yml (elle, ücretli eval)
 ├── instructions/             # Bu dokümantasyon
 ├── dataset/
-│   └── factuality/           # Factuality eval dataset'i (4 kategori, JSON)
+│   ├── factuality/           # Factuality eval dataset'i (4 kategori, JSON)
+│   └── hallucination/        # Hallucination eval dataset'i (4 kategori, 50 kayıt)
 ├── judges/
 │   ├── factuality_judge/     # Hakem YAML'ları: level1_basic, level2_intermediate, level3_advanced
+│   ├── hallucination_judge/  # Hallucination hakemleri (aynı 3 seviye)
 │   └── expected_behavior_judge/  # Davranış hakemi (dil, kısalık, ton, çerçeveleme)
 ├── src/kerimbalci_com/
 │   ├── __init__.py           # main(): ayarları yükler, loglamayı kurar
 │   ├── __main__.py           # python -m kerimbalci_com giriş noktası
 │   ├── config.py             # Settings, get_settings(), setup_logging()
 │   ├── chatbot.py            # ChatbotClient — HF Space'e soru gönderir
-│   ├── datasets.py           # load_factuality(), şema doğrulama
-│   ├── dataset_builder/      # Siteden dataset üretimi: crawl, split, merge (python -m ...)
+│   ├── datasets.py           # DatasetSchema, load_factuality(), load_hallucination()
+│   ├── dataset_builder/      # Siteden dataset üretimi: crawl, split, merge, verify (python -m ...)
 │   └── evals/
 │       ├── __main__.py       # CLI: python -m kerimbalci_com.evals <suite> [--tags/--ids/--limit/--level]
 │       ├── eval_suite.py     # EvalSuite: case'ler + metric fabrikası + filtre
 │       ├── suite_runner.py   # run_suite(): paralel çalıştırma, CaseResult/SuiteResult
-│       ├── judge_config.py   # load_judge() (YAML) + build_geval()
+│       ├── judge_config.py   # JudgeSet, load_judge() (YAML) + build_geval()
 │       ├── reporter.py       # Tag bazlı özet tablo + JSON rapor (reports/)
 │       ├── compare.py        # İki raporu karşılaştırır: bozulan/düzelen case'ler
 │       └── suites/
 │           ├── __init__.py   # SUITES kaydı
-│           └── factuality_suite.py  # dataset/factuality + judges/factuality_judge
+│           ├── common.py             # Ortak: LLMTestCase + metric fabrikası
+│           ├── factuality_suite.py   # dataset/factuality + judges/factuality_judge
+│           └── hallucination_suite.py # dataset/hallucination + judges/hallucination_judge
 └── tests/
     ├── conftest.py           # Ortak fixture'lar: settings, chatbot, judge_model
     ├── unit/                 # Ağ/API gerektirmez
@@ -41,13 +45,16 @@ kerimbalci.com/
     │   ├── test_datasets.py  # Dataset şeması + gerçek dataset
     │   ├── test_judges.py    # Hakem YAML şeması
     │   ├── test_dataset_builder.py  # Tarama, metin çıkarma, merge (sahte fetch)
+│   ├── test_dataset_verify.py   # evidence alıntılarının site metninde doğrulanması
     │   ├── test_chatbot.py   # Zaman aşımı / yeniden deneme (sahte Gradio)
     │   ├── test_compare.py   # Rapor karşılaştırma
     │   └── test_evals.py     # Suite, runner, reporter, CLI (sahte chatbot/hakem)
     ├── integration/
     │   └── test_connections.py  # HF Space, HF token, Anthropic, JUDGE_MODEL
-    └── factuality/
-        └── test_factuality.py   # Eval: factuality suite'i pytest/deepeval ile
+    ├── factuality/
+    │   └── test_factuality.py   # Eval: factuality suite'i pytest/deepeval ile
+    └── hallucination/
+        └── test_hallucination.py  # Eval: hallucination suite'i pytest/deepeval ile
 ```
 
 ## Veri akışı (eval)

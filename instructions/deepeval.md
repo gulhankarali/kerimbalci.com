@@ -21,6 +21,7 @@
 ```bash
 uv run deepeval test run tests/factuality/   # önerilen: özet tablo + Confident AI
 uv run pytest -m eval tests/factuality/      # düz pytest
+HALLUCINATION_JUDGE_LEVEL=1 uv run pytest tests/hallucination -m eval -k fab-001   # hallucination
 ```
 
 `deepeval test run` sonunda metrik bazlı özet tablo gösterir ve

@@ -17,6 +17,8 @@ AI asistanlar için yazılmıştır. Temel kurallar kök dizindeki `CLAUDE.md`'d
 | [chatbot.md](chatbot.md) | Chatbot istemcisi ve beklenen davranış |
 | [dataset.md](dataset.md) | Eval dataset'lerinin hazırlanması |
 | [../judges/factuality_judge/](../judges/factuality_judge/README.md) | Hakem (LLM-as-judge) YAML'ları — seviye 1-3 |
+| [../judges/hallucination_judge/](../judges/hallucination_judge/README.md) | Hallucination hakemleri — seviye 1-3 |
+| [../dataset/hallucination/](../dataset/hallucination/README.md) | Hallucination dataset'i — kategoriler, şema, bakım |
 | [git.md](git.md) | Git akışı ve commit kuralları |
 
 ## Hızlı başlangıç
