@@ -1,8 +1,8 @@
 """Hakem (LLM-as-judge) yapilandirmasi: YAML'dan okuma, dogrulama, GEval kurma.
 
-Kriterler koda gomulmez; judges/factuality_judge/factuality_judge_level<N>_*.yaml
-dosyalarindan okunur. `build_geval` bu yapilandirmadan case'e ozel bir deepeval
-GEval metrigi uretir.
+Kriterler koda gomulmez; judges/<suite>_judge/<suite>_judge_level<N>_*.yaml
+dosyalarindan okunur (her suite bir `JudgeSet`). `build_geval` bu yapilandirmadan
+case'e ozel bir deepeval GEval metrigi uretir.
 """
 
 import logging
@@ -16,14 +16,12 @@ from deepeval.models import DeepEvalBaseLLM
 from deepeval.test_case import SingleTurnParams
 
 from kerimbalci_com.config import PROJECT_ROOT
-from kerimbalci_com.datasets import CATEGORIES
+from kerimbalci_com.datasets import ALL_CATEGORIES, FACTUALITY, HALLUCINATION, DatasetSchema
 
 logger = logging.getLogger(__name__)
 
-FACTUALITY_JUDGE_DIR = PROJECT_ROOT / "judges" / "factuality_judge"
-EXPECTED_BEHAVIOR_JUDGE_FILE = (
-    PROJECT_ROOT / "judges" / "expected_behavior_judge" / "expected_behavior_judge.yaml"
-)
+JUDGES_ROOT = PROJECT_ROOT / "judges"
+EXPECTED_BEHAVIOR_JUDGE_FILE = JUDGES_ROOT / "expected_behavior_judge" / "expected_behavior_judge.yaml"
 
 EVALUATION_PARAMS = frozenset({"input", "actual_output", "expected_output", "context"})
 REQUIRED_KEYS = ("name", "level", "description", "threshold", "evaluation_params",
@@ -33,6 +31,28 @@ SCORE_MIN, SCORE_MAX = 0, 10
 
 class JudgeConfigError(ValueError):
     """Hakem YAML dosyasi semaya uymuyor."""
+
+
+@dataclass(frozen=True)
+class JudgeSet:
+    """Bir suite'in seviyeli hakemleri: judges/<prefix>/<prefix>_level<N>_*.yaml."""
+
+    prefix: str
+    categories: frozenset[str]
+
+    @classmethod
+    def for_dataset(cls, schema: DatasetSchema) -> "JudgeSet":
+        return cls(prefix=f"{schema.name}_judge", categories=schema.categories)
+
+    @property
+    def directory(self) -> Path:
+        return JUDGES_ROOT / self.prefix
+
+
+FACTUALITY_JUDGES = JudgeSet.for_dataset(FACTUALITY)
+HALLUCINATION_JUDGES = JudgeSet.for_dataset(HALLUCINATION)
+FACTUALITY_JUDGE_DIR = FACTUALITY_JUDGES.directory
+HALLUCINATION_JUDGE_DIR = HALLUCINATION_JUDGES.directory
 
 
 @dataclass(frozen=True)
@@ -72,7 +92,7 @@ class JudgeConfig:
         return [p for p in self.evaluation_params if p != "context"]
 
 
-def _validate(data: dict, path: Path) -> None:
+def _validate(data: dict, path: Path, categories: frozenset[str]) -> None:
     where = path.name
     if not isinstance(data, dict):
         raise JudgeConfigError(f"{where}: YAML kok dugumu sozluk olmali")
@@ -84,7 +104,7 @@ def _validate(data: dict, path: Path) -> None:
     unknown = set(data["evaluation_params"]) - EVALUATION_PARAMS
     if unknown:
         raise JudgeConfigError(f"{where}: bilinmeyen evaluation_params {sorted(unknown)}")
-    unknown = set(data.get("category_steps") or {}) - CATEGORIES
+    unknown = set(data.get("category_steps") or {}) - categories
     if unknown:
         raise JudgeConfigError(f"{where}: bilinmeyen kategori {sorted(unknown)}")
 
@@ -109,27 +129,35 @@ def _validate(data: dict, path: Path) -> None:
         raise JudgeConfigError(f"{where}: rubric {SCORE_MAX}'a kadar ulasmiyor")
 
 
-def load_judge(level: int, directory: Path | None = None) -> JudgeConfig:
-    """Verilen seviyedeki factuality hakem yapilandirmasini yukler."""
-    directory = directory or FACTUALITY_JUDGE_DIR
-    matches = sorted(directory.glob(f"factuality_judge_level{level}_*.yaml"))
+def load_judge(
+    level: int,
+    directory: Path | None = None,
+    judges: JudgeSet = FACTUALITY_JUDGES,
+) -> JudgeConfig:
+    """Verilen seviyedeki hakem yapilandirmasini yukler (varsayilan: factuality)."""
+    directory = directory or judges.directory
+    matches = sorted(directory.glob(f"{judges.prefix}_level{level}_*.yaml"))
     if len(matches) != 1:
         raise JudgeConfigError(
             f"{directory} altinda level {level} icin tam olarak 1 YAML bekleniyordu, "
             f"{len(matches)} bulundu"
         )
-    judge = load_judge_file(matches[0])
+    judge = load_judge_file(matches[0], judges.categories)
     if judge.level != level:
         raise JudgeConfigError(f"{matches[0].name}: dosyadaki level ({judge.level}) adla uyusmuyor")
     return judge
 
 
-def load_judge_file(path: Path) -> JudgeConfig:
-    """Tek bir hakem YAML dosyasini okur ve dogrular."""
+def load_judge_file(path: Path, categories: frozenset[str] = ALL_CATEGORIES) -> JudgeConfig:
+    """Tek bir hakem YAML dosyasini okur ve dogrular.
+
+    category_steps anahtarlari `categories` icinde olmalidir; varsayilan tum
+    suite'lerin kategorileridir (ortak hakemler, or. Expected Behavior, icin).
+    """
     if not path.is_file():
         raise JudgeConfigError(f"Hakem dosyasi bulunamadi: {path}")
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    _validate(data, path)
+    _validate(data, path, categories)
     logger.debug("Hakem yuklendi: %s (%s)", data["name"], path.name)
     return JudgeConfig(
         name=data["name"],
