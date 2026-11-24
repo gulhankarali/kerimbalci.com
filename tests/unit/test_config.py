@@ -1,10 +1,10 @@
-"""config modulunun testleri."""
+"""Tests for the config module."""
 
 from kerimbalci_com.config import Settings, _env_bool, get_settings
 
 
 def test_default_settings(monkeypatch):
-    """Hicbir ortam degiskeni yokken mantikli varsayilanlar doner."""
+    """Sensible defaults are returned when no environment variable is set."""
     for key in ("APP_NAME", "ENVIRONMENT", "DEBUG", "LOG_LEVEL"):
         monkeypatch.delenv(key, raising=False)
     settings = get_settings()
@@ -16,7 +16,7 @@ def test_default_settings(monkeypatch):
 
 
 def test_settings_from_env(monkeypatch):
-    """Ayarlar ortam degiskenlerinden dinamik olarak okunur."""
+    """Settings are read dynamically from environment variables."""
     monkeypatch.setenv("APP_NAME", "test-app")
     monkeypatch.setenv("ENVIRONMENT", "production")
     monkeypatch.setenv("DEBUG", "true")
@@ -30,7 +30,7 @@ def test_settings_from_env(monkeypatch):
 
 
 def test_env_bool_variants(monkeypatch):
-    """Bool cevirici farkli yazimlari dogru anlar."""
+    """The bool converter understands different spellings."""
     truthy = ["1", "true", "True", "YES", "on"]
     falsy = ["0", "false", "no", "off", ""]
     for value in truthy:
@@ -42,14 +42,14 @@ def test_env_bool_variants(monkeypatch):
 
 
 def test_env_bool_default(monkeypatch):
-    """Degisken tanimli degilse verilen varsayilan doner."""
+    """The given default is returned when the variable is not set."""
     monkeypatch.delenv("MISSING_FLAG", raising=False)
     assert _env_bool("MISSING_FLAG") is False
     assert _env_bool("MISSING_FLAG", default=True) is True
 
 
 def test_settings_frozen():
-    """Settings nesnesi degistirilemez (immutable) olmali."""
+    """The Settings object must be immutable."""
     settings = Settings()
     try:
         settings.debug = True  # type: ignore[misc]
@@ -59,8 +59,8 @@ def test_settings_frozen():
     assert raised
 
 
-def test_factuality_ayarlari(monkeypatch):
-    """Hakem seviyesi varsayilan 3; esik tanimsiz/bos ise None (YAML'daki kullanilir)."""
+def test_factuality_settings(monkeypatch):
+    """Judge level defaults to 3; threshold is None when unset/empty (the YAML value is used)."""
     monkeypatch.delenv("FACTUALITY_JUDGE_LEVEL", raising=False)
     monkeypatch.delenv("EVAL_FACTUALITY_THRESHOLD", raising=False)
     settings = get_settings()
@@ -77,8 +77,8 @@ def test_factuality_ayarlari(monkeypatch):
     assert get_settings().factuality_threshold == 0.8
 
 
-def test_hallucination_ayarlari(monkeypatch):
-    """Hakem seviyesi varsayilan 3; esik bos ise None (YAML'daki kullanilir)."""
+def test_hallucination_settings(monkeypatch):
+    """Judge level defaults to 3; threshold is None when empty (the YAML value is used)."""
     monkeypatch.delenv("HALLUCINATION_JUDGE_LEVEL", raising=False)
     monkeypatch.setenv("EVAL_HALLUCINATION_THRESHOLD", "")
     settings = get_settings()
@@ -92,8 +92,8 @@ def test_hallucination_ayarlari(monkeypatch):
     assert settings.hallucination_threshold == 0.7
 
 
-def test_eval_runner_ayarlari(monkeypatch):
-    """Eszamanlilik, tag listesi ve rapor klasoru ortamdan okunur."""
+def test_eval_runner_settings(monkeypatch):
+    """Concurrency, tag list and report folder are read from the environment."""
     for key in ("EVAL_CONCURRENCY", "EVAL_TAGS", "EVAL_REPORT_DIR"):
         monkeypatch.delenv(key, raising=False)
     settings = get_settings()
@@ -103,15 +103,15 @@ def test_eval_runner_ayarlari(monkeypatch):
 
     monkeypatch.setenv("EVAL_CONCURRENCY", "8")
     monkeypatch.setenv("EVAL_TAGS", " false_premise , ,unanswerable")
-    monkeypatch.setenv("EVAL_REPORT_DIR", "out/raporlar")
+    monkeypatch.setenv("EVAL_REPORT_DIR", "out/reports")
     settings = get_settings()
     assert settings.eval_concurrency == 8
     assert settings.eval_tags == ("false_premise", "unanswerable")
-    assert settings.eval_report_dir.parts[-2:] == ("out", "raporlar")
+    assert settings.eval_report_dir.parts[-2:] == ("out", "reports")
 
 
-def test_http_ve_site_ayarlari(monkeypatch):
-    """Zaman asimi, site adresi ve calisma klasoru ortamdan okunur."""
+def test_http_and_site_settings(monkeypatch):
+    """Timeout, site URL and work folder are read from the environment."""
     for key in ("HTTP_TIMEOUT", "SITE_URL", "SITE_WORKDIR"):
         monkeypatch.delenv(key, raising=False)
     settings = get_settings()
@@ -120,15 +120,15 @@ def test_http_ve_site_ayarlari(monkeypatch):
     assert settings.site_workdir.parts[-2:] == (".cache", "site")
 
     monkeypatch.setenv("HTTP_TIMEOUT", "5")
-    monkeypatch.setenv("SITE_URL", "https://ornek.com")
+    monkeypatch.setenv("SITE_URL", "https://example.com")
     monkeypatch.setenv("SITE_WORKDIR", "tmp/x")
     settings = get_settings()
-    assert (settings.http_timeout, settings.site_url) == (5, "https://ornek.com")
+    assert (settings.http_timeout, settings.site_url) == (5, "https://example.com")
     assert settings.site_workdir.parts[-2:] == ("tmp", "x")
 
 
-def test_chatbot_ve_kalite_kapisi_ayarlari(monkeypatch):
-    """Chatbot zaman asimi/yeniden deneme ve kalite kapisi esigi ortamdan okunur."""
+def test_chatbot_and_quality_gate_settings(monkeypatch):
+    """Chatbot timeout/retry and the quality gate threshold are read from the environment."""
     for key in ("CHATBOT_TIMEOUT", "CHATBOT_MAX_RETRIES", "CHATBOT_RETRY_BACKOFF", "EVAL_MIN_PASS_RATE"):
         monkeypatch.delenv(key, raising=False)
     s = get_settings()
@@ -144,14 +144,14 @@ def test_chatbot_ve_kalite_kapisi_ayarlari(monkeypatch):
     assert s.eval_min_pass_rate == 0.9
 
 
-def test_compare_esigi(monkeypatch):
+def test_compare_threshold(monkeypatch):
     monkeypatch.delenv("EVAL_COMPARE_MIN_DELTA", raising=False)
     assert get_settings().eval_compare_min_delta == 0.2
     monkeypatch.setenv("EVAL_COMPARE_MIN_DELTA", "0.1")
     assert get_settings().eval_compare_min_delta == 0.1
 
 
-def test_expected_behavior_ayari(monkeypatch):
+def test_expected_behavior_setting(monkeypatch):
     monkeypatch.delenv("EVAL_EXPECTED_BEHAVIOR", raising=False)
     assert get_settings().eval_expected_behavior is True
     monkeypatch.setenv("EVAL_EXPECTED_BEHAVIOR", "false")

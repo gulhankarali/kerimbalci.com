@@ -1,16 +1,16 @@
 """Hallucination suite: dataset/hallucination + judges/hallucination_judge (+ expected_behavior_judge).
 
-Factuality "cevap dogru mu?" diye sorar; hallucination "cevapta sitede
-OLMAYAN bir sey uyduruldu mu?" diye sorar. Case tag'i = dataset kategorisi:
-  fabricated_detail    — konu sitede var, sorulan ayrinti yok
-  fake_attribution     — soz/fikir yanlis kisiye atfediliyor veya hic soylenmemis
-  entity_confusion     — sitede birbirine benzeyen iki varlik karistiriliyor
-  unsupported_addition — cevap sitede var; risk, genel bilgiden kaynaksiz ekleme
+Factuality asks "is the answer right?"; hallucination asks "did the answer
+invent something that is NOT on the site?". Case tag = dataset category:
+  fabricated_detail    — the topic is on the site, the requested detail is not
+  fake_attribution     — a statement/idea is attributed to the wrong person or was never said
+  entity_confusion     — two similar entities on the site are mixed up
+  unsupported_addition — the answer is on the site; the risk is unsupported additions from general knowledge
 
-Kaydin `evidence` alintisi LLMTestCase.context olur, `hallucination_trap`
-hakem adimlarindaki {hallucination_trap} yer tutucusunu doldurur. Hakem
-seviyesi HALLUCINATION_JUDGE_LEVEL ile secilir; ikinci metric (Expected
-Behavior) EVAL_EXPECTED_BEHAVIOR ile acilip kapanir (bkz. suites/common.py).
+The record's `evidence` quote becomes LLMTestCase.context, and
+`hallucination_trap` fills the {hallucination_trap} placeholder in the judge
+steps. The judge level is selected with HALLUCINATION_JUDGE_LEVEL; the second
+metric (Expected Behavior) is toggled with EVAL_EXPECTED_BEHAVIOR (see suites/common.py).
 """
 
 from deepeval.models import DeepEvalBaseLLM
@@ -28,7 +28,7 @@ PLACEHOLDER_FIELDS = ("hallucination_trap",)
 
 
 def build_suite(settings: Settings, judge_model: DeepEvalBaseLLM, async_mode: bool = False) -> EvalSuite:
-    """Hallucination suite'ini kurar. Runner (thread havuzu) icin async_mode=False."""
+    """Builds the hallucination suite. async_mode=False for the runner (thread pool)."""
     config = load_judge(settings.hallucination_judge_level, judges=HALLUCINATION_JUDGES)
     behavior = load_judge_file(EXPECTED_BEHAVIOR_JUDGE_FILE) if settings.eval_expected_behavior else None
 

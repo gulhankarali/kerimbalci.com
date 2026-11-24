@@ -1,4 +1,4 @@
-"""judge_config modulunun ve judges/*/*.yaml hakem dosyalarinin testleri."""
+"""Tests for the judge_config module and the judges/*/*.yaml judge files."""
 
 import pytest
 import yaml
@@ -15,12 +15,12 @@ VALID = {
     "threshold": 0.5,
     "evaluation_params": ["input", "actual_output", "expected_output", "context"],
     "criteria": "c",
-    "evaluation_steps": ["adim 1"],
-    "rules": ["kural"],
-    "category_steps": {"false_premise": ['Yanlis: "{false_claim}"']},
+    "evaluation_steps": ["step 1"],
+    "rules": ["rule"],
+    "category_steps": {"false_premise": ['False: "{false_claim}"']},
     "rubric": [
-        {"score_range": [0, 4], "expected_outcome": "kotu"},
-        {"score_range": [5, 10], "expected_outcome": "iyi"},
+        {"score_range": [0, 4], "expected_outcome": "bad"},
+        {"score_range": [5, 10], "expected_outcome": "good"},
     ],
 }
 
@@ -31,13 +31,13 @@ def _write(tmp_path, data, name="factuality_judge_level1_test.yaml"):
 
 
 @pytest.mark.parametrize("level", [1, 2, 3])
-def test_gercek_hakem_dosyalari_gecerli(level):
+def test_real_judge_files_are_valid(level):
     judge = load_judge(level)
     assert judge.level == level
     assert judge.source is not None and judge.source.name.startswith(f"factuality_judge_level{level}_")
 
 
-def test_expected_behavior_hakemi_gecerli():
+def test_expected_behavior_judge_is_valid():
     judge = load_judge_file(EXPECTED_BEHAVIOR_JUDGE_FILE)
     assert judge.evaluation_params == ["input", "actual_output"]
     assert set(judge.category_steps) <= ALL_CATEGORIES
@@ -45,45 +45,45 @@ def test_expected_behavior_hakemi_gecerli():
 
 
 @pytest.mark.parametrize("level", [1, 2, 3])
-def test_gercek_hallucination_hakemleri_gecerli(level):
+def test_real_hallucination_judges_are_valid(level):
     judge = load_judge(level, judges=HALLUCINATION_JUDGES)
     assert judge.level == level
     assert judge.source.name.startswith(f"hallucination_judge_level{level}_")
     assert "context" in judge.evaluation_params
 
 
-def test_hallucination_level3_tum_kategorileri_kapsar():
+def test_hallucination_level3_covers_all_categories():
     judge = load_judge(3, judges=HALLUCINATION_JUDGES)
     assert judge.category_steps.keys() == HALLUCINATION_CATEGORIES
-    steps = judge.steps_for("fabricated_detail", hallucination_trap="TUZAK")
-    assert any("TUZAK" in s for s in steps)
+    steps = judge.steps_for("fabricated_detail", hallucination_trap="TRAP")
+    assert any("TRAP" in s for s in steps)
 
 
-def test_hallucination_hakemi_factuality_kategorisini_reddeder(tmp_path):
+def test_hallucination_judge_rejects_factuality_category(tmp_path):
     data = {**VALID, "category_steps": {"false_premise": ["x"]}}
     _write(tmp_path, data, "hallucination_judge_level1_test.yaml")
-    with pytest.raises(JudgeConfigError, match="bilinmeyen kategori"):
+    with pytest.raises(JudgeConfigError, match="unknown category"):
         load_judge(1, tmp_path, judges=HALLUCINATION_JUDGES)
 
 
-def test_load_judge_file_yoksa_hata(tmp_path):
-    with pytest.raises(JudgeConfigError, match="bulunamadi"):
-        load_judge_file(tmp_path / "yok.yaml")
+def test_load_judge_file_missing_raises(tmp_path):
+    with pytest.raises(JudgeConfigError, match="not found"):
+        load_judge_file(tmp_path / "missing.yaml")
 
 
-def test_level3_tum_kategorileri_kapsar():
+def test_level3_covers_all_categories():
     assert load_judge(3).category_steps.keys() == CATEGORIES
 
 
-def test_steps_for_kurallari_ve_kategoriyi_ekler(tmp_path):
+def test_steps_for_adds_rules_and_category(tmp_path):
     judge = load_judge(1, _write(tmp_path, VALID))
     assert judge.steps_for("false_premise", false_claim="X") == [
-        "adim 1", "Rule: kural", 'Yanlis: "X"'
+        "step 1", "Rule: rule", 'False: "X"'
     ]
-    assert judge.steps_for("direct_fact") == ["adim 1", "Rule: kural"]
+    assert judge.steps_for("direct_fact") == ["step 1", "Rule: rule"]
 
 
-def test_params_for_kanit_yoksa_context_cikar(tmp_path):
+def test_params_for_drops_context_without_evidence(tmp_path):
     judge = load_judge(1, _write(tmp_path, VALID))
     assert "context" in judge.params_for(has_context=True)
     assert "context" not in judge.params_for(has_context=False)
@@ -94,26 +94,26 @@ def test_params_for_kanit_yoksa_context_cikar(tmp_path):
     [
         ({"criteria": ""}, "'criteria'"),
         ({"threshold": 1.5}, "threshold"),
-        ({"evaluation_params": ["input", "foo"]}, "bilinmeyen evaluation_params"),
-        ({"category_steps": {"baska": ["x"]}}, "bilinmeyen kategori"),
+        ({"evaluation_params": ["input", "foo"]}, "unknown evaluation_params"),
+        ({"category_steps": {"other": ["x"]}}, "unknown category"),
         ({"rubric": [{"score_range": [0, 5], "expected_outcome": "a"},
-                     {"score_range": [5, 10], "expected_outcome": "b"}]}, "cakismasiz"),
+                     {"score_range": [5, 10], "expected_outcome": "b"}]}, "overlaps"),
         ({"rubric": [{"score_range": [0, 4], "expected_outcome": "a"},
-                     {"score_range": [6, 10], "expected_outcome": "b"}]}, "bosluksuz"),
-        ({"rubric": [{"score_range": [0, 8], "expected_outcome": "a"}]}, "ulasmiyor"),
-        ({"rubric": [{"score_range": [0, 10]}]}, "rubric maddesi"),
-        ({"level": 2}, "uyusmuyor"),
+                     {"score_range": [6, 10], "expected_outcome": "b"}]}, "without gaps"),
+        ({"rubric": [{"score_range": [0, 8], "expected_outcome": "a"}]}, "does not reach"),
+        ({"rubric": [{"score_range": [0, 10]}]}, "invalid rubric item"),
+        ({"level": 2}, "does not match"),
     ],
 )
-def test_hatali_yaml_yakalanir(tmp_path, patch, message):
+def test_invalid_yaml_is_rejected(tmp_path, patch, message):
     with pytest.raises(JudgeConfigError, match=message):
         load_judge(1, _write(tmp_path, {**VALID, **patch}))
 
 
-def test_eksik_veya_fazla_dosya(tmp_path):
-    with pytest.raises(JudgeConfigError, match="0 bulundu"):
+def test_missing_or_extra_files(tmp_path):
+    with pytest.raises(JudgeConfigError, match="found 0"):
         load_judge(1, tmp_path)
     _write(tmp_path, VALID, "factuality_judge_level1_a.yaml")
     _write(tmp_path, VALID, "factuality_judge_level1_b.yaml")
-    with pytest.raises(JudgeConfigError, match="2 bulundu"):
+    with pytest.raises(JudgeConfigError, match="found 2"):
         load_judge(1, tmp_path)

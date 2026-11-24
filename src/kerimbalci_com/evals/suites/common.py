@@ -1,9 +1,9 @@
-"""Hakem YAML'li (GEval) suite'lerin ortak parcalari.
+"""Shared parts of suites with YAML judges (GEval).
 
-Bir case iki metric'le olculur:
-  1. Ana metric      — suite'in seviyeli hakemi (judges/<suite>_judge/level<N>)
-  2. Expected Behavior — dil, kisalik, ton, cerceveleme (EVAL_EXPECTED_BEHAVIOR=false ile kapanir)
-Case ancak tum metric'ler gecerse gecmis sayilir.
+Each case is measured with two metrics:
+  1. Main metric       — the suite's leveled judge (judges/<suite>_judge/level<N>)
+  2. Expected Behavior — language, concision, tone, framing (disabled with EVAL_EXPECTED_BEHAVIOR=false)
+A case passes only if all metrics pass.
 """
 
 from collections.abc import Sequence
@@ -16,7 +16,7 @@ from kerimbalci_com.evals.judge_config import JudgeConfig, build_geval
 
 
 def build_test_case(case: Case, answer: str) -> LLMTestCase:
-    """Kaydin `evidence` alintisi LLMTestCase.context olur; tag = kategori."""
+    """The record's `evidence` quote becomes LLMTestCase.context; tag = category."""
     evidence = case.get("evidence")
     return LLMTestCase(
         input=case["input"],
@@ -37,10 +37,10 @@ def judged_metrics(
     placeholder_fields: Sequence[str],
     async_mode: bool,
 ) -> MetricFactory:
-    """Case basina YENI metric listesi ureten fabrika.
+    """Factory that returns a NEW metric list per case.
 
-    placeholder_fields: kayittaki bu alanlar hakem adimlarindaki {alan}
-    yer tutucularini doldurur (eksikse bos metin).
+    placeholder_fields: these record fields fill the {field} placeholders in
+    the judge steps (empty string if missing).
     """
 
     def metrics_for(case: Case) -> list:

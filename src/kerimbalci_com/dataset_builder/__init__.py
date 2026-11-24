@@ -1,8 +1,9 @@
-"""Siteden eval dataset'i uretme araclari.
+"""Tools for generating eval datasets from the site.
 
-Akis (bkz. instructions/dataset.md):
-    1. crawl  : sitemap -> tum sayfalar -> duz metin (+ manifest.json)
-    2. split  : metinleri kelime sayisina gore dengeli gruplara boler
-    3. (LLM)  : her grup icin instructions/dataset.md -> "Uretici Prompt"
-    4. merge  : uretilen JSON'lari evidence dogrulamasiyla dataset'e yazar
+Flow (see instructions/dataset.md):
+    1. crawl  : sitemap -> all pages -> plain text (+ manifest.json)
+    2. split  : splits the texts into groups balanced by word count
+    3. (LLM)  : for each group, instructions/dataset.md -> "Generator Prompt"
+    4. merge  : writes the generated JSON into the dataset after evidence verification
+    5. verify : checks every evidence quote of a dataset against the site text
 """

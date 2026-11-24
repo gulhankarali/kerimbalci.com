@@ -1,12 +1,12 @@
-"""Iki eval kosusunun JSON raporunu karsilastirir (regresyon tespiti).
+"""Compares the JSON reports of two eval runs (regression detection).
 
-    uv run python -m kerimbalci_com.evals.compare                       # son iki rapor (ayni suite)
+    uv run python -m kerimbalci_com.evals.compare                       # last two reports (same suite)
     uv run python -m kerimbalci_com.evals.compare --suite factuality-L3
-    uv run python -m kerimbalci_com.evals.compare eski.json yeni.json
+    uv run python -m kerimbalci_com.evals.compare old.json new.json
 
-Raporlar: EVAL_REPORT_DIR (vars. reports/). Puan degisimi esigi:
-EVAL_COMPARE_MIN_DELTA (vars. 0.2). Cikis kodu: 0 bozulma yok, 1 bozulma var,
-2 karsilastirilacak rapor bulunamadi.
+Reports: EVAL_REPORT_DIR (default reports/). Score change threshold:
+EVAL_COMPARE_MIN_DELTA (default 0.2). Exit code: 0 no regression, 1 regression,
+2 no reports to compare.
 """
 
 import argparse
@@ -45,9 +45,9 @@ class Comparison:
     new_suite: str
     old_summary: dict
     new_summary: dict
-    regressions: list[CaseChange] = field(default_factory=list)   # gecti -> kaldi
-    fixes: list[CaseChange] = field(default_factory=list)         # kaldi -> gecti
-    score_changes: list[CaseChange] = field(default_factory=list) # durum ayni, puan |d| >= esik
+    regressions: list[CaseChange] = field(default_factory=list)   # passed -> failed
+    fixes: list[CaseChange] = field(default_factory=list)         # failed -> passed
+    score_changes: list[CaseChange] = field(default_factory=list) # same status, |score delta| >= threshold
     added: list[str] = field(default_factory=list)
     removed: list[str] = field(default_factory=list)
 
@@ -62,7 +62,7 @@ def _case_score(case: dict) -> float | None:
 
 
 def compare_reports(old: dict, new: dict, min_delta: float) -> Comparison:
-    """Iki rapor sozlugunu case id'sine gore eslestirip farklari cikarir."""
+    """Matches two report dicts by case id and extracts the differences."""
     old_cases = {c["id"]: c for c in old["cases"]}
     new_cases = {c["id"]: c for c in new["cases"]}
     result = Comparison(
@@ -101,7 +101,7 @@ def _fmt_score(value: float | None) -> str:
 def _fmt_change(c: CaseChange) -> str:
     text = f"  {c.id:<14} [{', '.join(c.tags)}]  {_fmt_score(c.old_score)} -> {_fmt_score(c.new_score)}"
     if c.new_error:
-        text += f"  (hata: {c.new_error})"
+        text += f"  (error: {c.new_error})"
     return text
 
 
@@ -115,31 +115,31 @@ def _rate_line(label: str, old: dict | None, new: dict | None) -> str:
     o_avg, n_avg = avg(old), avg(new)
     delta = "" if o_avg is None or n_avg is None else f" ({n_avg - o_avg:+.2f})"
     return (f"  {label:<16}{rate(old):>6} -> {rate(new):<6}"
-            f"  ort.puan {_fmt_score(o_avg)} -> {_fmt_score(n_avg)}{delta}")
+            f"  avg.score {_fmt_score(o_avg)} -> {_fmt_score(n_avg)}{delta}")
 
 
 def format_comparison(cmp: Comparison) -> str:
-    lines = [f"Karsilastirma: {cmp.old_suite} ({cmp.old_summary['started_at']}) -> "
+    lines = [f"Comparison: {cmp.old_suite} ({cmp.old_summary['started_at']}) -> "
              f"{cmp.new_suite} ({cmp.new_summary['started_at']})"]
     if cmp.old_suite != cmp.new_suite:
-        lines.append("  UYARI: farkli suite/hakem seviyesi karsilastiriliyor")
+        lines.append("  WARNING: comparing different suites/judge levels")
     old_cost = (cmp.old_summary["overall"].get("usage") or {}).get("cost")
     new_cost = (cmp.new_summary["overall"].get("usage") or {}).get("cost")
     if old_cost is not None and new_cost is not None:
-        lines.append(f"Hakem maliyeti: ${old_cost:.4f} -> ${new_cost:.4f} ({new_cost - old_cost:+.4f})")
-    lines.append("Gecme orani:")
+        lines.append(f"Judge cost: ${old_cost:.4f} -> ${new_cost:.4f} ({new_cost - old_cost:+.4f})")
+    lines.append("Pass rate:")
     lines.append(_rate_line("overall", cmp.old_summary["overall"], cmp.new_summary["overall"]))
     tags = sorted(set(cmp.old_summary["by_tag"]) | set(cmp.new_summary["by_tag"]))
     for tag in tags:
         lines.append(_rate_line(tag, cmp.old_summary["by_tag"].get(tag),
                                 cmp.new_summary["by_tag"].get(tag)))
-    for title, items in (("BOZULAN (gecti -> kaldi)", cmp.regressions),
-                         ("DUZELEN (kaldi -> gecti)", cmp.fixes),
-                         ("PUANI DEGISEN", cmp.score_changes)):
+    for title, items in (("REGRESSED (passed -> failed)", cmp.regressions),
+                         ("FIXED (failed -> passed)", cmp.fixes),
+                         ("SCORE CHANGED", cmp.score_changes)):
         lines.append(f"{title}: {len(items)}")
         lines.extend(_fmt_change(c) for c in items)
     if cmp.added or cmp.removed:
-        lines.append(f"Yeni case: {', '.join(cmp.added) or '-'} | Kaldirilan: {', '.join(cmp.removed) or '-'}")
+        lines.append(f"New cases: {', '.join(cmp.added) or '-'} | Removed: {', '.join(cmp.removed) or '-'}")
     return "\n".join(lines)
 
 
@@ -148,9 +148,9 @@ def load_report(path: Path) -> dict:
 
 
 def latest_reports(directory: Path, suite: str | None = None, count: int = 2) -> list[Path]:
-    """Klasordeki raporlardan (istenirse tek suite) en yeni `count` tanesini eskiden yeniye dondurur.
+    """Returns the newest `count` reports in the folder (optionally of one suite), oldest first.
 
-    suite verilmezse en yeni raporun suite'i kullanilir.
+    Without `suite`, the suite of the newest report is used.
     """
     reports = []
     for path in directory.glob("*.json"):
@@ -168,10 +168,10 @@ def latest_reports(directory: Path, suite: str | None = None, count: int = 2) ->
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m kerimbalci_com.evals.compare")
-    parser.add_argument("reports", nargs="*", type=Path, help="eski.json yeni.json (bos = son iki rapor)")
-    parser.add_argument("--suite", default=None, help="ornek: factuality-L3 (vars. en son kosulan)")
+    parser.add_argument("reports", nargs="*", type=Path, help="old.json new.json (empty = last two reports)")
+    parser.add_argument("--suite", default=None, help="e.g. factuality-L3 (default: the most recent run)")
     parser.add_argument("--min-delta", type=float, default=None,
-                        help="puan degisimi esigi; varsayilan EVAL_COMPARE_MIN_DELTA")
+                        help="score change threshold; default EVAL_COMPARE_MIN_DELTA")
     args = parser.parse_args(argv)
     settings = get_settings()
     setup_logging(settings)
@@ -181,11 +181,11 @@ def main(argv: list[str] | None = None) -> int:
     elif not args.reports:
         found = latest_reports(settings.eval_report_dir, args.suite)
         if len(found) < 2:
-            logger.error("Karsilastirmak icin en az 2 rapor gerekli (%s)", settings.eval_report_dir)
+            logger.error("At least 2 reports are needed to compare (%s)", settings.eval_report_dir)
             return 2
         old_path, new_path = found
     else:
-        parser.error("ya iki rapor yolu verin ya da hic vermeyin")
+        parser.error("give either two report paths or none")
 
     min_delta = args.min_delta if args.min_delta is not None else settings.eval_compare_min_delta
     cmp = compare_reports(load_report(old_path), load_report(new_path), min_delta)

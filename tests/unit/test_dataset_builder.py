@@ -1,4 +1,4 @@
-"""dataset_builder modulunun cevrimdisi testleri (ag yok; sahte fetch)."""
+"""Offline tests for the dataset_builder module (no network; fake fetch)."""
 
 import json
 
@@ -31,21 +31,21 @@ def test_stem_for_url():
     assert stem_for_url("https://s.com/bir-yazi/") == "bir-yazi"
 
 
-def test_sitemap_ve_url_kesfi_gorselleri_atlar():
+def test_sitemap_and_url_discovery_skip_images():
     assert parse_sitemap(INDEX) == ["https://s.com/sitemap-posts.xml"]
     assert discover_urls("https://s.com", PAGES.__getitem__) == [
         "https://s.com/", "https://s.com/tag/ene/", "https://s.com/yazi-1/"
     ]
 
 
-def test_extract_text_meta_ve_govde():
+def test_extract_text_meta_and_body():
     meta_line, body = extract_text(HTML).split("\n\n", 1)
     assert json.loads(meta_line) == {"og:title": ["Baslik"], "article:tag": ["ENE"]}
     assert "Birinci\xa0paragraf." in body and "Ikinci" in body
     assert "Menu" not in body and "Instagram" not in body and "x()" not in body
 
 
-def test_crawl_dosyalari_ve_manifesti_yazar(monkeypatch, tmp_path):
+def test_crawl_writes_files_and_manifest(monkeypatch, tmp_path):
     monkeypatch.setenv("SITE_URL", "https://s.com")
     monkeypatch.setenv("SITE_WORKDIR", str(tmp_path / "site"))
     pages = {**PAGES, "https://s.com/yazi-1/": None}
@@ -61,7 +61,7 @@ def test_crawl_dosyalari_ve_manifesti_yazar(monkeypatch, tmp_path):
     assert json.loads((tmp_path / "site" / "manifest.json").read_text()) == manifest
 
 
-def test_split_groups_dengeli(tmp_path):
+def test_split_groups_balanced(tmp_path):
     for name, words in {"a": 100, "b": 60, "c": 50, "d": 10}.items():
         (tmp_path / f"{name}.txt").write_text("k " * words)
     groups = split_groups(tmp_path, 2)
@@ -93,7 +93,7 @@ def _merge_fixture(tmp_path):
     return work, gen, ds
 
 
-def test_merge_dogrular_normalize_eder_ve_elle_kayitlari_korur(tmp_path):
+def test_merge_verifies_normalizes_and_keeps_manual_records(tmp_path):
     work, gen, ds = _merge_fixture(tmp_path)
     report = merge(gen, work, ds)
 
@@ -101,7 +101,7 @@ def test_merge_dogrular_normalize_eder_ve_elle_kayitlari_korur(tmp_path):
     assert len(report.rejected) == 1 and "Uydurma" in report.rejected[0][1]
     fact = json.loads((ds / "direct_facts.json").read_text(encoding="utf-8"))[0]
     assert fact["id"] == "fact-001" and fact["source_url"] == "https://s.com/yazi/"
-    assert fact["evidence"] == "Kerim Balcı Bafra'da doğdu."  # NFC'ye cevrildi
+    assert fact["evidence"] == "Kerim Balcı Bafra'da doğdu."  # converted to NFC
     premise = json.loads((ds / "false_premise.json").read_text(encoding="utf-8"))[0]
     assert premise["false_claim"] == "İzmir"
     unans = json.loads((ds / "unanswerable.json").read_text(encoding="utf-8"))

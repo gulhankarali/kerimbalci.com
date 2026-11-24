@@ -1,7 +1,7 @@
-"""Bir eval suite'inin tanimi: hangi case'ler, hangi metric'lerle olculecek.
+"""Definition of an eval suite: which cases are measured with which metrics.
 
-EvalSuite veri (case listesi) ile olcum mantigini (metric fabrikasi ve
-LLMTestCase donusumu) bir arada tutar. Calistirma suite_runner'in isidir.
+EvalSuite keeps the data (case list) together with the measurement logic
+(metric factory and LLMTestCase conversion). Running it is suite_runner's job.
 """
 
 from collections.abc import Callable, Iterable, Sequence
@@ -16,7 +16,7 @@ TestCaseBuilder = Callable[[Case, str], LLMTestCase]
 
 
 def default_test_case(case: Case, answer: str) -> LLMTestCase:
-    """input / expected_output alanlarindan standart LLMTestCase uretir."""
+    """Builds a standard LLMTestCase from the input / expected_output fields."""
     return LLMTestCase(
         input=case["input"],
         actual_output=answer,
@@ -28,10 +28,10 @@ def default_test_case(case: Case, answer: str) -> LLMTestCase:
 
 @dataclass(frozen=True)
 class EvalSuite:
-    """Calistirilabilir bir eval suite'i.
+    """A runnable eval suite.
 
-    metrics_for her cagrida YENI metric nesneleri dondurmelidir; deepeval
-    metric'leri olcum sonucunu (score, reason) kendi uzerinde tutar.
+    metrics_for must return NEW metric objects on every call; deepeval metrics
+    keep the measurement result (score, reason) on themselves.
     """
 
     name: str
@@ -50,7 +50,7 @@ class EvalSuite:
         ids: Iterable[str] = (),
         limit: int | None = None,
     ) -> "EvalSuite":
-        """Tag ve/veya id'ye gore suzulmus yeni bir suite dondurur (bos = filtre yok)."""
+        """Returns a new suite filtered by tag and/or id (empty = no filter)."""
         tags, ids = set(tags), set(ids)
         selected = [
             case for case in self.cases

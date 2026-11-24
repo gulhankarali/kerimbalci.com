@@ -1,20 +1,20 @@
-"""Chatbot factuality (dogruluk) degerlendirmesi — deepeval + Confident AI.
+"""Chatbot factuality evaluation — deepeval + Confident AI.
 
-Suite tanimi (case'ler, hakem, LLMTestCase) kerimbalci_com.evals.suites.factuality_suite
-modulundedir; bu dosya ayni suite'i pytest/deepeval uzerinden calistirir ve
-sonuclari Confident AI'ya gonderir. Fixture'lar: tests/conftest.py.
-Paralel, yerel raporlu alternatif:
+The suite definition (cases, judge, LLMTestCase) lives in
+kerimbalci_com.evals.suites.factuality_suite; this file runs the same suite
+through pytest/deepeval and sends the results to Confident AI. Fixtures:
+tests/conftest.py. Parallel alternative with local reports:
     uv run python -m kerimbalci_com.evals factuality
 
-Sorular : dataset/factuality/*.json
-Hakem   : judges/factuality_judge/ (FACTUALITY_JUDGE_LEVEL = 1 | 2 | 3)
-Esik    : YAML'daki threshold; .env -> EVAL_FACTUALITY_THRESHOLD doluysa o.
+Questions : dataset/factuality/*.json
+Judge     : judges/factuality_judge/ (FACTUALITY_JUDGE_LEVEL = 1 | 2 | 3)
+Threshold : threshold from the YAML; .env -> EVAL_FACTUALITY_THRESHOLD if set.
 
-DIKKAT: Hakem model icin Anthropic API'ye ucretli istek atar.
+WARNING: makes paid requests to the Anthropic API for the judge model.
 
-Calistirma:
+Usage:
     uv run deepeval test run tests/factuality/
-    uv run pytest -m eval tests/factuality/ -k false_premise        # tek kategori
+    uv run pytest -m eval tests/factuality/ -k false_premise        # one category
     FACTUALITY_JUDGE_LEVEL=1 uv run pytest -m eval tests/factuality/ -k fact-001
 """
 
@@ -41,5 +41,5 @@ def suite(settings: Settings, judge_model: AnthropicModel) -> EvalSuite:
 @pytest.mark.parametrize("record", RECORDS, ids=[f"{r['category']}:{r['id']}" for r in RECORDS])
 def test_factuality(chatbot: ChatbotClient, suite: EvalSuite, record: dict):
     answer = chatbot.ask(record["input"])
-    assert answer.strip(), "Chatbot bos cevap dondu"
+    assert answer.strip(), "Chatbot returned an empty answer"
     assert_test(suite.build_test_case(record, answer), suite.metrics_for(record))

@@ -1,13 +1,13 @@
 """Factuality suite: dataset/factuality + judges/factuality_judge (+ expected_behavior_judge).
 
-Case tag'i = dataset kategorisi (direct_fact, false_premise, unanswerable,
-time_sensitive). Kaydin `evidence` alintisi LLMTestCase.context olur;
-hakem seviyesi FACTUALITY_JUDGE_LEVEL ile secilir.
+Case tag = dataset category (direct_fact, false_premise, unanswerable,
+time_sensitive). The record's `evidence` quote becomes LLMTestCase.context;
+the judge level is selected with FACTUALITY_JUDGE_LEVEL.
 
-Her case iki metric'le olculur (bkz. suites/common.py):
-  1. Factuality        — olgular dogru mu? (judges/factuality_judge/level<N>)
-  2. Expected Behavior — dil, kisalik, ton, cerceveleme (judges/expected_behavior_judge/)
-     EVAL_EXPECTED_BEHAVIOR=false ile kapatilir.
+Each case is measured with two metrics (see suites/common.py):
+  1. Factuality        — are the facts right? (judges/factuality_judge/level<N>)
+  2. Expected Behavior — language, concision, tone, framing (judges/expected_behavior_judge/)
+     Disabled with EVAL_EXPECTED_BEHAVIOR=false.
 """
 
 from deepeval.models import DeepEvalBaseLLM
@@ -25,7 +25,7 @@ PLACEHOLDER_FIELDS = ("false_claim", "valid_as_of")
 
 
 def build_suite(settings: Settings, judge_model: DeepEvalBaseLLM, async_mode: bool = False) -> EvalSuite:
-    """Factuality suite'ini kurar. Runner (thread havuzu) icin async_mode=False."""
+    """Builds the factuality suite. async_mode=False for the runner (thread pool)."""
     config = load_judge(settings.factuality_judge_level, judges=FACTUALITY_JUDGES)
     behavior = load_judge_file(EXPECTED_BEHAVIOR_JUDGE_FILE) if settings.eval_expected_behavior else None
 

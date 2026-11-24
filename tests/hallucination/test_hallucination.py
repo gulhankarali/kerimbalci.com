@@ -1,21 +1,20 @@
-"""Chatbot hallucination (uydurma) degerlendirmesi — deepeval + Confident AI.
+"""Chatbot hallucination evaluation — deepeval + Confident AI.
 
-Suite tanimi kerimbalci_com.evals.suites.hallucination_suite modulundedir; bu
-dosya ayni suite'i pytest/deepeval uzerinden calistirir ve sonuclari Confident
-AI'ya gonderir. Fixture'lar: tests/conftest.py.
-Paralel, yerel raporlu alternatif:
+The suite definition lives in kerimbalci_com.evals.suites.hallucination_suite;
+this file runs the same suite through pytest/deepeval and sends the results to
+Confident AI. Fixtures: tests/conftest.py. Parallel alternative with local reports:
     uv run python -m kerimbalci_com.evals hallucination
 
-Sorular : dataset/hallucination/*.json
-Hakem   : judges/hallucination_judge/ (HALLUCINATION_JUDGE_LEVEL = 1 | 2 | 3)
-Esik    : YAML'daki threshold; .env -> EVAL_HALLUCINATION_THRESHOLD doluysa o.
+Questions : dataset/hallucination/*.json
+Judge     : judges/hallucination_judge/ (HALLUCINATION_JUDGE_LEVEL = 1 | 2 | 3)
+Threshold : threshold from the YAML; .env -> EVAL_HALLUCINATION_THRESHOLD if set.
 
-DIKKAT: Hakem model icin Anthropic API'ye ucretli istek atar.
+WARNING: makes paid requests to the Anthropic API for the judge model.
 
-Calistirma:
-    HALLUCINATION_JUDGE_LEVEL=1 uv run pytest tests/hallucination -m eval -k fab-001   # tek kayit
-    uv run pytest -m eval tests/hallucination/ -k fake_attribution                     # tek kategori
-    uv run deepeval test run tests/hallucination/                                      # hepsi (50 soru)
+Usage:
+    HALLUCINATION_JUDGE_LEVEL=1 uv run pytest tests/hallucination -m eval -k fab-001   # one record
+    uv run pytest -m eval tests/hallucination/ -k fake_attribution                     # one category
+    uv run deepeval test run tests/hallucination/                                      # all (50 questions)
 """
 
 import pytest
@@ -41,5 +40,5 @@ def suite(settings: Settings, judge_model: AnthropicModel) -> EvalSuite:
 @pytest.mark.parametrize("record", RECORDS, ids=[f"{r['category']}:{r['id']}" for r in RECORDS])
 def test_hallucination(chatbot: ChatbotClient, suite: EvalSuite, record: dict):
     answer = chatbot.ask(record["input"])
-    assert answer.strip(), "Chatbot bos cevap dondu"
+    assert answer.strip(), "Chatbot returned an empty answer"
     assert_test(suite.build_test_case(record, answer), suite.metrics_for(record))

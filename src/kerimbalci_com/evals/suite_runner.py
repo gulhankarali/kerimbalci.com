@@ -1,9 +1,9 @@
-"""Bir suite'in case'lerini paralel calistirir.
+"""Runs the cases of a suite in parallel.
 
-Her case: chatbot'a input sorulur -> LLMTestCase kurulur -> suite'in
-metric'leri (hakem) olculur. EVAL_CONCURRENCY kadar case ayni anda calisir.
-Hicbir hata disari firlatilmaz; hata CaseResult.error'a yazilir, boylece tek
-bir case'in patlamasi tum kosuyu durdurmaz.
+For each case: the input is sent to the chatbot -> an LLMTestCase is built ->
+the suite's metrics (judges) are measured. EVAL_CONCURRENCY cases run at once.
+No error is raised to the caller; it is stored in CaseResult.error, so one
+failing case does not stop the whole run.
 """
 
 import logging
@@ -29,7 +29,7 @@ class Chatbot(Protocol):
 
 @dataclass
 class CaseResult:
-    """Tek bir case'in sonucu: chatbot cevabi, olculen metric'ler, hata ve sure."""
+    """Result of one case: chatbot answer, measured metrics, error and duration."""
 
     case: Case
     test_case: LLMTestCase | None = None
@@ -46,7 +46,7 @@ class CaseResult:
 
 @dataclass
 class SuiteResult:
-    """Bir suite kosusunun toplu sonucu."""
+    """Aggregate result of a suite run."""
 
     suite_name: str
     results: list[CaseResult]
@@ -70,9 +70,9 @@ class SuiteResult:
         return self.passed / len(self.results) if self.results else 0.0
 
     def meets_quality_gate(self, min_pass_rate: float) -> bool:
-        """Kalite kapisi: gecen oran >= min_pass_rate (hata alan case'ler basarisiz sayilir).
+        """Quality gate: pass rate >= min_pass_rate (errored cases count as failures).
 
-        Bos kosu kapidan gecemez.
+        An empty run never passes the gate.
         """
         return bool(self.results) and self.pass_rate >= min_pass_rate
 
@@ -84,14 +84,14 @@ def _run_case(suite: EvalSuite, case: Case, get_chatbot: Callable[[], Chatbot]) 
     try:
         answer = get_chatbot().ask(case["input"])
         if not answer or not answer.strip():
-            raise ValueError("Chatbot bos cevap dondu")
+            raise ValueError("Chatbot returned an empty answer")
         result.test_case = suite.build_test_case(case, answer)
         result.metrics = suite.metrics_for(case)
         for metric in result.metrics:
             metric.measure(result.test_case, _show_indicator=False)
-    except Exception as exc:  # noqa: BLE001 — hata case sonucuna yazilir
+    except Exception as exc:  # noqa: BLE001 — the error is stored in the case result
         result.error = f"{type(exc).__name__}: {exc}"
-        logger.warning("%s: hata — %s", case_id, result.error)
+        logger.warning("%s: error — %s", case_id, result.error)
     result.duration_seconds = perf_counter() - start
     if result.error is None:
         logger.info("%s: %s (%.1fs)", case_id, "PASS" if result.passed else "FAIL",
@@ -104,9 +104,9 @@ def run_suite(
     chatbot_factory: Callable[[], Chatbot],
     concurrency: int = 1,
 ) -> SuiteResult:
-    """Suite'i calistirir. Her worker thread kendi chatbot istemcisini kullanir.
+    """Runs the suite. Each worker thread uses its own chatbot client.
 
-    Sonuclar case sirasiyla doner.
+    Results are returned in case order.
     """
     concurrency = max(1, concurrency)
     local = threading.local()
@@ -116,7 +116,7 @@ def run_suite(
             local.chatbot = chatbot_factory()
         return local.chatbot
 
-    logger.info("Suite '%s': %d case, eszamanlilik %d", suite.name, len(suite.cases), concurrency)
+    logger.info("Suite '%s': %d cases, concurrency %d", suite.name, len(suite.cases), concurrency)
     started_at = datetime.now(timezone.utc)
     start = perf_counter()
     with ThreadPoolExecutor(max_workers=concurrency, thread_name_prefix="eval") as pool:

@@ -1,8 +1,8 @@
-"""Hakem (LLM-as-judge) yapilandirmasi: YAML'dan okuma, dogrulama, GEval kurma.
+"""Judge (LLM-as-judge) configuration: loading YAML, validation, building GEval.
 
-Kriterler koda gomulmez; judges/<suite>_judge/<suite>_judge_level<N>_*.yaml
-dosyalarindan okunur (her suite bir `JudgeSet`). `build_geval` bu yapilandirmadan
-case'e ozel bir deepeval GEval metrigi uretir.
+Criteria are not hardcoded; they are read from
+judges/<suite>_judge/<suite>_judge_level<N>_*.yaml (each suite is a `JudgeSet`).
+`build_geval` builds a case-specific deepeval GEval metric from this configuration.
 """
 
 import logging
@@ -30,12 +30,12 @@ SCORE_MIN, SCORE_MAX = 0, 10
 
 
 class JudgeConfigError(ValueError):
-    """Hakem YAML dosyasi semaya uymuyor."""
+    """A judge YAML file does not match the schema."""
 
 
 @dataclass(frozen=True)
 class JudgeSet:
-    """Bir suite'in seviyeli hakemleri: judges/<prefix>/<prefix>_level<N>_*.yaml."""
+    """The leveled judges of a suite: judges/<prefix>/<prefix>_level<N>_*.yaml."""
 
     prefix: str
     categories: frozenset[str]
@@ -57,7 +57,7 @@ HALLUCINATION_JUDGE_DIR = HALLUCINATION_JUDGES.directory
 
 @dataclass(frozen=True)
 class JudgeConfig:
-    """Tek bir hakem seviyesinin yapilandirmasi."""
+    """Configuration of a single judge level."""
 
     name: str
     level: int
@@ -72,7 +72,7 @@ class JudgeConfig:
     source: Path | None = None
 
     def steps_for(self, category: str, **values: str) -> list[str]:
-        """Genel adimlar + kurallar + kategoriye ozel adimlar ({yer_tutucu} doldurulur)."""
+        """General steps + rules + category-specific steps ({placeholder}s are filled)."""
         steps = [
             *self.evaluation_steps,
             *(f"Rule: {rule}" for rule in self.rules),
@@ -86,7 +86,7 @@ class JudgeConfig:
         return filled
 
     def params_for(self, has_context: bool) -> list[str]:
-        """Kanit yoksa 'context' parametresini cikarir."""
+        """Drops the 'context' parameter when there is no evidence."""
         if has_context:
             return list(self.evaluation_params)
         return [p for p in self.evaluation_params if p != "context"]
@@ -95,18 +95,18 @@ class JudgeConfig:
 def _validate(data: dict, path: Path, categories: frozenset[str]) -> None:
     where = path.name
     if not isinstance(data, dict):
-        raise JudgeConfigError(f"{where}: YAML kok dugumu sozluk olmali")
+        raise JudgeConfigError(f"{where}: the YAML root must be a mapping")
     for key in REQUIRED_KEYS:
         if data.get(key) in (None, "", []):
-            raise JudgeConfigError(f"{where}: '{key}' alani eksik")
+            raise JudgeConfigError(f"{where}: '{key}' field is missing")
     if not 0 <= float(data["threshold"]) <= 1:
-        raise JudgeConfigError(f"{where}: threshold 0-1 arasinda olmali")
+        raise JudgeConfigError(f"{where}: threshold must be between 0 and 1")
     unknown = set(data["evaluation_params"]) - EVALUATION_PARAMS
     if unknown:
-        raise JudgeConfigError(f"{where}: bilinmeyen evaluation_params {sorted(unknown)}")
+        raise JudgeConfigError(f"{where}: unknown evaluation_params {sorted(unknown)}")
     unknown = set(data.get("category_steps") or {}) - categories
     if unknown:
-        raise JudgeConfigError(f"{where}: bilinmeyen kategori {sorted(unknown)}")
+        raise JudgeConfigError(f"{where}: unknown category {sorted(unknown)}")
 
     ranges = []
     for item in data["rubric"]:
@@ -114,19 +114,19 @@ def _validate(data: dict, path: Path, categories: frozenset[str]) -> None:
             low, high = item["score_range"]
             assert item["expected_outcome"]
         except (KeyError, TypeError, ValueError, AssertionError) as exc:
-            raise JudgeConfigError(f"{where}: rubric maddesi hatali: {item}") from exc
+            raise JudgeConfigError(f"{where}: invalid rubric item: {item}") from exc
         ranges.append((int(low), int(high)))
     ranges.sort()
     expected_start = SCORE_MIN
     for low, high in ranges:
         if low != expected_start or high < low:
             raise JudgeConfigError(
-                f"{where}: rubric araliklari {SCORE_MIN}-{SCORE_MAX} arasini bosluksuz ve "
-                f"cakismasiz kapsamali (sorunlu aralik: [{low}, {high}])"
+                f"{where}: rubric ranges must cover {SCORE_MIN}-{SCORE_MAX} without gaps or "
+                f"overlaps (problem range: [{low}, {high}])"
             )
         expected_start = high + 1
     if expected_start != SCORE_MAX + 1:
-        raise JudgeConfigError(f"{where}: rubric {SCORE_MAX}'a kadar ulasmiyor")
+        raise JudgeConfigError(f"{where}: rubric does not reach {SCORE_MAX}")
 
 
 def load_judge(
@@ -134,31 +134,31 @@ def load_judge(
     directory: Path | None = None,
     judges: JudgeSet = FACTUALITY_JUDGES,
 ) -> JudgeConfig:
-    """Verilen seviyedeki hakem yapilandirmasini yukler (varsayilan: factuality)."""
+    """Loads the judge configuration of the given level (default: factuality)."""
     directory = directory or judges.directory
     matches = sorted(directory.glob(f"{judges.prefix}_level{level}_*.yaml"))
     if len(matches) != 1:
         raise JudgeConfigError(
-            f"{directory} altinda level {level} icin tam olarak 1 YAML bekleniyordu, "
-            f"{len(matches)} bulundu"
+            f"expected exactly 1 YAML for level {level} in {directory}, "
+            f"found {len(matches)}"
         )
     judge = load_judge_file(matches[0], judges.categories)
     if judge.level != level:
-        raise JudgeConfigError(f"{matches[0].name}: dosyadaki level ({judge.level}) adla uyusmuyor")
+        raise JudgeConfigError(f"{matches[0].name}: level in the file ({judge.level}) does not match the file name")
     return judge
 
 
 def load_judge_file(path: Path, categories: frozenset[str] = ALL_CATEGORIES) -> JudgeConfig:
-    """Tek bir hakem YAML dosyasini okur ve dogrular.
+    """Reads and validates a single judge YAML file.
 
-    category_steps anahtarlari `categories` icinde olmalidir; varsayilan tum
-    suite'lerin kategorileridir (ortak hakemler, or. Expected Behavior, icin).
+    category_steps keys must be in `categories`; the default is the categories
+    of all suites (for shared judges such as Expected Behavior).
     """
     if not path.is_file():
-        raise JudgeConfigError(f"Hakem dosyasi bulunamadi: {path}")
+        raise JudgeConfigError(f"Judge file not found: {path}")
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     _validate(data, path, categories)
-    logger.debug("Hakem yuklendi: %s (%s)", data["name"], path.name)
+    logger.debug("Judge loaded: %s (%s)", data["name"], path.name)
     return JudgeConfig(
         name=data["name"],
         level=int(data["level"]),
@@ -184,10 +184,10 @@ def build_geval(
     placeholders: dict[str, str] | None = None,
     async_mode: bool = True,
 ) -> GEval:
-    """Yapilandirmadan bir case'e ozel GEval metrigi kurar.
+    """Builds a case-specific GEval metric from the configuration.
 
-    threshold None ise YAML'daki deger kullanilir. Thread havuzunda
-    calisirken async_mode=False verilmelidir.
+    If threshold is None the YAML value is used. Pass async_mode=False when
+    running in a thread pool.
     """
     return GEval(
         name=f"{config.name} ({category})",

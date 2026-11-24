@@ -1,8 +1,8 @@
-"""Dataset kayitlarinin `evidence` alintilarini indirilmis site metninde dogrular.
+"""Verifies the `evidence` quotes of dataset records against the downloaded site text.
 
-Her kaydin `source_url`'i manifest uzerinden metin dosyasina eslenir ve
-`evidence` (Unicode NFC + bosluk sadelestirmesinden sonra) o metinde birebir
-aranir. Kaynaksiz kayitlar (source_url = null) atlanir.
+Each record's `source_url` is mapped to its text file via the manifest, and the
+`evidence` is searched verbatim in that text (after Unicode NFC and whitespace
+normalization). Records without a source (source_url = null) are skipped.
 """
 
 import json
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def verify_evidence(records: list[dict], workdir: Path) -> list[str]:
-    """Dogrulanamayan kayitlar icin sorun listesi dondurur (bos liste = hepsi gecti)."""
+    """Returns a list of problems for records that cannot be verified (empty = all passed)."""
     manifest = json.loads((workdir / "manifest.json").read_text(encoding="utf-8"))
     stem_of = {url: stem for stem, url in manifest.items()}
     texts: dict[str, str] = {}
@@ -25,18 +25,18 @@ def verify_evidence(records: list[dict], workdir: Path) -> list[str]:
         url, evidence = record.get("source_url"), record.get("evidence")
         if not url:
             continue
-        rid = record.get("id", "<id yok>")
+        rid = record.get("id", "<no id>")
         stem = stem_of.get(url)
         if stem is None:
-            problems.append(f"{rid}: source_url manifest'te yok ({url})")
+            problems.append(f"{rid}: source_url not in manifest ({url})")
             continue
         if not evidence:
-            problems.append(f"{rid}: evidence bos")
+            problems.append(f"{rid}: evidence is empty")
             continue
         if stem not in texts:
             texts[stem] = normalize((workdir / "text" / f"{stem}.txt").read_text(encoding="utf-8"))
         if normalize(evidence) not in texts[stem]:
-            problems.append(f"{rid}: evidence {stem}.txt icinde bulunamadi")
+            problems.append(f"{rid}: evidence not found in {stem}.txt")
 
     for problem in problems:
         logger.warning(problem)

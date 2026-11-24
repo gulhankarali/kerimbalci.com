@@ -1,13 +1,13 @@
-"""Suite sonuclarini raporlar: konsol ozeti (tag bazli) ve JSON dosyasi.
+"""Reports suite results: console summary (per tag) and a JSON file.
 
-Hakem maliyeti ve token sayilari deepeval metric'lerinden (evaluation_cost,
-input_tokens, output_tokens) toplanir. Fiyatlar deepeval'in model tablosundan
-gelir; degistirmek icin .env -> ANTHROPIC_COST_PER_INPUT_TOKEN /
-ANTHROPIC_COST_PER_OUTPUT_TOKEN (deepeval ayarlari). Chatbot (HF Space) maliyeti
-dahil degildir.
+Judge cost and token counts are summed from the deepeval metrics
+(evaluation_cost, input_tokens, output_tokens). Prices come from deepeval's
+model table; to change them use .env -> ANTHROPIC_COST_PER_INPUT_TOKEN /
+ANTHROPIC_COST_PER_OUTPUT_TOKEN (deepeval settings). The chatbot (HF Space)
+cost is not included.
 
-Ayrintili, gecmise donuk karsilastirma icin Confident AI kullanilir
-(`deepeval test run`); bu rapor runner kosularinin yerel kaydidir.
+Confident AI (`deepeval test run`) is used for detailed historical comparison;
+this report is the local record of runner runs.
 """
 
 import json
@@ -26,9 +26,9 @@ def _scores(result: CaseResult) -> list[float]:
 
 
 def case_usage(result: CaseResult) -> dict:
-    """Bir case'in tum metric'lerinin hakem maliyeti (USD) ve token toplamlari.
+    """Judge cost (USD) and token totals of all metrics of a case.
 
-    Hicbir metric maliyet bildirmediyse cost None olur (bilinmiyor != 0).
+    cost is None if no metric reported a cost (unknown != 0).
     """
     costs = [m.evaluation_cost for m in result.metrics if getattr(m, "evaluation_cost", None) is not None]
     return {
@@ -49,7 +49,7 @@ def _usage_totals(results: list[CaseResult]) -> dict:
 
 
 def _metric_name(metric) -> str:
-    """GEval adi 'Factuality L3 Advanced (direct_fact) [GEval]' -> 'Factuality L3 Advanced'."""
+    """GEval name 'Factuality L3 Advanced (direct_fact) [GEval]' -> 'Factuality L3 Advanced'."""
     name = getattr(metric, "name", None) or type(metric).__name__
     return name.split(" (")[0]
 
@@ -75,10 +75,10 @@ def _by_metric(results: list[CaseResult]) -> dict:
 def summarize(
     suite: EvalSuite, suite_result: SuiteResult, min_pass_rate: float | None = None
 ) -> dict:
-    """Toplam ve tag bazli gecme orani / ortalama puan; verilirse kalite kapisi sonucu."""
+    """Overall and per-tag pass rate / average score; quality gate result if a threshold is given."""
     groups: dict[str, list[CaseResult]] = defaultdict(list)
     for result in suite_result.results:
-        for tag in suite.tags_of(result.case) or ["(etiketsiz)"]:
+        for tag in suite.tags_of(result.case) or ["(untagged)"]:
             groups[tag].append(result)
 
     def stats(results: list[CaseResult]) -> dict:
@@ -110,11 +110,11 @@ def summarize(
 
 
 def format_summary(summary: dict) -> str:
-    """Ozet sozlugunu okunabilir bir tabloya cevirir."""
+    """Turns the summary dict into a readable table."""
     rows = [("overall", summary["overall"]), *summary["by_tag"].items()]
     lines = [
         f"Suite: {summary['suite']}  ({summary['duration_seconds']}s)",
-        f"{'tag':<18}{'gecen':>8}{'toplam':>8}{'hata':>6}{'oran':>8}{'ort.puan':>10}",
+        f"{'tag':<18}{'passed':>8}{'total':>8}{'error':>6}{'rate':>8}{'avg.score':>10}",
     ]
     for tag, s in rows:
         avg = "-" if s["avg_score"] is None else f"{s['avg_score']:.2f}"
@@ -124,26 +124,26 @@ def format_summary(summary: dict) -> str:
         )
     by_metric = summary.get("by_metric") or {}
     if len(by_metric) > 1:
-        lines.append("Metric bazinda:")
+        lines.append("Per metric:")
         for name, s in by_metric.items():
             avg = "-" if s["avg_score"] is None else f"{s['avg_score']:.2f}"
-            lines.append(f"  {name:<30}{s['passed']:>5}/{s['total']:<5}{s['pass_rate']:>6.0%}  ort.puan {avg}")
+            lines.append(f"  {name:<30}{s['passed']:>5}/{s['total']:<5}{s['pass_rate']:>6.0%}  avg.score {avg}")
     usage = summary["overall"].get("usage") or {}
     if usage.get("cost") is not None or usage.get("input_tokens"):
         cost = "-" if usage.get("cost") is None else f"${usage['cost']:.4f}"
         per_case = ""
         if usage.get("cost") is not None and summary["overall"]["total"]:
-            per_case = f", case basina ${usage['cost'] / summary['overall']['total']:.4f}"
+            per_case = f", per case ${usage['cost'] / summary['overall']['total']:.4f}"
         lines.append(
-            f"Hakem maliyeti: {cost}{per_case} "
-            f"({usage.get('input_tokens', 0):,} girdi / {usage.get('output_tokens', 0):,} cikti token)"
+            f"Judge cost: {cost}{per_case} "
+            f"({usage.get('input_tokens', 0):,} input / {usage.get('output_tokens', 0):,} output tokens)"
         )
     gate = summary.get("quality_gate")
     if gate:
-        verdict = "GECTI" if gate["passed"] else "KALDI"
+        verdict = "PASSED" if gate["passed"] else "FAILED"
         lines.append(
-            f"Kalite kapisi: {verdict} (oran {gate['pass_rate']:.0%}, "
-            f"esik {gate['min_pass_rate']:.0%})"
+            f"Quality gate: {verdict} (rate {gate['pass_rate']:.0%}, "
+            f"threshold {gate['min_pass_rate']:.0%})"
         )
     return "\n".join(lines)
 
@@ -182,7 +182,7 @@ def write_json_report(
     directory: Path,
     min_pass_rate: float | None = None,
 ) -> Path:
-    """Ozet + case ayrintilarini <directory>/<suite>-<zaman>.json dosyasina yazar."""
+    """Writes the summary + case details to <directory>/<suite>-<timestamp>.json."""
     directory.mkdir(parents=True, exist_ok=True)
     stamp = suite_result.started_at.strftime("%Y%m%dT%H%M%SZ")
     path = directory / f"{suite_result.suite_name}-{stamp}.json"
@@ -191,5 +191,5 @@ def write_json_report(
         "cases": [_case_record(suite, r) for r in suite_result.results],
     }
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    logger.info("Rapor yazildi: %s", path)
+    logger.info("Report written: %s", path)
     return path

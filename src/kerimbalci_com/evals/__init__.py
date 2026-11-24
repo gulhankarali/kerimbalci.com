@@ -1,6 +1,6 @@
-"""Chatbot eval altyapisi: suite tanimi, paralel runner, hakem ve raporlama.
+"""Chatbot eval infrastructure: suite definition, parallel runner, judges and reporting.
 
-Calistirma: uv run python -m kerimbalci_com.evals factuality --tags false_premise --limit 5
+Usage: uv run python -m kerimbalci_com.evals factuality --tags false_premise --limit 5
 """
 
 from kerimbalci_com.evals.eval_suite import EvalSuite

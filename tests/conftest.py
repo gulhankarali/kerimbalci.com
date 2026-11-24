@@ -1,12 +1,12 @@
-"""Tum testlerde ortak fixture'lar.
+"""Fixtures shared by all tests.
 
-Gercek servis gerektiren fixture'lar ilgili ayar .env'de yoksa testi atlar
-(skip); boylece eksik ayar testi basarisiz yapmaz.
+Fixtures that need a real service skip the test when the related setting is
+missing from .env, so a missing setting does not fail the test.
 
-Klasorler:
-    tests/unit/         ag/API gerektirmeyen birim testler
-    tests/integration/  dis servis baglanti testleri      (-m integration)
-    tests/<suite>/      suite bazli LLM eval testleri      (-m eval, ucretli)
+Folders:
+    tests/unit/         unit tests without network/API
+    tests/integration/  external service connection tests   (-m integration)
+    tests/<suite>/      per-suite LLM eval tests             (-m eval, paid)
 """
 
 import pytest
@@ -23,15 +23,15 @@ def settings() -> Settings:
 
 @pytest.fixture(scope="session")
 def chatbot(settings: Settings) -> ChatbotClient:
-    """HF Space'teki gercek chatbot istemcisi."""
+    """Real chatbot client for the HF Space."""
     if not settings.hf_chatbot_url:
-        pytest.skip("HF_CHATBOT_URL tanimli degil (.env dosyasina ekleyin)")
+        pytest.skip("HF_CHATBOT_URL is not set (add it to the .env file)")
     return ChatbotClient(settings)
 
 
 @pytest.fixture(scope="session")
 def judge_model(settings: Settings) -> AnthropicModel:
-    """Hakem (LLM-as-judge) modeli."""
+    """Judge (LLM-as-judge) model."""
     if not settings.judge_model:
-        pytest.skip("JUDGE_MODEL tanimli degil (.env dosyasina ekleyin)")
+        pytest.skip("JUDGE_MODEL is not set (add it to the .env file)")
     return AnthropicModel(model=settings.judge_model)

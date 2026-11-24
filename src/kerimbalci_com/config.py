@@ -1,8 +1,8 @@
-"""Uygulama ayarlari.
+"""Application settings.
 
-Tum ayarlar ortam degiskenlerinden (.env dosyasi veya sistem ortami) okunur.
-Kodun icine sabit deger (hardcoding) yazilmaz; yeni bir ayar gerektiginde
-once .env.example dosyasina eklenir, sonra buradan okunur.
+All settings are read from environment variables (.env file or the system
+environment). Nothing is hardcoded; a new setting is first added to
+.env.example and then read here.
 """
 
 import logging
@@ -12,15 +12,15 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Proje kok dizini: bu dosyanin konumundan dinamik olarak bulunur.
+# Project root, derived dynamically from the location of this file.
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-# .env dosyasini yukle (dosya yoksa sessizce gecer, sistem ortami kullanilir).
+# Load the .env file (silently skipped if missing; the system environment is used).
 load_dotenv(PROJECT_ROOT / ".env")
 
 
 def _env_bool(key: str, default: bool = False) -> bool:
-    """Ortam degiskenini bool'a cevirir: '1', 'true', 'yes', 'on' -> True."""
+    """Converts an environment variable to bool: '1', 'true', 'yes', 'on' -> True."""
     value = os.getenv(key)
     if value is None:
         return default
@@ -28,19 +28,19 @@ def _env_bool(key: str, default: bool = False) -> bool:
 
 
 def _env_float(key: str) -> float | None:
-    """Ortam degiskenini float'a cevirir; tanimsiz veya bossa None."""
+    """Converts an environment variable to float; None if unset or empty."""
     value = os.getenv(key, "").strip()
     return float(value) if value else None
 
 
 def _env_list(key: str) -> tuple[str, ...]:
-    """Virgulle ayrilmis ortam degiskenini temizlenmis demete cevirir; bossa ()."""
+    """Converts a comma-separated environment variable to a cleaned tuple; () if empty."""
     return tuple(item.strip() for item in os.getenv(key, "").split(",") if item.strip())
 
 
 @dataclass(frozen=True)
 class Settings:
-    """Ortamdan okunan uygulama ayarlari."""
+    """Application settings read from the environment."""
 
     app_name: str = field(default_factory=lambda: os.getenv("APP_NAME", "kerimbalci-com"))
     environment: str = field(default_factory=lambda: os.getenv("ENVIRONMENT", "development"))
@@ -67,14 +67,14 @@ class Settings:
     factuality_judge_level: int = field(
         default_factory=lambda: int(os.getenv("FACTUALITY_JUDGE_LEVEL", "3"))
     )
-    # Bos birakilirsa hakem YAML'indaki threshold kullanilir.
+    # If empty, the threshold from the judge YAML is used.
     factuality_threshold: float | None = field(
         default_factory=lambda: _env_float("EVAL_FACTUALITY_THRESHOLD")
     )
     hallucination_judge_level: int = field(
         default_factory=lambda: int(os.getenv("HALLUCINATION_JUDGE_LEVEL", "3"))
     )
-    # Bos birakilirsa hakem YAML'indaki threshold kullanilir.
+    # If empty, the threshold from the judge YAML is used.
     hallucination_threshold: float | None = field(
         default_factory=lambda: _env_float("EVAL_HALLUCINATION_THRESHOLD")
     )
@@ -100,14 +100,14 @@ class Settings:
 
 
 def get_settings() -> Settings:
-    """Guncel ortam degiskenlerinden yeni bir Settings nesnesi olusturur."""
+    """Builds a new Settings object from the current environment variables."""
     return Settings()
 
 
 def setup_logging(settings: Settings | None = None) -> logging.Logger:
-    """Ayarlardaki seviyeye gore logging'i yapilandirir.
+    """Configures logging according to the configured level.
 
-    DEBUG=true ise seviye otomatik olarak DEBUG'a cekilir.
+    With DEBUG=true the level is automatically set to DEBUG.
     """
     settings = settings or get_settings()
     level = logging.DEBUG if settings.debug else getattr(logging, settings.log_level, logging.INFO)

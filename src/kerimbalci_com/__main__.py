@@ -1,4 +1,4 @@
-"""`python -m kerimbalci_com` veya debugger ile calistirma giris noktasi."""
+"""Entry point for `python -m kerimbalci_com` or the debugger."""
 
 from kerimbalci_com import main
 

@@ -1,4 +1,4 @@
-"""evals.compare: iki rapor arasindaki bozulma/duzelme/puan degisimi tespiti."""
+"""evals.compare: detecting regressions/fixes/score changes between two reports."""
 
 import json
 import logging
@@ -35,7 +35,7 @@ NEW = report("factuality-L3", "2026-11-23T10:00:00+00:00", [
 
 
 @pytest.fixture(autouse=True)
-def _kok_logger_ayarini_koru():
+def _restore_root_logger():
     root = logging.getLogger()
     handlers, level = root.handlers[:], root.level
     yield
@@ -43,57 +43,57 @@ def _kok_logger_ayarini_koru():
     root.setLevel(level)
 
 
-def test_compare_reports_siniflandirir():
+def test_compare_reports_classifies():
     cmp = compare_reports(OLD, NEW, min_delta=0.2)
     assert [c.id for c in cmp.regressions] == ["a"]
     assert [c.id for c in cmp.fixes] == ["b"]
-    assert [c.id for c in cmp.score_changes] == ["c"]  # d: 0.05 < esik
+    assert [c.id for c in cmp.score_changes] == ["c"]  # d: 0.05 < threshold
     assert cmp.score_changes[0].delta == pytest.approx(-0.25)
     assert (cmp.added, cmp.removed) == (["f"], ["e"])
     assert cmp.has_regressions
 
 
-def test_format_comparison_ve_farkli_suite_uyarisi():
+def test_format_comparison_and_different_suite_warning():
     text = format_comparison(compare_reports(OLD, NEW, 0.2))
-    assert "Hakem maliyeti" not in text  # eski raporlarda usage yok
+    assert "Judge cost" not in text  # old reports have no usage
     with_cost = {**NEW, "summary": {**NEW["summary"], "overall": {
         **NEW["summary"]["overall"], "usage": {"cost": 0.5}}}}
     old_cost = {**OLD, "summary": {**OLD["summary"], "overall": {
         **OLD["summary"]["overall"], "usage": {"cost": 0.2}}}}
-    assert "Hakem maliyeti: $0.2000 -> $0.5000 (+0.3000)" in format_comparison(
+    assert "Judge cost: $0.2000 -> $0.5000 (+0.3000)" in format_comparison(
         compare_reports(old_cost, with_cost, 0.2))
-    assert "BOZULAN (gecti -> kaldi): 1" in text and "a " in text
-    assert "UYARI" not in text
+    assert "REGRESSED (passed -> failed): 1" in text and "a " in text
+    assert "WARNING" not in text
     other = report("factuality-L1", "2026-11-24T00:00:00+00:00", NEW["cases"])
-    assert "UYARI: farkli suite" in format_comparison(compare_reports(OLD, other, 0.2))
+    assert "WARNING: comparing different suites" in format_comparison(compare_reports(OLD, other, 0.2))
 
 
 def _write(directory, name, data):
     (directory / name).write_text(json.dumps(data), encoding="utf-8")
 
 
-def test_latest_reports_ayni_suiteden_son_ikisi(tmp_path):
+def test_latest_reports_last_two_of_same_suite(tmp_path):
     _write(tmp_path, "1.json", OLD)
     _write(tmp_path, "2.json", report("factuality-L1", "2026-11-21T00:00:00+00:00", OLD["cases"]))
     _write(tmp_path, "3.json", NEW)
-    (tmp_path / "bozuk.json").write_text("{}")
+    (tmp_path / "broken.json").write_text("{}")
     assert [p.name for p in latest_reports(tmp_path)] == ["1.json", "3.json"]
     assert [p.name for p in latest_reports(tmp_path, "factuality-L1")] == ["2.json"]
-    assert latest_reports(tmp_path / "yok") == []
+    assert latest_reports(tmp_path / "missing") == []
 
 
-def test_main_cikis_kodlari(monkeypatch, tmp_path):
+def test_main_exit_codes(monkeypatch, tmp_path):
     monkeypatch.setenv("EVAL_REPORT_DIR", str(tmp_path))
-    assert main([]) == 2                     # rapor yok
+    assert main([]) == 2                     # no reports
     _write(tmp_path, "old.json", OLD)
     _write(tmp_path, "new.json", NEW)
-    assert main([]) == 1                     # a bozuldu
+    assert main([]) == 1                     # a regressed
     assert main([str(tmp_path / "new.json"), str(tmp_path / "new.json")]) == 0
     assert main([str(tmp_path / "old.json"), str(tmp_path / "old.json"), "--min-delta", "0"]) == 0
 
 
-def test_reporter_ciktisiyla_uyumlu(tmp_path):
-    """Gercek reporter'in yazdigi rapor formati compare tarafindan okunabilir."""
+def test_compatible_with_reporter_output(tmp_path):
+    """The report format written by the real reporter can be read by compare."""
     from kerimbalci_com.evals.eval_suite import EvalSuite
     from kerimbalci_com.evals.reporter import write_json_report
     from kerimbalci_com.evals.suite_runner import run_suite
@@ -104,7 +104,7 @@ def test_reporter_ciktisiyla_uyumlu(tmp_path):
             self.threshold = 0.5
 
         def measure(self, test_case, *a, **k):
-            self.score = 1.0 if test_case.actual_output == "dogru" else 0.0
+            self.score = 1.0 if test_case.actual_output == "right" else 0.0
             self.success = self.score >= 0.5
             return self.score
 
@@ -125,7 +125,7 @@ def test_reporter_ciktisiyla_uyumlu(tmp_path):
                       cases=({"id": "a", "input": "q", "expected_output": "e", "tags": ["x"]},),
                       metrics_for=lambda c: [Metric()])
     paths = []
-    for answer in ("dogru", "yanlis"):
+    for answer in ("right", "wrong"):
         result = run_suite(suite, lambda a=answer: Bot(a))
         directory = tmp_path / answer
         paths.append(write_json_report(suite, result, directory))

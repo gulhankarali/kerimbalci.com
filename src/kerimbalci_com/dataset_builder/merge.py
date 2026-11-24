@@ -1,8 +1,9 @@
-"""LLM'in urettigi soru-cevaplari dogrulayip dataset dosyalarina yazar.
+"""Verifies LLM-generated question-answer pairs and writes them to the dataset files.
 
-Her kaydin `evidence` alintisi, kaynak metinde (Unicode NFC + bosluk
-sadelestirmesinden sonra) birebir aranir; bulunamayan kayit reddedilir.
-Mevcut dataset'teki kaynaksiz (source_url = null) elle yazilmis kayitlar korunur.
+The `evidence` quote of each record is searched verbatim in the source text
+(after Unicode NFC and whitespace normalization); records that are not found
+are rejected. Hand-written records without a source (source_url = null) in the
+existing dataset are kept.
 """
 
 import json
@@ -31,7 +32,7 @@ _OPTIONAL = ("false_claim", "valid_as_of", "notes")
 
 
 def normalize(text: str) -> str:
-    """NFC normalizasyonu + tum bosluklari (\\xa0 dahil) tek bosluga indirir."""
+    """NFC normalization + collapses all whitespace (including \\xa0) to a single space."""
     return re.sub(r"\s+", " ", unicodedata.normalize("NFC", text)).strip()
 
 
@@ -50,7 +51,7 @@ def _manual_records(dataset_dir: Path) -> list[dict]:
 
 
 def merge(generated_dir: Path, workdir: Path, dataset_dir: Path) -> MergeReport:
-    """generated_dir/*.json -> dogrula -> dataset_dir/<kategori>.json (id'ler yeniden atanir)."""
+    """generated_dir/*.json -> verify -> dataset_dir/<category>.json (ids are reassigned)."""
     manifest = json.loads((workdir / "manifest.json").read_text(encoding="utf-8"))
     texts: dict[str, str] = {}
     buckets: dict[str, list[dict]] = defaultdict(list)
@@ -65,10 +66,10 @@ def merge(generated_dir: Path, workdir: Path, dataset_dir: Path) -> MergeReport:
                 texts[stem] = normalize(src.read_text(encoding="utf-8"))
             evidence = normalize(raw.get("evidence", ""))
             if raw.get("category") not in FILES:
-                report.rejected.append((path.name, f"gecersiz kategori: {raw.get('input')}"))
+                report.rejected.append((path.name, f"invalid category: {raw.get('input')}"))
                 continue
             if not evidence or evidence not in texts.get(stem, "") or stem not in manifest:
-                report.rejected.append((path.name, f"evidence dogrulanamadi: {raw.get('input')}"))
+                report.rejected.append((path.name, f"evidence could not be verified: {raw.get('input')}"))
                 continue
             record = {
                 "input": normalize(raw["input"]),
@@ -88,5 +89,5 @@ def merge(generated_dir: Path, workdir: Path, dataset_dir: Path) -> MergeReport:
         )
         report.written[category] = len(numbered)
     for source, reason in report.rejected:
-        logger.warning("Reddedildi (%s): %s", source, reason)
+        logger.warning("Rejected (%s): %s", source, reason)
     return report

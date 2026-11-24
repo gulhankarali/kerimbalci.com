@@ -1,14 +1,14 @@
-"""Komut satirindan suite calistirma.
+"""Run a suite from the command line.
 
     uv run python -m kerimbalci_com.evals factuality
     uv run python -m kerimbalci_com.evals factuality --tags false_premise,unanswerable --limit 5
     uv run python -m kerimbalci_com.evals factuality --ids fact-001,premise-002 --level 1
     uv run python -m kerimbalci_com.evals hallucination --tags fake_attribution --level 1
 
-Varsayilanlar .env'den gelir (EVAL_TAGS, EVAL_CONCURRENCY, FACTUALITY_JUDGE_LEVEL,
+Defaults come from .env (EVAL_TAGS, EVAL_CONCURRENCY, FACTUALITY_JUDGE_LEVEL,
 HALLUCINATION_JUDGE_LEVEL, EVAL_MIN_PASS_RATE).
-Cikis kodu: 0 = kalite kapisi gecti, 1 = kapi kaldi (gecen oran < esik), 2 = eksik ayar.
-DIKKAT: Hakem model icin ucretli API istegi atar.
+Exit code: 0 = quality gate passed, 1 = gate failed (pass rate < threshold), 2 = missing setting.
+WARNING: makes paid API requests for the judge model.
 """
 
 import argparse
@@ -34,15 +34,15 @@ def _csv(value: str) -> list[str]:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="python -m kerimbalci_com.evals")
     parser.add_argument("suite", choices=sorted(SUITES))
-    parser.add_argument("--tags", type=_csv, default=None, help="virgulle; varsayilan EVAL_TAGS")
-    parser.add_argument("--ids", type=_csv, default=[], help="virgulle case id'leri")
-    parser.add_argument("--limit", type=int, default=None, help="en fazla N case")
+    parser.add_argument("--tags", type=_csv, default=None, help="comma-separated; default EVAL_TAGS")
+    parser.add_argument("--ids", type=_csv, default=[], help="comma-separated case ids")
+    parser.add_argument("--limit", type=int, default=None, help="at most N cases")
     parser.add_argument("--level", type=int, choices=[1, 2, 3], default=None,
-                        help="hakem seviyesi; varsayilan <SUITE>_JUDGE_LEVEL (.env)")
+                        help="judge level; default <SUITE>_JUDGE_LEVEL (.env)")
     parser.add_argument("--concurrency", type=int, default=None,
-                        help="varsayilan EVAL_CONCURRENCY")
+                        help="default EVAL_CONCURRENCY")
     parser.add_argument("--min-pass-rate", type=float, default=None,
-                        help="kalite kapisi esigi 0-1; varsayilan EVAL_MIN_PASS_RATE")
+                        help="quality gate threshold 0-1; default EVAL_MIN_PASS_RATE")
     return parser.parse_args(argv)
 
 
@@ -58,7 +58,7 @@ def main(argv: list[str] | None = None) -> int:
     missing = [k for k, v in (("HF_CHATBOT_URL", settings.hf_chatbot_url),
                               ("JUDGE_MODEL", settings.judge_model)) if not v]
     if missing:
-        logger.error("Eksik ayar: %s (.env dosyasina ekleyin)", ", ".join(missing))
+        logger.error("Missing setting: %s (add it to the .env file)", ", ".join(missing))
         return 2
 
     judge_model = AnthropicModel(model=settings.judge_model)
@@ -68,7 +68,7 @@ def main(argv: list[str] | None = None) -> int:
         limit=args.limit,
     )
     if not suite.cases:
-        logger.error("Filtreye uyan case yok")
+        logger.error("No case matches the filter")
         return 2
 
     result = run_suite(

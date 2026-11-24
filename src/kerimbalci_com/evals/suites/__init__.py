@@ -1,4 +1,4 @@
-"""Kayitli eval suite'leri. Yeni suite: suites/<ad>_suite.py + buraya ekle."""
+"""Registered eval suites. New suite: suites/<name>_suite.py + register it here."""
 
 from collections.abc import Callable
 

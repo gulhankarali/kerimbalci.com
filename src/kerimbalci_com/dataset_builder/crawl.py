@@ -1,7 +1,7 @@
-"""Siteyi sitemap uzerinden tarar ve her sayfayi duz metne cevirir.
+"""Crawls the site via its sitemap and converts every page to plain text.
 
-Cikti (SITE_WORKDIR altinda):
-    text/<stem>.txt  ilk satir JSON meta (og:title, published_time, tag), sonra metin
+Output (under SITE_WORKDIR):
+    text/<stem>.txt  first line is JSON metadata (og:title, published_time, tag), then the text
     manifest.json    {stem: url}
 """
 
@@ -29,7 +29,7 @@ _ASSET = re.compile(r"\.(jpe?g|png|webp|gif|svg)$", re.IGNORECASE)
 
 
 def make_fetcher(settings: Settings) -> Fetcher:
-    """Ayarlardaki User-Agent ve timeout ile URL'den metin indiren fonksiyon."""
+    """Returns a function that downloads a URL as text using the configured User-Agent and timeout."""
     def fetch(url: str) -> str:
         request = urllib.request.Request(url, headers={"User-Agent": settings.crawl_user_agent})
         with urllib.request.urlopen(request, timeout=settings.http_timeout) as response:
@@ -38,13 +38,13 @@ def make_fetcher(settings: Settings) -> Fetcher:
 
 
 def parse_sitemap(xml_text: str) -> list[str]:
-    """Sitemap (veya sitemap index) icindeki <loc> adreslerini dondurur."""
+    """Returns the <loc> URLs of a sitemap (or sitemap index)."""
     root = ET.fromstring(xml_text)
     return [loc.text.strip() for loc in root.iter(f"{_SITEMAP_NS}loc") if loc.text]
 
 
 def discover_urls(site_url: str, fetch: Fetcher) -> list[str]:
-    """sitemap.xml -> alt sitemap'ler -> sayfa adresleri (gorseller haric, tekilsiz)."""
+    """sitemap.xml -> child sitemaps -> page URLs (images excluded, deduplicated)."""
     index = parse_sitemap(fetch(site_url.rstrip("/") + "/sitemap.xml"))
     children = [u for u in index if u.endswith(".xml")] or [site_url.rstrip("/") + "/sitemap.xml"]
     urls: list[str] = []
@@ -56,7 +56,7 @@ def discover_urls(site_url: str, fetch: Fetcher) -> list[str]:
 
 
 def stem_for_url(url: str) -> str:
-    """URL'den dosya adi: / -> home, /tag/x/ -> tag_x, /yazi/ -> yazi."""
+    """File name for a URL: / -> home, /tag/x/ -> tag_x, /post/ -> post."""
     path = urlparse(url).path.strip("/")
     return path.replace("/", "_") if path else "home"
 
@@ -91,7 +91,7 @@ class _TextExtractor(HTMLParser):
 
 
 def extract_text(html: str) -> str:
-    """HTML'den meta satiri + okunabilir govde metni uretir (nav/footer/script haric)."""
+    """Builds a metadata line + readable body text from HTML (nav/footer/script excluded)."""
     parser = _TextExtractor()
     parser.feed(html)
     body = re.sub(r"[ \t]+", " ", "".join(parser.parts))
@@ -100,30 +100,30 @@ def extract_text(html: str) -> str:
 
 
 def crawl(settings: Settings, fetch: Fetcher | None = None) -> dict[str, str]:
-    """Tum siteyi indirip SITE_WORKDIR altina yazar; {stem: url} manifestini dondurur."""
+    """Downloads the whole site into SITE_WORKDIR and returns the {stem: url} manifest."""
     fetch = fetch or make_fetcher(settings)
     text_dir = settings.site_workdir / "text"
     text_dir.mkdir(parents=True, exist_ok=True)
 
     manifest: dict[str, str] = {}
     urls = discover_urls(settings.site_url, fetch)
-    logger.info("%d sayfa bulundu", len(urls))
+    logger.info("%d pages found", len(urls))
     for url in urls:
         stem = stem_for_url(url)
         try:
             (text_dir / f"{stem}.txt").write_text(extract_text(fetch(url)), encoding="utf-8")
             manifest[stem] = url
-        except Exception as exc:  # noqa: BLE001 — tek sayfa tum taramayi durdurmasin
-            logger.warning("%s indirilemedi: %s", url, exc)
+        except Exception as exc:  # noqa: BLE001 — one page must not stop the whole crawl
+            logger.warning("Could not download %s: %s", url, exc)
     (settings.site_workdir / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    logger.info("%d sayfa yazildi: %s", len(manifest), text_dir)
+    logger.info("%d pages written: %s", len(manifest), text_dir)
     return manifest
 
 
 def split_groups(text_dir: Path, count: int) -> list[list[str]]:
-    """Metin dosyalarini toplam kelime sayisi dengeli `count` gruba boler."""
+    """Splits the text files into `count` groups with balanced total word counts."""
     files = sorted(text_dir.glob("*.txt"), key=lambda f: -len(f.read_text(encoding="utf-8").split()))
     groups: list[list[str]] = [[] for _ in range(max(1, count))]
     weights = [0] * len(groups)
